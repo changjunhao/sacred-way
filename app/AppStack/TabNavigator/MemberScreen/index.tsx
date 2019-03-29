@@ -1,4 +1,4 @@
-import {inject} from 'mobx-react/native';
+import {inject, observer} from 'mobx-react/native';
 import React, {Component, Fragment} from 'react';
 import {
   Image,
@@ -14,6 +14,7 @@ interface InterfaceProps extends NavigationScreenProps<{}> {
 }
 
 @inject('UserStore')
+@observer
 export default class MemberScreen extends Component<InterfaceProps, {}> {
   public static navigationOptions = {
     headerBackTitle: null,

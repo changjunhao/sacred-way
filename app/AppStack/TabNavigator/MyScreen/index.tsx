@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import {NavigationEvents, NavigationScreenProps} from 'react-navigation';
 import {scaleSize, setSpText2} from '../../../Lib/ScreenUtil';
-import { getUserInfo } from '../../../Services/user';
+// import { getUserInfo } from '../../../Services/user';
 import ApplicationStyles from '../../../Theme/ApplicationStyles';
 
 interface InterfaceMyState {
@@ -98,12 +98,12 @@ export default class MyScreen extends Component<InterfaceProps, InterfaceMyState
     this.setState({
       userInfo: this.props.UserStore.info,
     });
-    getUserInfo()
-      .then((userInfo) => {
-        this.setState({
-          userInfo,
-        });
-      });
+    // getUserInfo()
+    //   .then((userInfo) => {
+    //     this.setState({
+    //       userInfo,
+    //     });
+    //   });
   }
 
   private showActionSheet = () => {

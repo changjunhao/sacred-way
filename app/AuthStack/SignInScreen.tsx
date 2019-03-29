@@ -81,6 +81,7 @@ export default class SignInScreen extends Component<InterfaceProps, InterfaceSta
     });
     if (response) {
       this.props.tokenStore.setToken(response.usersign);
+      this.props.UserStore.setInfo(response.user_info);
       await AsyncStorage.setItem('userToken', response.usersign);
       this.props.navigation.navigate('App');
     }

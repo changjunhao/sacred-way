@@ -31,7 +31,7 @@ export function sendMobileMessage(params) {
     });
 }
 
-export function login(params: { phone: string; password: string; }): Promise<{usersign: string}|undefined> {
+export function login(params: { phone: string; password: string; }) {
   return fetch(`${BASEURL}/membercenter/Register/LoginWithPassword`, {
     method: 'POST',
     headers: {
