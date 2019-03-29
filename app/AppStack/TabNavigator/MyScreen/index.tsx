@@ -13,9 +13,9 @@ import {
   View,
 } from 'react-native';
 import {NavigationEvents, NavigationScreenProps} from 'react-navigation';
-import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
-import { getUserInfo } from '../../Services/user';
-import ApplicationStyles from '../../Theme/ApplicationStyles';
+import {scaleSize, setSpText2} from '../../../Lib/ScreenUtil';
+import { getUserInfo } from '../../../Services/user';
+import ApplicationStyles from '../../../Theme/ApplicationStyles';
 
 interface InterfaceMyState {
   userInfo;
@@ -47,13 +47,13 @@ export default class MyScreen extends Component<InterfaceProps, InterfaceMyState
         <NavigationEvents onWillFocus={this.fetchData} />
         <ScrollView style={{...ApplicationStyles.mainContainer}}>
           <ImageBackground
-            source={require('../../Images/bg.png')}
+            source={require('../../../Images/bg.png')}
             style={styles.cardBackgroundImage}
             imageStyle={{resizeMode: 'cover', borderRadius: 4}}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <Text style={{color: '#FEE3A6', fontSize: setSpText2(18), fontWeight: 'bold'}}>{userInfo.vip_name}</Text>
               <TouchableWithoutFeedback onPress={this.showActionSheet}>
-                <Image style={{marginRight: scaleSize(17)}} source={require('../../Images/shezhi.png')} />
+                <Image style={{marginRight: scaleSize(17)}} source={require('../../../Images/shezhi.png')} />
               </TouchableWithoutFeedback>
             </View>
             <View
@@ -63,13 +63,13 @@ export default class MyScreen extends Component<InterfaceProps, InterfaceMyState
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   marginTop: scaleSize(25),
-                  marginBottom: scaleSize(16)
+                  marginBottom: scaleSize(16),
                 }
               }>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Image
                   style={styles.avatar}
-                  source={userInfo.head_img ? {uri: userInfo.head_img} : require('../../Images/mrtx.png')}
+                  source={userInfo.head_img ? {uri: userInfo.head_img} : require('../../../Images/mrtx.png')}
                   resizeMode={'cover'}
                 />
                 <View style={{marginLeft: scaleSize(18)}}>

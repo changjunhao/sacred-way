@@ -9,7 +9,7 @@ export default createStackNavigator(
     SignIn: SignInScreen,
     SignUp: SignUpScreen,
     ResetPassword: ResetPasswordScreen,
-    InfoEdit: InfoEditScreen,
+    InfoEdit: createStackNavigator({InfoEdit: InfoEditScreen}, {mode: 'modal'}),
   },
   {
     headerMode: 'none',
