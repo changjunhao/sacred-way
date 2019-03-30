@@ -38,9 +38,7 @@ export default class InfoEditScreen extends Component<InterfaceProps> {
           <View style={styles.tipView}>
             <Text style={styles.tipText}>为了能提供更好的服务，请认真填写以下信息</Text>
           </View>
-          <EditInfo
-            UserStore={this.props.UserStore}
-          />
+          <EditInfo UserStore={this.props.UserStore} />
         </View>
         <TouchableHighlight
           disabled={baseInfo.phone === '' || baseInfo.name === '' || baseInfo.location === ''}

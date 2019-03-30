@@ -24,7 +24,7 @@ export default class FindScreen extends Component<InterfaceProps> {
         <ScrollView style={{...ApplicationStyles.mainContainer, paddingHorizontal: scaleSize(12)}}>
           {userInfo.status !== 2 ?
             (
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('ChangeInfo')}>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('InfoModify')}>
                 <View
                   style={{
                     backgroundColor: '#FFF4DA',

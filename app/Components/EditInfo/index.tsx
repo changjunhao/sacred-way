@@ -18,6 +18,11 @@ interface InterfaceProps {
 class EditInfo extends Component<InterfaceProps> {
 
   public componentDidMount(): void {
+    this.props.UserStore.setBaseInfo({
+      name: this.props.UserStore.info.real_name,
+      phone: this.props.UserStore.info.contact_number || this.props.UserStore.info.mobile_number,
+      location: this.props.UserStore.info.location,
+    });
     Picker.init({
       pickerConfirmBtnText: '确定',
       pickerCancelBtnText: '取消',
