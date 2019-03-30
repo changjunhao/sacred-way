@@ -1,12 +1,13 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import { toJS } from 'mobx';
+import store from '../Stores/TokenStore';
 import config from './config';
 
 const { BASEURL } = config;
 
-export async function getCurriculumlist() {
+export function getCurriculumlist() {
   return fetch(`${BASEURL}/membercenter/curriculum/curriculumlist`, {
     headers: {
-      USERSIGN: await AsyncStorage.getItem('userToken') || '',
+      USERSIGN: toJS(store).token,
     },
   })
     .then((response) => response.json())
@@ -18,10 +19,10 @@ export async function getCurriculumlist() {
     });
 }
 
-export async function getUserBuyCurriculum() {
+export function getUserBuyCurriculum() {
   return fetch(`${BASEURL}/membercenter/curriculum/getUserBuyCurriculum`, {
     headers: {
-      USERSIGN: await AsyncStorage.getItem('userToken') || '',
+      USERSIGN: toJS(store).token,
     },
   })
     .then((response) => response.json())
@@ -33,10 +34,10 @@ export async function getUserBuyCurriculum() {
     });
 }
 
-export async function getCourseList(params) {
+export function getCourseList(params) {
   return fetch(`${BASEURL}/membercenter/curriculum/getCurriculumByCategoryId?category_id=${params.categoryId}`, {
     headers: {
-      USERSIGN: await AsyncStorage.getItem('userToken') || '',
+      USERSIGN: toJS(store).token,
     },
   })
     .then((response) => response.json())
@@ -48,10 +49,10 @@ export async function getCourseList(params) {
     });
 }
 
-export async function getCourseDetail(params) {
+export function getCourseDetail(params) {
   return fetch(`${BASEURL}/membercenter/curriculum/getCurriculumInfo?id=${params.id}`, {
     headers: {
-      USERSIGN: await AsyncStorage.getItem('userToken') || '',
+      USERSIGN: toJS(store).token,
     },
   })
     .then((response) => response.json())
@@ -63,10 +64,10 @@ export async function getCourseDetail(params) {
     });
 }
 
-export async function getSubCurriculum(params) {
+export function getSubCurriculum(params) {
   return fetch(`${BASEURL}/membercenter/curriculum/getSubCurriculum?curriculum_id=${params.id}`, {
     headers: {
-      USERSIGN: await AsyncStorage.getItem('userToken') || '',
+      USERSIGN: toJS(store).token,
     },
   })
     .then((response) => response.json())

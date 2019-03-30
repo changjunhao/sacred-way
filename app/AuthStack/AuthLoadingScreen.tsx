@@ -33,6 +33,7 @@ class AuthLoadingScreen extends Component<InterfaceProps, {}> {
       this.props.tokenStore.setToken(userToken);
       const userInfo = await getUserInfo();
       this.props.UserStore.setInfo(userInfo);
+      this.props.UserStore.setBaseInfo({phone: userInfo.mobile_number});
       if (userInfo.status === 0) {
         const resetAction = StackActions.reset({
           index: 0,

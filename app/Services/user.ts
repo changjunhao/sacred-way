@@ -31,6 +31,26 @@ export function sendMobileMessage(params) {
     });
 }
 
+export function checkVerificationCode(params) {
+  return fetch(`${BASEURL}/utility/MobileMessage/checkCode`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      mobile_number: params.phone,
+      code: params.code,
+    }),
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson;
+    })
+    .catch((error) => {
+      // console.error(error);
+    });
+}
+
 export function login(params: { phone: string; password: string; }) {
   return fetch(`${BASEURL}/membercenter/Register/LoginWithPassword`, {
     method: 'POST',
@@ -83,6 +103,28 @@ export function signUp(params) {
     });
 }
 
+export function resetPassword(params) {
+  return fetch(`${BASEURL}/membercenter/Password/setPassword`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      mobile_number: params.phone,
+      code: params.code,
+      password: params.password,
+      password_repeat: params.repeatPassword,
+    }),
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson;
+    })
+    .catch((error) => {
+      // console.error(error);
+    });
+}
+
 export function getUserInfo() {
   return fetch(`${BASEURL}/membercenter/Userinfo/getUserInfo`, {
     headers: {
@@ -92,6 +134,28 @@ export function getUserInfo() {
     .then((response) => response.json())
     .then((responseJson) => {
       return responseJson.data;
+    })
+    .catch((error) => {
+      // console.error(error);
+    });
+}
+
+export function setUserInfo(params) {
+  return fetch(`${BASEURL}/membercenter/Userinfo/setUserInfo`, {
+    method: 'POST',
+    headers: {
+      USERSIGN: toJS(store).token,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      real_name: params.name,
+      contact_number: params.phone,
+      location: params.location,
+    }),
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson;
     })
     .catch((error) => {
       // console.error(error);

@@ -50,34 +50,29 @@ export default class MyScreen extends Component<InterfaceProps, InterfaceMyState
             source={require('../../../Images/bg.png')}
             style={styles.cardBackgroundImage}
             imageStyle={{resizeMode: 'cover', borderRadius: 4}}>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={{color: '#FEE3A6', fontSize: setSpText2(18), fontWeight: 'bold'}}>{userInfo.vip_name}</Text>
+            <View style={{flexDirection: 'row-reverse'}}>
               <TouchableWithoutFeedback onPress={this.showActionSheet}>
-                <Image style={{marginRight: scaleSize(17)}} source={require('../../../Images/shezhi.png')} />
+                <Image source={require('../../../Images/shezhi.png')} />
               </TouchableWithoutFeedback>
             </View>
             <View
-              style={
-                {
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginTop: scaleSize(25),
-                  marginBottom: scaleSize(16),
-                }
-              }>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Image
-                  style={styles.avatar}
-                  source={userInfo.head_img ? {uri: userInfo.head_img} : require('../../../Images/mrtx.png')}
-                  resizeMode={'cover'}
-                />
-                <View style={{marginLeft: scaleSize(18)}}>
-                  <Text style={{color: '#FEE3A6', fontSize: setSpText2(16), marginBottom: scaleSize(10)}}>
-                    {userInfo.real_name || userInfo.nick_name}
-                  </Text>
-                  <Text style={{color: '#FEE3A6', fontSize: setSpText2(11)}}>{userInfo.contact_number}</Text>
-                </View>
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: scaleSize(9),
+                marginBottom: scaleSize(16),
+              }}
+            >
+              <Image
+                style={styles.avatar}
+                source={userInfo.head_img ? {uri: userInfo.head_img} : require('../../../Images/mrtx.png')}
+                resizeMode={'cover'}
+              />
+              <View style={{marginLeft: scaleSize(16)}}>
+                <Text style={{color: '#FEE3A6', fontSize: setSpText2(16), marginBottom: scaleSize(12)}}>
+                  {userInfo.real_name || userInfo.nick_name}
+                </Text>
+                <Text style={{color: '#FEE3A6', fontSize: setSpText2(11)}}>{userInfo.contact_number}</Text>
               </View>
             </View>
             {userInfo.roles ?
@@ -146,8 +141,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 6},
     shadowOpacity: 0.5,
     shadowRadius: 12,
-    paddingLeft: scaleSize(17),
-    paddingVertical: scaleSize(15),
+    padding: scaleSize(16),
   },
   avatar : {
     width: scaleSize(50),
@@ -155,13 +149,6 @@ const styles = StyleSheet.create({
     borderRadius: scaleSize(25),
     borderColor: 'rgb(254, 227, 166)',
     borderWidth: 2,
-  },
-  inviteCodeText: {
-    fontSize: setSpText2(11),
-    color: '#302E2F',
-    paddingLeft: scaleSize(16),
-    paddingRight: scaleSize(8),
-    paddingVertical: scaleSize(6),
   },
   rolesView: {
     paddingRight: scaleSize(17),

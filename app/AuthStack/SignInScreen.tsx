@@ -49,7 +49,7 @@ export default class SignInScreen extends Component<InterfaceProps, InterfaceSta
             textContentType={'password'}
             onChangeText={(password) => this.setState({password})} />
           <TouchableHighlight
-            disabled={this.state.phone === '' && this.state.password === ''}
+            disabled={this.state.phone === '' || this.state.password === ''}
             onPressIn={this.handleLogin}
             underlayColor='white'>
             <View

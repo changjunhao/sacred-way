@@ -48,7 +48,7 @@ export default StyleSheet.create({
     color: '#272a32',
     fontSize: setSpText2(14),
   },
-  signUpInputView: {
+  inputView: {
     width: scaleSize(300),
     flexDirection: 'row',
     alignItems: 'center',
@@ -57,7 +57,7 @@ export default StyleSheet.create({
     borderBottomColor: '#E2E2E2',
     borderBottomWidth: 1,
   },
-  signUpInput: {
+  input: {
     flex: 1,
     color: '#111a34',
     fontSize: setSpText2(15),
