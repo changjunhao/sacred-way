@@ -71,5 +71,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>短视频会员 想要访问您的照片库以更改您的个人资料照片</string>
 </dict>
 </plist>
