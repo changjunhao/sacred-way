@@ -7,7 +7,6 @@ import styles from './Styles';
 interface InterfaceStates {
   phone: string;
   password: string;
-  inviteCode: number;
   code: string;
   content: string;
   totalTime: number;
@@ -23,7 +22,6 @@ export default class SignUpScreen extends Component<InterfaceProps, InterfaceSta
     this.state = {
       phone: '',
       password: '',
-      inviteCode: 8286968, // 9115427
       code: '',
       content: '发送验证码',
       totalTime: 60,
@@ -97,9 +95,7 @@ export default class SignUpScreen extends Component<InterfaceProps, InterfaceSta
   }
 
   private signUp = async () => {
-    // this.props.navigation.navigate('InfoEdit');
     const result = await signUp({
-      inviteCode: this.state.inviteCode,
       phone: this.state.phone,
       code: this.state.code,
       password: this.state.password,

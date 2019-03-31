@@ -83,7 +83,6 @@ export function signUp(params) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      invite_code: params.inviteCode,
       mobile_number: params.phone,
       code: params.code,
       password: params.password,

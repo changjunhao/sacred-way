@@ -23,29 +23,10 @@ class EditInfo extends Component<InterfaceProps> {
       phone: this.props.UserStore.info.contact_number || this.props.UserStore.info.mobile_number,
       location: this.props.UserStore.info.location,
     });
-    Picker.init({
-      pickerConfirmBtnText: '确定',
-      pickerCancelBtnText: '取消',
-      pickerTitleText: '选择省市区/县',
-      pickerConfirmBtnColor: [47, 134, 246, 1],
-      pickerCancelBtnColor: [102, 111, 131, 1],
-      pickerTitleColor: [17, 26, 52, 1],
-      pickerToolBarBg: [249, 250, 251, 1],
-      pickerBg: [255, 255, 255, 1],
-      pickerRowHeight: 45,
-      pickerData: district,
-      selectedValue: [59],
-      onPickerConfirm: (data) => {
-        let location = data[0];
-        if (data[1]) {
-          location += `-${data[1]}`;
-          if (data[2]) {
-            location += `-${data[2]}`;
-          }
-        }
-        this.props.UserStore.setBaseInfo({location});
-      },
-    });
+  }
+
+  public componentWillUnmount(): void {
+    Picker.hide();
   }
 
   public render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> {
@@ -80,7 +61,7 @@ class EditInfo extends Component<InterfaceProps> {
             <Icon size={scaleSize(8)} color='#FF3F3F' name={'ios-star'}/>
             <Text style={styles.labelText}>所在地</Text>
           </View>
-          <TouchableHighlight underlayColor='white' onPress={() => Picker.show()}>
+          <TouchableHighlight underlayColor='white' onPress={this.handlePickerShow}>
             <Text style={styles.input}>{this.props.UserStore.baseInfo.location}</Text>
           </TouchableHighlight>
         </View>
@@ -94,6 +75,33 @@ class EditInfo extends Component<InterfaceProps> {
 
   private handleNameChange = (name) => {
     this.props.UserStore.setBaseInfo({name});
+  }
+
+  private handlePickerShow = () => {
+    Picker.init({
+      pickerConfirmBtnText: '确定',
+      pickerCancelBtnText: '取消',
+      pickerTitleText: '选择省市区/县',
+      pickerConfirmBtnColor: [47, 134, 246, 1],
+      pickerCancelBtnColor: [102, 111, 131, 1],
+      pickerTitleColor: [17, 26, 52, 1],
+      pickerToolBarBg: [249, 250, 251, 1],
+      pickerBg: [255, 255, 255, 1],
+      pickerRowHeight: 45,
+      pickerData: district,
+      selectedValue: [59],
+      onPickerConfirm: (data) => {
+        let location = data[0];
+        if (data[1]) {
+          location += `-${data[1]}`;
+          if (data[2]) {
+            location += `-${data[2]}`;
+          }
+        }
+        this.props.UserStore.setBaseInfo({location});
+      },
+    });
+    Picker.show();
   }
 
 }

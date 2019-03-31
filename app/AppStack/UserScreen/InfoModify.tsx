@@ -3,10 +3,11 @@ import React, {Component} from 'react';
 import {
   Alert,
   Image,
+  KeyboardAvoidingView,
   SafeAreaView,
   ScrollView,
-  StyleSheet,
-  Text, TextInput,
+  StyleSheet, Text,
+  TextInput,
   TouchableHighlight,
   View,
 } from 'react-native';
@@ -50,40 +51,43 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
   public render() {
     const { baseInfo } = this.props.UserStore;
 
+    // TODO keyboardVerticalOffset 需判断设备
     return (
       <SafeAreaView style={{flex: 1}}>
-        <ScrollView style={{...ApplicationStyles.mainContainer}}>
-          <View style={styles.avatarActionView}>
-            <TouchableHighlight underlayColor='white'  onPress={this.handleSelectImage}>
-              <View>
-                <Image
-                  style={styles.avatar}
-                  source={this.state.avatar ? {uri: this.state.avatar} : require('../../Images/mrtx.png')}
-                  resizeMode={'cover'}
-                />
-                <Text style={styles.avatarTip}>点击修改头像</Text>
-              </View>
-            </TouchableHighlight>
-          </View>
-          <View style={styles.hr} />
-          <View style={styles.infoView}>
-            <EditInfo UserStore={this.props.UserStore} />
-          </View>
-          <View style={styles.hr} />
-          <View style={styles.infoView}>
-            <View>
-              <View style={InputStyles.labelView}>
-                <Text style={InputStyles.labelText}>昵称</Text>
-              </View>
-              <TextInput
-                style={InputStyles.input}
-                placeholder={'请输入昵称（6个字）'}
-                defaultValue={this.props.UserStore.info.nick_name}
-                onChangeText={(nickName) => this.setState({nickName})}
-              />
+        <KeyboardAvoidingView style={{flex: 1}} behavior='padding' keyboardVerticalOffset={88} enabled>
+          <ScrollView style={{...ApplicationStyles.mainContainer}}>
+            <View style={styles.avatarActionView}>
+              <TouchableHighlight underlayColor='white'  onPress={this.handleSelectImage}>
+                <View>
+                  <Image
+                    style={styles.avatar}
+                    source={this.state.avatar ? {uri: this.state.avatar} : require('../../Images/mrtx.png')}
+                    resizeMode={'cover'}
+                  />
+                  <Text style={styles.avatarTip}>点击修改头像</Text>
+                </View>
+              </TouchableHighlight>
             </View>
-          </View>
-        </ScrollView>
+            <View style={styles.hr} />
+            <View style={styles.infoView}>
+              <EditInfo UserStore={this.props.UserStore} />
+            </View>
+            <View style={styles.hr} />
+            <View style={styles.infoView}>
+              <View>
+                <View style={InputStyles.labelView}>
+                  <Text style={InputStyles.labelText}>昵称</Text>
+                </View>
+                <TextInput
+                  style={InputStyles.input}
+                  placeholder={'请输入昵称（6个字）'}
+                  defaultValue={this.props.UserStore.info.nick_name}
+                  onChangeText={(nickName) => this.setState({nickName})}
+                />
+              </View>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
         <TouchableHighlight
           disabled={baseInfo.phone === '' || baseInfo.name === '' || baseInfo.location === ''}
           underlayColor='white'

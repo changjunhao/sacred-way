@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import {inject, observer} from 'mobx-react/native'
+import {inject, observer} from 'mobx-react/native';
 import React, {Component} from 'react';
 import {Text, TouchableHighlight, View} from 'react-native';
-import {NavigationScreenProps, SafeAreaView} from 'react-navigation';
+import {NavigationActions, NavigationScreenProps, SafeAreaView, StackActions} from 'react-navigation';
 import LoginInput from '../Components/LoginInput';
 import {login} from '../Services/user';
 import styles from './Styles';
@@ -83,7 +83,15 @@ export default class SignInScreen extends Component<InterfaceProps, InterfaceSta
       this.props.tokenStore.setToken(response.usersign);
       this.props.UserStore.setInfo(response.user_info);
       await AsyncStorage.setItem('userToken', response.usersign);
-      this.props.navigation.navigate('App');
+      if (response.user_info.status === 0) {
+        const resetAction = StackActions.reset({
+          index: 0,
+          actions: [NavigationActions.navigate({ routeName: 'InfoEdit' })],
+        });
+        this.props.navigation.dispatch(resetAction);
+      } else {
+        this.props.navigation.navigate( 'App');
+      }
     }
   }
 }
