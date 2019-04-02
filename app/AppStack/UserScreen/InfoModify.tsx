@@ -68,11 +68,11 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
                 </View>
               </TouchableHighlight>
             </View>
-            <View style={styles.hr} />
+            <View style={ApplicationStyles.hr} />
             <View style={styles.infoView}>
               <EditInfo UserStore={this.props.UserStore} />
             </View>
-            <View style={styles.hr} />
+            <View style={ApplicationStyles.hr} />
             <View style={styles.infoView}>
               <View>
                 <View style={InputStyles.labelView}>
@@ -166,12 +166,6 @@ const styles = StyleSheet.create({
   },
   buttonDisable: {
     backgroundColor: '#bfc4d0',
-  },
-  hr: {
-    width: scaleSize(375),
-    height: scaleSize(10),
-    backgroundColor: '#E2E2E2',
-    marginLeft: scaleSize(-16),
   },
   infoView: {
     paddingVertical: scaleSize(16),

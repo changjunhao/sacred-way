@@ -10,7 +10,8 @@
     "rules": {
         "quotemark": [true, "single"],
         "object-literal-sort-keys": false,
-        "indent": [true, "spaces", 2]
+        "indent": [true, "spaces", 2],
+        "interface-name": [true, "never-prefix"]
     },
     "rulesDirectory": []
 }

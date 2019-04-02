@@ -12,7 +12,7 @@ export default class PasswordModify extends Component {
   public render() {
     return (
       <View>
-        <Text>信息编辑</Text>
+        <Text>修改密码</Text>
       </View>
     );
   }

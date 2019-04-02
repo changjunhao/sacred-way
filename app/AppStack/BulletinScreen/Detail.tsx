@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {
   Image,
+  SafeAreaView,
   ScrollView,
   Text,
   View,
@@ -8,6 +9,7 @@ import {
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
 import { getBulletin } from '../../Services/bulletin';
+import ApplicationStyles from '../../Theme/ApplicationStyles';
 
 interface InterfaceState {
   id: string;
@@ -51,28 +53,30 @@ export default class BulletinDetailScreen extends Component<InterfaceProps, Inte
   public render() {
     const { bulletin } = this.state;
     return (
-      <ScrollView style={{paddingTop: scaleSize(16), paddingHorizontal: scaleSize(16)}}>
-        <View>
-          <Text style={{color: '#272a32', fontWeight: 'bold', fontSize: setSpText2(15)}}>{bulletin.title}</Text>
-        </View>
-        <View style={{flexDirection: 'row'}}>
+      <SafeAreaView style={{flex: 1}}>
+        <ScrollView style={{...ApplicationStyles.mainContainer}}>
           <View>
-            <Text>{bulletin.category_name}</Text>
+            <Text style={{color: '#272a32', fontWeight: 'bold', fontSize: setSpText2(15)}}>{bulletin.title}</Text>
           </View>
-          {bulletin.is_top === 1 && <View><Text>置顶</Text></View>}
-        </View>
-        <View>
-          <Text>{bulletin.content}</Text>
           <View style={{flexDirection: 'row'}}>
-            {bulletin.images.map((image) => (
-              <Image
-                key={image.id}
-                style={{width: scaleSize(80), height: scaleSize(80)}}
-                source={{uri: `${image.url}/thumb_medium`}} />
-            ))}
+            <View>
+              <Text>{bulletin.category_name}</Text>
+            </View>
+            {bulletin.is_top === 1 && <View><Text>置顶</Text></View>}
           </View>
-        </View>
-      </ScrollView>
+          <View>
+            <Text>{bulletin.content}</Text>
+            <View style={{flexDirection: 'row'}}>
+              {bulletin.images.map((image) => (
+                <Image
+                  key={image.id}
+                  style={{width: scaleSize(80), height: scaleSize(80)}}
+                  source={{uri: `${image.url}/thumb_medium`}} />
+              ))}
+            </View>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
