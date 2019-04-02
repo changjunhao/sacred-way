@@ -26,6 +26,9 @@ class EditInfo extends Component<InterfaceProps> {
   }
 
   public componentWillUnmount(): void {
+    // Picker.isPickerShow((status) => {
+    //   alert(status);
+    // });
     Picker.hide();
   }
 

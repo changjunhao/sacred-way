@@ -13,7 +13,7 @@
     "mobx-react": "^5.4.3",
     "mobx-state-tree": "^3.12.2",
     "react": "16.8.6",
-    "react-native": "0.59.2",
+    "react-native": "0.59.3",
     "react-native-gesture-handler": "^1.1.0",
     "react-native-image-picker": "^0.28.1",
     "react-native-linear-gradient": "^2.5.4",
