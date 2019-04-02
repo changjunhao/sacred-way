@@ -1,12 +1,14 @@
 import {inject} from 'mobx-react/native';
 import React, {Component, Fragment} from 'react';
 import { Image, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
-import Icon from 'react-native-vector-icons/AntDesign'
+import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/AntDesign';
 import {NavigationEvents, NavigationScreenProps} from 'react-navigation';
 import CommunityListComponent from '../../../Components/CommunityList';
 import {scaleSize, setSpText2} from '../../../Lib/ScreenUtil';
 import {getBulletinList} from '../../../Services/bulletin';
 import {getCommunityList} from '../../../Services/community';
+import { getCurriculumlist } from '../../../Services/course';
 import ApplicationStyles from '../../../Theme/ApplicationStyles';
 import styles from './Styles';
 
@@ -17,6 +19,7 @@ interface InterfaceProps extends NavigationScreenProps<{}> {
 interface InterfaceStates {
   bulletinList: any[];
   questionsList: any[];
+  specialColumnList: any[];
 }
 
 @inject('UserStore')
@@ -30,6 +33,7 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
     this.state = {
       bulletinList: [],
       questionsList: [],
+      specialColumnList: [],
     };
   }
 
@@ -38,7 +42,7 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
 
   public render() {
     const userInfo = this.props.UserStore.info;
-    const { bulletinList, questionsList } = this.state;
+    const { bulletinList, questionsList, specialColumnList } = this.state;
 
     const CommunityList = questionsList
       .map((question) => (
@@ -81,6 +85,29 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
                 </TouchableWithoutFeedback>
               )
               : null}
+            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('BulletinList')}>
+              <LinearGradient
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 0}}
+                colors={['#E9C58F', '#F4E1BD']}
+                style={{
+                  ...ApplicationStyles.flexRow,
+                  justifyContent: 'space-between',
+                  width: '100%',
+                  height: scaleSize(35),
+                  marginVertical: scaleSize(12),
+                  paddingHorizontal: scaleSize(8),
+                  borderRadius: scaleSize(4),
+                }}>
+                <View style={{...ApplicationStyles.flexRow}}>
+                  <Image source={require('../../../Images/tab_find_images/bulletin_icon.png')} />
+                  <Text style={{color: '#FFF', fontSize: setSpText2(15), fontWeight: 'bold'}}>
+                    会员公告
+                  </Text>
+                </View>
+                <Icon size={setSpText2(12)} color={'#FFF'} name={'right'}/>
+              </LinearGradient>
+            </TouchableWithoutFeedback>
             {bulletinList.map((bulletin) => (
               <TouchableWithoutFeedback
                 key={bulletin.id}
@@ -117,6 +144,52 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
             {CommunityList}
           </View>
           <View style={{...ApplicationStyles.hr, marginLeft: scaleSize(-12)}} />
+          <View style={styles.specialColumnListView}>
+            {specialColumnList.map((specialColumn, index) => (
+              <Fragment key={specialColumn.id}>
+                <TouchableWithoutFeedback>
+                  <View style={styles.specialColumnView}>
+                    {specialColumn.pic ? (
+                      <Image
+                        resizeMode={'cover'}
+                        style={styles.specialColumnCover}
+                        source={{uri: `${specialColumn.pic}/banner_medium`}}
+                      />
+                    ) : null}
+                    <Text numberOfLines={2} style={{...ApplicationStyles.contentListTitle}}>
+                      {specialColumn.name}
+                    </Text>
+                    <View style={styles.specialColumnInfoView}>
+                      <View>
+                        <Text style={styles.specialColumnInfoText}>
+                          {specialColumn.column_buy_count}人已加入学习
+                        </Text>
+                        <Text style={styles.specialColumnInfoText}>
+                          已更新{specialColumn.count}节/共{specialColumn.course_total_count}节
+                        </Text>
+                      </View>
+                      <View style={{...styles.subscribeButton}}>
+                        <Text style={{...styles.subscribeButtonText, ...styles.subscribeButtonTip}}>
+                          订阅专栏
+                        </Text>
+                        <Text style={{...styles.subscribeButtonText, ...styles.subscribeButtonPrice}}>
+                          {specialColumn.column_price / 100}元/
+                          <Text style={{...styles.subscribeButtonUnit}}>
+                            {specialColumn.course_total_count}节
+                          </Text>
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableWithoutFeedback>
+                <ScrollView horizontal={true}>
+                </ScrollView>
+                {index !== specialColumnList.length - 1 && (
+                  <View style={{...ApplicationStyles.hr, marginLeft: scaleSize(-12)}} />
+                )}
+              </Fragment>
+            ))}
+          </View>
         </ScrollView>
       </Fragment>
     );
@@ -133,6 +206,12 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
       .then((res) => {
         this.setState({
           questionsList: res.list,
+        });
+      });
+    getCurriculumlist()
+      .then((res) => {
+        this.setState({
+          specialColumnList: res.data,
         });
       });
   }

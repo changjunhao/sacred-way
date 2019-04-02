@@ -13,12 +13,15 @@ import {
   View,
 } from 'react-native';
 import {NavigationEvents, NavigationScreenProps} from 'react-navigation';
+import CourseListComponent from '../../../Components/CourseList';
 import {scaleSize, setSpText2} from '../../../Lib/ScreenUtil';
 // import { getUserInfo } from '../../../Services/user';
+import { getUserBuyCurriculum } from '../../../Services/course';
 import ApplicationStyles from '../../../Theme/ApplicationStyles';
 
 interface InterfaceMyState {
   userInfo;
+  purchasedCourses: any[];
 }
 
 interface InterfaceProps extends NavigationScreenProps<{}> {
@@ -36,23 +39,24 @@ export default class MyScreen extends Component<InterfaceProps, InterfaceMyState
     super(props);
     this.state = {
       userInfo: {},
+      purchasedCourses: [],
     };
   }
 
   public render() {
-    const { userInfo } = this.state;
+    const { userInfo, purchasedCourses } = this.state;
 
     return (
       <Fragment>
         <NavigationEvents onWillFocus={this.fetchData} />
         <ScrollView style={{...ApplicationStyles.mainContainer}}>
           <ImageBackground
-            source={require('../../../Images/bg.png')}
+            source={require('../../../Images/tab_member_images/bg.png')}
             style={styles.cardBackgroundImage}
             imageStyle={{resizeMode: 'cover', borderRadius: 4}}>
             <View style={{flexDirection: 'row-reverse'}}>
               <TouchableWithoutFeedback onPress={this.showActionSheet}>
-                <Image source={require('../../../Images/shezhi.png')} />
+                <Image source={require('../../../Images/tab_member_images/shezhi.png')} />
               </TouchableWithoutFeedback>
             </View>
             <View
@@ -68,22 +72,34 @@ export default class MyScreen extends Component<InterfaceProps, InterfaceMyState
                 source={userInfo.head_img ? {uri: userInfo.head_img} : require('../../../Images/mrtx.png')}
                 resizeMode={'cover'}
               />
-              <View style={{marginLeft: scaleSize(16)}}>
-                <Text style={{color: '#FEE3A6', fontSize: setSpText2(16), marginBottom: scaleSize(12)}}>
-                  {userInfo.real_name || userInfo.nick_name}
-                </Text>
+              <View style={{marginLeft: scaleSize(16), height: scaleSize(50), justifyContent: 'space-around'}}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Text style={{color: '#FEE3A6', fontSize: setSpText2(16), marginRight: scaleSize(8)}}>
+                    {userInfo.real_name || userInfo.nick_name}
+                  </Text>
+                  {userInfo.member_name && (
+                    <Text style={{
+                      fontSize: setSpText2(12),
+                      color: '#E4CA91',
+                      backgroundColor: '#5A5952',
+                      paddingHorizontal: scaleSize(12),
+                      paddingVertical: scaleSize(5)}}
+                    >
+                      {userInfo.member_name}
+                    </Text>
+                  )}
+                </View>
                 <Text style={{color: '#FEE3A6', fontSize: setSpText2(11)}}>{userInfo.contact_number}</Text>
               </View>
             </View>
-            {userInfo.roles ?
-              <View style={styles.rolesView}>
-                {userInfo.roles.map((role, index) => (
-                  <View key={index} style={styles.roleView}>
-                    <Text style={styles.roleText}>{role}</Text>
-                  </View>
-                ))}
-              </View> : null}
           </ImageBackground>
+          <View style={{paddingVertical: scaleSize(25)}}>
+            <Text style={{...ApplicationStyles.contentListTitle}}>我学习的课程</Text>
+            {purchasedCourses.map((course) => (
+              <CourseListComponent key={course.curriculum_id} course={course} navigation={this.props.navigation}>
+              </CourseListComponent>
+            ))}
+          </View>
         </ScrollView>
       </Fragment>
     );
@@ -99,6 +115,12 @@ export default class MyScreen extends Component<InterfaceProps, InterfaceMyState
     //       userInfo,
     //     });
     //   });
+    getUserBuyCurriculum()
+      .then((res) => {
+        this.setState({
+          purchasedCourses: res,
+        });
+      });
   }
 
   private showActionSheet = () => {

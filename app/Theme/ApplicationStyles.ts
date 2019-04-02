@@ -13,6 +13,10 @@ export default StyleSheet.create({
     backgroundColor: '#E2E2E2',
     marginLeft: scaleSize(-16),
   },
+  flexRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   contentListHeader: {
     height: scaleSize(62),
     flexDirection: 'row',
@@ -21,7 +25,8 @@ export default StyleSheet.create({
   },
   contentListTitle: {
     fontSize: setSpText2(18),
-    color: '#272a32',
+    color: '#222222',
     fontWeight: 'bold',
+    flexWrap: 'wrap',
   },
 });
