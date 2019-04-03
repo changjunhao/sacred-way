@@ -59,4 +59,50 @@ export default StyleSheet.create({
   subscribeButtonUnit: {
     fontSize: setSpText2(12),
   },
+  curriculumColumn: {
+    width: scaleSize(295),
+  },
+  catalogTitle: {
+    fontSize: setSpText2(13),
+    fontWeight: 'bold',
+    color: '#222222',
+    marginBottom: scaleSize(12),
+  },
+  courseView: {
+    marginBottom: scaleSize(15),
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  keyWordView: {
+    borderColor: '#F26522',
+    borderWidth: scaleSize(1),
+    borderRadius: scaleSize(7),
+    width: scaleSize(50),
+    height: scaleSize(20),
+    marginRight: scaleSize(10),
+    justifyContent: 'center',
+  },
+  keyWord: {
+    textAlign: 'center',
+    color: '#F26522',
+    fontWeight: 'bold',
+    fontSize: setSpText2(9),
+  },
+  courseTitle: {
+    width: scaleSize(200),
+    height: scaleSize(40),
+    lineHeight: setSpText2(13 * 1.3),
+    fontSize: setSpText2(13),
+    color: '#222222',
+    flexWrap: 'wrap',
+  },
+  coursePrice: {
+    color: '#F26522',
+    fontSize: setSpText2(12),
+  },
+  courseLearnNumber: {
+    marginLeft: scaleSize(6),
+    fontSize: setSpText2(12),
+    color: '#999999',
+  },
 });

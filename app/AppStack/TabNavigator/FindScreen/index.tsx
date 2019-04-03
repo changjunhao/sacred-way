@@ -37,9 +37,6 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
     };
   }
 
-  public componentDidMount() {
-  }
-
   public render() {
     const userInfo = this.props.UserStore.info;
     const { bulletinList, questionsList, specialColumnList } = this.state;
@@ -52,7 +49,10 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
     return (
       <Fragment>
         <NavigationEvents onWillFocus={this.fetchData} />
-        <ScrollView style={{...ApplicationStyles.mainContainer, paddingHorizontal: scaleSize(12)}}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{...ApplicationStyles.mainContainer, paddingHorizontal: scaleSize(12)}}
+        >
           <View>
             {userInfo.status !== 2 ?
               (
@@ -147,7 +147,8 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
           <View style={styles.specialColumnListView}>
             {specialColumnList.map((specialColumn, index) => (
               <Fragment key={specialColumn.id}>
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback
+                  onPress={() => this.props.navigation.navigate('SpecialColumnDetail', {id: specialColumn.id})}>
                   <View style={styles.specialColumnView}>
                     {specialColumn.pic ? (
                       <Image
@@ -182,7 +183,46 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
                     </View>
                   </View>
                 </TouchableWithoutFeedback>
-                <ScrollView horizontal={true}>
+                <Text style={styles.catalogTitle}>专栏课程目录</Text>
+                <ScrollView
+                  horizontal={true}
+                  snapToInterval={scaleSize(295)}
+                  showsHorizontalScrollIndicator={false}>
+                  {specialColumn.curriculums.map((curriculumList, curriculumIndex) => (
+                    <View
+                      key={curriculumIndex}
+                      style={curriculumIndex === specialColumn.length - 1 ?
+                        {...styles.curriculumColumn, width: scaleSize(351)} :
+                        {...styles.curriculumColumn}}>
+                      {curriculumList.map((curriculum) => (
+                        <TouchableWithoutFeedback
+                          key={curriculum.curriculum_id}
+                          onPress={
+                            () => this.props.navigation.navigate(
+                              'CourseDetail',
+                              {id: curriculum.curriculum_id, columnId: specialColumn.id},
+                              )
+                          }>
+                          <View style={styles.courseView}>
+                            <View style={styles.keyWordView}>
+                              <Text style={styles.keyWord}>{curriculum.key_word}</Text>
+                            </View>
+                            <View>
+                              <Text
+                                numberOfLines={2}
+                                style={styles.courseTitle}>
+                                {curriculum.curriculum_name}
+                              </Text>
+                              <View style={{flexDirection: 'row'}}>
+                                <Text style={styles.coursePrice}>{curriculum.present_price / 100}元/单节</Text>
+                                <Text style={styles.courseLearnNumber}>{curriculum.buy_count}人学习</Text>
+                              </View>
+                            </View>
+                          </View>
+                        </TouchableWithoutFeedback>
+                      ))}
+                    </View>
+                  ))}
                 </ScrollView>
                 {index !== specialColumnList.length - 1 && (
                   <View style={{...ApplicationStyles.hr, marginLeft: scaleSize(-12)}} />
@@ -210,8 +250,21 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
       });
     getCurriculumlist()
       .then((res) => {
+        function splitList(list) {
+          const { length } = list;
+          const newList: any[] = [];
+          for (let i = 0; i < length; i += 3) {
+            newList.push(list.slice(i, i + 3));
+          }
+          return newList;
+        }
         this.setState({
-          specialColumnList: res.data,
+          specialColumnList: res.data.map((item, index) => ({
+            ...item,
+            curriculums: splitList(item.curriculums),
+            current: index % 3,
+            length: Math.ceil(item.curriculums.length / 3),
+          })),
         });
       });
   }

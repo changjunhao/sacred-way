@@ -3,6 +3,8 @@ import BulletinDetailScreen from './BulletinScreen/Detail';
 import BulletinListScreen from './BulletinScreen/List';
 import CommunityDetailScreen from './CommunityScreen/Detail';
 import CommunityListScreen from './CommunityScreen/List';
+import CourseDetailScreen from './CourseScreen/Detail'
+import SpecialColumnDetailScreen from './SpecialColumnScreen/Detail';
 import TabNavigator from './TabNavigator';
 import InfoModifyScreen from './UserScreen/InfoModify';
 import PasswordModifyScreen from './UserScreen/PasswordModify';
@@ -16,6 +18,8 @@ export default createStackNavigator(
     BulletinDetail: BulletinDetailScreen,
     CommunityList: CommunityListScreen,
     CommunityDetail: CommunityDetailScreen,
+    SpecialColumnDetail: SpecialColumnDetailScreen,
+    CourseDetail: CourseDetailScreen,
   },
   {
     defaultNavigationOptions: {
