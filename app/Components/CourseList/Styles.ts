@@ -42,4 +42,12 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  shareIcon: {
+    marginRight: scaleSize(28),
+  },
+  learningText: {
+    marginLeft: scaleSize(8),
+    fontSize: setSpText2(12),
+    color: '#F26522',
+  },
 });

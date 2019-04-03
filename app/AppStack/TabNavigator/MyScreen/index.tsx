@@ -95,8 +95,11 @@ export default class MyScreen extends Component<InterfaceProps, InterfaceMyState
           </ImageBackground>
           <View style={{paddingVertical: scaleSize(25)}}>
             <Text style={{...ApplicationStyles.contentListTitle}}>我学习的课程</Text>
-            {purchasedCourses.map((course) => (
-              <CourseListComponent key={course.curriculum_id} course={course} navigation={this.props.navigation}>
+            {purchasedCourses.map((course, index) => (
+              <CourseListComponent
+                key={course.curriculum_id}
+                course={course}
+                navigation={this.props.navigation} borderBottom={index !== purchasedCourses.length - 1}>
               </CourseListComponent>
             ))}
           </View>
