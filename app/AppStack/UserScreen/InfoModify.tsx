@@ -37,10 +37,6 @@ interface InterfaceStates {
 @inject('UserStore')
 @observer
 export default class InfoModify extends Component<InterfaceProps, InterfaceStates> {
-  public static navigationOptions = {
-    tabBarVisible: false,
-  };
-
   constructor(prop) {
     super(prop);
     this.state = {
