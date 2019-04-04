@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import {
+  Keyboard,
   Text,
   TextInput,
   TouchableHighlight,
@@ -16,6 +17,7 @@ interface InterfaceProps {
 }
 
 class EditInfo extends Component<InterfaceProps> {
+  private keyboardDidShowListener: any;
 
   public componentDidMount(): void {
     this.props.UserStore.setBaseInfo({
@@ -23,12 +25,19 @@ class EditInfo extends Component<InterfaceProps> {
       phone: this.props.UserStore.info.contact_number || this.props.UserStore.info.mobile_number,
       location: this.props.UserStore.info.location,
     });
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+  }
+
+  public _keyboardDidShow() {
+    Picker.isPickerShow((status) => {
+      if (status) {
+        Picker.hide();
+      }
+    });
   }
 
   public componentWillUnmount(): void {
-    // Picker.isPickerShow((status) => {
-    //   alert(status);
-    // });
+    this.keyboardDidShowListener.remove();
     Picker.hide();
   }
 

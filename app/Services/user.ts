@@ -150,7 +150,32 @@ export function setUserInfo(params) {
       real_name: params.name,
       contact_number: params.phone,
       location: params.location,
+      head_img: params.avatar,
+      nick_name: params.nickName,
+      wechat: params.weChat,
+      wechat_qrcode: params.weChatQR,
+      company: params.company,
+      duty: params.duty,
+      trade: params.trade,
     }),
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson;
+    })
+    .catch((error) => {
+      // console.error(error);
+    });
+}
+
+export function uploadAvatar(params) {
+  const formData = new FormData();
+  // @ts-ignore
+  formData.append('file', {uri: params.uri, type: 'application/octet-stream', name: params.name});
+  formData.append('dir', 'headImg');
+  return fetch(`${BASEURL}/utility/FileUpload/uploadFtoOss`, {
+    method: 'POST',
+    body: formData,
   })
     .then((response) => response.json())
     .then((responseJson) => {

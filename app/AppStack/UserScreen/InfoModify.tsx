@@ -12,10 +12,12 @@ import {
   View,
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
+import Icon from 'react-native-vector-icons/AntDesign';
 import {NavigationScreenProps} from 'react-navigation';
 import EditInfo from '../../Components/EditInfo';
 import InputStyles from '../../Components/EditInfo/Styles';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
+import { setUserInfo, uploadAvatar } from '../../Services/user';
 import ApplicationStyles from '../../Theme/ApplicationStyles';
 
 interface InterfaceProps extends NavigationScreenProps<{}> {
@@ -25,6 +27,11 @@ interface InterfaceProps extends NavigationScreenProps<{}> {
 interface InterfaceStates {
   avatar: string;
   nickName: string;
+  weChat: string;
+  weChatQR: string;
+  company: string;
+  duty: string;
+  trade: string;
 }
 
 @inject('UserStore')
@@ -39,6 +46,11 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
     this.state = {
       avatar: '',
       nickName: '',
+      weChat: '',
+      weChatQR: '',
+      company: '',
+      duty: '',
+      trade: '',
     };
   }
 
@@ -57,7 +69,7 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
         <KeyboardAvoidingView style={{flex: 1}} behavior='padding' keyboardVerticalOffset={88} enabled>
           <ScrollView style={{...ApplicationStyles.mainContainer}}>
             <View style={styles.avatarActionView}>
-              <TouchableHighlight underlayColor='white'  onPress={this.handleSelectImage}>
+              <TouchableHighlight underlayColor='white'  onPress={() => this.handleSelectImage('avatar')}>
                 <View>
                   <Image
                     style={styles.avatar}
@@ -85,6 +97,68 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
                   onChangeText={(nickName) => this.setState({nickName})}
                 />
               </View>
+              <View>
+                <View style={InputStyles.labelView}>
+                  <Text style={InputStyles.labelText}>微信号</Text>
+                </View>
+                <TextInput
+                  style={InputStyles.input}
+                  placeholder={'请输入微信号（20个字）'}
+                  defaultValue={this.props.UserStore.info.wechat}
+                  onChangeText={(weChat) => this.setState({weChat})}
+                />
+              </View>
+              <View>
+                <View style={InputStyles.labelView}>
+                  <Text style={InputStyles.labelText}>微信二维码</Text>
+                </View>
+                <TouchableHighlight underlayColor='white'  onPress={this.handleSelectImage}>
+                  <View style={{...styles.weChatQRView}}>
+                    {this.state.weChatQR || this.props.UserStore.info.wechat_qrcode ? (
+                      <Image
+                        style={{...styles.weChatQR}}
+                        resizeMode={'cover'}
+                        source={{uri: this.state.weChatQR || this.props.UserStore.info.wechat_qrcode}}
+                      />
+                    ) : (
+                      <Icon size={setSpText2(40)} color={'#272A32'} name={'plus'}/>
+                    )}
+                  </View>
+                </TouchableHighlight>
+              </View>
+              <View>
+                <View style={InputStyles.labelView}>
+                  <Text style={InputStyles.labelText}>公司名称</Text>
+                </View>
+                <TextInput
+                  style={InputStyles.input}
+                  placeholder={'请输入公司名称（20个字）'}
+                  defaultValue={this.props.UserStore.info.company}
+                  onChangeText={(company) => this.setState({company})}
+                />
+              </View>
+              <View>
+                <View style={InputStyles.labelView}>
+                  <Text style={InputStyles.labelText}>职务名称</Text>
+                </View>
+                <TextInput
+                  style={InputStyles.input}
+                  placeholder={'请输入职务名称（10个字）'}
+                  defaultValue={this.props.UserStore.info.duty}
+                  onChangeText={(duty) => this.setState({duty})}
+                />
+              </View>
+              <View>
+                <View style={InputStyles.labelView}>
+                  <Text style={InputStyles.labelText}>所属行业</Text>
+                </View>
+                <TextInput
+                  style={InputStyles.input}
+                  placeholder={'请输入所属行业（10个字）'}
+                  defaultValue={this.props.UserStore.info.trade}
+                  onChangeText={(trade) => this.setState({trade})}
+                />
+              </View>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -106,29 +180,62 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
   }
 
   private handleSubmit = async () => {
-    // TODO 提交
+    const {name, phone, location} = this.props.UserStore.baseInfo;
+    const {avatar, nickName, weChat, weChatQR, company, duty, trade} = this.state;
+    await setUserInfo({
+      name,
+      phone,
+      location,
+      avatar,
+      nickName,
+      weChat,
+      weChatQR,
+      company,
+      duty,
+      trade,
+    })
+      .then((res) => {
+        if (res.errno === 0) {
+          this.props.UserStore.setInfo(res.data);
+          this.props.navigation.goBack();
+        } else {
+          Alert.alert(res.errmsg);
+        }
+      });
   }
 
-  private handleSelectImage = () => {
+  private handleSelectImage = (type) => {
     const options = {
-      title: '选取头像',
+      title: '选取图片',
       cancelButtonTitle: '取消',
       takePhotoButtonTitle: null,
       chooseFromLibraryButtonTitle: null,
-      cameraType: 'front',
       mediaType: 'photo',
     };
 
     // @ts-ignore
     ImagePicker.launchImageLibrary(options, (response) => {
-      if (response.error) {
+      if (response.didCancel) {
+        // console.log('User cancelled image picker');
+      } else if (response.error) {
         Alert.alert(response.error);
       } else {
-        // You can also display the image using data:
-        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-        this.setState({
-          avatar: response.uri,
-        });
+        uploadAvatar({uri: response.uri, name: response.fileName})
+          .then((res) => {
+            if (res.errno === 0) {
+              if (type === 'avatar') {
+                this.setState({
+                  avatar: res.data.info.file_url,
+                });
+              } else {
+                this.setState({
+                  weChatQR: res.data.info.file_url,
+                });
+              }
+            } else {
+              Alert.alert(res.errmsg);
+            }
+          });
       }
     });
   }
@@ -169,5 +276,18 @@ const styles = StyleSheet.create({
   },
   infoView: {
     paddingVertical: scaleSize(16),
+  },
+  weChatQRView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: scaleSize(12),
+    borderColor: '#E2E2E2',
+    borderWidth: 1,
+    width: scaleSize(90),
+    height: scaleSize(90),
+  },
+  weChatQR: {
+    width: scaleSize(90),
+    height: scaleSize(90),
   },
 });

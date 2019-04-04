@@ -102,7 +102,7 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
                 <View style={{...ApplicationStyles.flexRow}}>
                   <Image source={require('../../../Images/tab_find_images/bulletin_icon.png')} />
                   <Text style={{color: '#FFF', fontSize: setSpText2(15), fontWeight: 'bold'}}>
-                    会员公告
+                    布告栏
                   </Text>
                 </View>
                 <Icon size={setSpText2(12)} color={'#FFF'} name={'right'}/>

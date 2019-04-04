@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
 
 export default StyleSheet.create({
@@ -61,5 +61,6 @@ export default StyleSheet.create({
   },
   infoView: {
     paddingHorizontal: scaleSize(16),
+    minHeight: Dimensions.get('window').height - scaleSize(100) - 88 - 34,
   },
 });
