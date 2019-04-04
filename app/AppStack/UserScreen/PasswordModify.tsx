@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-community/async-storage"
+import AsyncStorage from '@react-native-community/async-storage';
 import {inject, observer} from 'mobx-react/native';
 import React, {Component, Fragment} from 'react';
 import {
@@ -8,10 +8,10 @@ import {
   TextInput,
   TouchableHighlight,
   View,
-} from 'react-native'
+} from 'react-native';
 import {NavigationScreenProps} from 'react-navigation';
 import InputStyles from '../../AuthStack/Styles';
-import {scaleSize, setSpText2} from '../../Lib/ScreenUtil'
+import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
 import {checkVerificationCode, resetPassword, sendMobileMessage} from '../../Services/user';
 
 interface InterfaceStates {
