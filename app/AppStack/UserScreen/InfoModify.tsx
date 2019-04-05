@@ -63,7 +63,9 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
     return (
       <SafeAreaView style={{flex: 1}}>
         <KeyboardAvoidingView style={{flex: 1}} behavior='padding' keyboardVerticalOffset={88} enabled>
-          <ScrollView style={{...ApplicationStyles.mainContainer}}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={{...ApplicationStyles.mainContainer}}>
             <View style={styles.avatarActionView}>
               <TouchableHighlight underlayColor='white'  onPress={() => this.handleSelectImage('avatar')}>
                 <View>

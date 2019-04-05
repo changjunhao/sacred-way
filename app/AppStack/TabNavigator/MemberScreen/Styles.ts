@@ -40,7 +40,79 @@ export default StyleSheet.create({
     padding: scaleSize(16),
     marginBottom: scaleSize(36),
   },
-  recommendation: {
-
+  incomeView: {
+    flexDirection: 'row',
+  },
+  myIncome: {
+    flex: 1,
+    height: scaleSize(88),
+  },
+  canWithdraw: {
+    borderLeftColor: '#EBEBEB',
+    borderLeftWidth: scaleSize(1),
+    width: scaleSize(120),
+    height: scaleSize(88),
+    justifyContent: 'center',
+  },
+  myUsers: {
+    marginTop: scaleSize(16),
+    paddingVertical: scaleSize(16),
+    borderTopColor: '#EBEBEB',
+    borderTopWidth: scaleSize(1),
+  },
+  myUsersInfo: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    height: scaleSize(60),
+  },
+  incomeInfo: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    height: scaleSize(60),
+  },
+  infoTitle: {
+    fontSize: setSpText2(22),
+    fontWeight: 'bold',
+    color: '#49495E',
+  },
+  infoTitleIcon: {
+    marginLeft: scaleSize(8),
+  },
+  infoTipText: {
+    marginTop: scaleSize(5),
+    fontSize: setSpText2(12),
+    fontWeight: '500',
+    textAlign: 'center',
+    color: '#AAAAAA',
+  },
+  text: {
+    color: '#49495E',
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  userNumber: {
+    fontSize: setSpText2(20),
+  },
+  todayIncome: {
+    fontSize: setSpText2(22),
+  },
+  totalIncome: {
+    fontSize: setSpText2(14),
+  },
+  money: {
+    color: '#E8C38D',
+    fontWeight: '500',
+    textAlign: 'center',
+    fontSize: setSpText2(20),
+  },
+  recommendTitle: {
+    color: '#444444',
+    fontSize: setSpText2(22),
+    fontWeight: 'bold',
+  },
+  recommendTitleBorder: {
+    width: scaleSize(3),
+    height: scaleSize(16),
+    marginRight: scaleSize(8),
   },
 });

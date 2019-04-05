@@ -49,7 +49,9 @@ export default class MyScreen extends Component<InterfaceProps, InterfaceMyState
     return (
       <Fragment>
         <NavigationEvents onWillFocus={this.fetchData} />
-        <ScrollView style={{...ApplicationStyles.mainContainer}}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{...ApplicationStyles.mainContainer}}>
           <ImageBackground
             source={require('../../../Images/tab_member_images/bg.png')}
             style={styles.cardBackgroundImage}
@@ -99,6 +101,7 @@ export default class MyScreen extends Component<InterfaceProps, InterfaceMyState
               <CourseListComponent
                 key={course.curriculum_id}
                 course={course}
+                recommend={false}
                 navigation={this.props.navigation} borderBottom={index !== purchasedCourses.length - 1}>
               </CourseListComponent>
             ))}

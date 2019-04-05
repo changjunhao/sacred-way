@@ -35,6 +35,11 @@ export default StyleSheet.create({
     fontSize: setSpText2(16),
     fontWeight: 'bold',
   },
+  recommendPrice: {
+    color: '#FF5400',
+    fontSize: setSpText2(14),
+    fontWeight: 'bold',
+  },
   unit: {
     fontSize: setSpText2(12),
   },
@@ -49,5 +54,13 @@ export default StyleSheet.create({
     marginLeft: scaleSize(8),
     fontSize: setSpText2(12),
     color: '#F26522',
+  },
+  shareText: {
+    color: '#644528',
+    fontSize: setSpText2(12),
+    fontWeight: 'bold',
+  },
+  sharePriceText: {
+    fontSize: setSpText2(14),
   },
 });

@@ -40,7 +40,9 @@ export default class CommunityListScreen extends Component<InterfaceProps, Inter
     const { questionsList } = this.state;
 
     return (
-      <ScrollView style={{...ApplicationStyles.mainContainer}}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{...ApplicationStyles.mainContainer}}>
         <View style={{...ApplicationStyles.container}}>
           {questionsList.map((question) => (
             <CommunityListComponent key={question.id} question={question} navigation={this.props.navigation}/>

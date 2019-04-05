@@ -18,7 +18,7 @@ export default class CourseDetail extends Component<InterfaceProps> {
   public render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> {
     return (
       <SafeAreaView style={{flex: 1}}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View>
             <Text>课程详情页</Text>
           </View>

@@ -131,7 +131,9 @@ export default class CommunityDetailScreen extends Component<InterfaceProps, Int
     const { title, groupName, readCount, list, modalVisible } = this.state;
     return (
       <Fragment>
-        <ScrollView style={{backgroundColor: '#f0f0f0', padding: scaleSize(16)}}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{backgroundColor: '#f0f0f0', padding: scaleSize(16)}}>
           <ImageBackground
             source={require('../../Images/watermark.png')}
             style={{minHeight: '100%', width: '100%'}}

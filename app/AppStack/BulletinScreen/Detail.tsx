@@ -54,7 +54,9 @@ export default class BulletinDetailScreen extends Component<InterfaceProps, Inte
     const { bulletin } = this.state;
     return (
       <SafeAreaView style={{flex: 1}}>
-        <ScrollView style={{...ApplicationStyles.mainContainer}}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{...ApplicationStyles.mainContainer}}>
           <View style={{marginTop: scaleSize(15)}}>
             <Text style={{color: '#272a32', fontWeight: 'bold', fontSize: setSpText2(15)}}>{bulletin.title}</Text>
           </View>

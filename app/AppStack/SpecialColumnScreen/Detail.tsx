@@ -29,6 +29,10 @@ interface InterfaceProps {
 }
 
 export default class SpecialColumnDetail extends Component<InterfaceProps, InterfaceState> {
+  public static navigationOptions = {
+    headerBackTitle: null,
+  };
+
   constructor(prop) {
     super(prop);
     this.state = {
@@ -56,7 +60,11 @@ export default class SpecialColumnDetail extends Component<InterfaceProps, Inter
 
     return (
       <SafeAreaView style={{flex: 1}}>
-        <ScrollView stickyHeaderIndices={[3]} automaticallyAdjustContentInsets={false} style={{flex: 1}}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          stickyHeaderIndices={[3]}
+          automaticallyAdjustContentInsets={false}
+          style={{flex: 1}}>
           {info.pic ? <Image resizeMode={'cover'} source={{uri: info.pic}} style={styles.cover} /> : null}
           <View style={styles.baseInfoView}>
             <View style={{...ApplicationStyles.flexRow}}>
@@ -109,6 +117,7 @@ export default class SpecialColumnDetail extends Component<InterfaceProps, Inter
               <CourseListComponent
                 key={course.curriculum_id}
                 course={course}
+                recommend={false}
                 borderBottom={index !== curriculumList.length - 1}
                 // @ts-ignore
                 navigation={this.props.navigation}>
