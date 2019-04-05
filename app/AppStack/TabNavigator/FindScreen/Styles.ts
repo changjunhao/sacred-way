@@ -19,6 +19,21 @@ export default StyleSheet.create({
   specialColumnView: {
     paddingVertical: scaleSize(12),
   },
+  specialColumnCoverLabel: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    backgroundColor: '#F26522',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: scaleSize(45),
+    height: scaleSize(25),
+  },
+  specialColumnCoverLabelText: {
+    fontSize: setSpText2(13),
+    fontWeight: 'bold',
+    color: '#FFFEFE',
+  },
   specialColumnCover: {
     marginBottom: scaleSize(12),
     width: scaleSize(353),

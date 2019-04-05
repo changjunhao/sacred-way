@@ -154,11 +154,18 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
                   onPress={() => this.props.navigation.navigate('SpecialColumnDetail', {id: specialColumn.id})}>
                   <View style={styles.specialColumnView}>
                     {specialColumn.pic ? (
-                      <Image
-                        resizeMode={'cover'}
-                        style={styles.specialColumnCover}
-                        source={{uri: `${specialColumn.pic}/banner_medium`}}
-                      />
+                      <View>
+                        <Image
+                          resizeMode={'cover'}
+                          style={styles.specialColumnCover}
+                          source={{uri: `${specialColumn.pic}/banner_medium`}}
+                        />
+                        <View style={styles.specialColumnCoverLabel}>
+                          <Text style={styles.specialColumnCoverLabelText}>
+                            专栏
+                          </Text>
+                        </View>
+                      </View>
                     ) : null}
                     <Text numberOfLines={2} style={{...ApplicationStyles.contentListTitle}}>
                       {specialColumn.name}
