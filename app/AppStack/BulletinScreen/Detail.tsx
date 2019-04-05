@@ -55,7 +55,7 @@ export default class BulletinDetailScreen extends Component<InterfaceProps, Inte
     return (
       <SafeAreaView style={{flex: 1}}>
         <ScrollView style={{...ApplicationStyles.mainContainer}}>
-          <View>
+          <View style={{marginTop: scaleSize(15)}}>
             <Text style={{color: '#272a32', fontWeight: 'bold', fontSize: setSpText2(15)}}>{bulletin.title}</Text>
           </View>
           <View style={{flexDirection: 'row'}}>

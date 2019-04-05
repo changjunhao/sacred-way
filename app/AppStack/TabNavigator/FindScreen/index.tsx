@@ -20,6 +20,7 @@ interface InterfaceStates {
   bulletinList: any[];
   questionsList: any[];
   specialColumnList: any[];
+  questionsListCount: number;
 }
 
 @inject('UserStore')
@@ -34,12 +35,13 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
       bulletinList: [],
       questionsList: [],
       specialColumnList: [],
+      questionsListCount: 0,
     };
   }
 
   public render() {
     const userInfo = this.props.UserStore.info;
-    const { bulletinList, questionsList, specialColumnList } = this.state;
+    const { bulletinList, questionsList, questionsListCount, specialColumnList } = this.state;
 
     const CommunityList = questionsList
       .map((question) => (
@@ -62,6 +64,7 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
                       backgroundColor: '#FFF4DA',
                       borderRadius: 4,
                       height: scaleSize(35),
+                      marginTop: scaleSize(12),
                       paddingHorizontal: scaleSize(10),
                       flexDirection: 'row',
                       justifyContent: 'space-between',
@@ -132,7 +135,7 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
           <View>
             <View style={ApplicationStyles.contentListHeader}>
               <Text style={ApplicationStyles.contentListTitle}>美秒社群精华问答</Text>
-              {questionsList.length > 4 ? (
+              {questionsListCount > 2 ? (
                 <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('CommunityList')}>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Text style={{fontSize: setSpText2(13), color: '#272A32'}}>查看全部</Text>
@@ -144,7 +147,7 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
             {CommunityList}
           </View>
           <View style={{...ApplicationStyles.hr, marginLeft: scaleSize(-12)}} />
-          <View style={styles.specialColumnListView}>
+          <View>
             {specialColumnList.map((specialColumn, index) => (
               <Fragment key={specialColumn.id}>
                 <TouchableWithoutFeedback
@@ -246,6 +249,7 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
       .then((res) => {
         this.setState({
           questionsList: res.list,
+          questionsListCount: res.count,
         });
       });
     getCurriculumlist()

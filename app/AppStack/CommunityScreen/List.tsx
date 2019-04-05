@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {
   ScrollView,
+  View,
 } from 'react-native';
 import {NavigationScreenProps} from 'react-navigation';
 import CommunityListComponent from '../../Components/CommunityList';
@@ -40,9 +41,11 @@ export default class CommunityListScreen extends Component<InterfaceProps, Inter
 
     return (
       <ScrollView style={{...ApplicationStyles.mainContainer}}>
-        {questionsList.map((question) => (
-          <CommunityListComponent key={question.id} question={question} navigation={this.props.navigation}/>
-        ))}
+        <View style={{...ApplicationStyles.container}}>
+          {questionsList.map((question) => (
+            <CommunityListComponent key={question.id} question={question} navigation={this.props.navigation}/>
+          ))}
+        </View>
       </ScrollView>
     );
   }

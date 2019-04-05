@@ -33,7 +33,7 @@ class AuthLoadingScreen extends Component<InterfaceProps, {}> {
       this.props.tokenStore.setToken(userToken);
       const userInfo = await getUserInfo();
       this.props.UserStore.setInfo(userInfo);
-      if (userInfo.status === 0) {
+      if (userInfo.status === 1) {
         const resetAction = StackActions.reset({
           index: 0,
           actions: [NavigationActions.navigate({ routeName: 'InfoEdit' })],

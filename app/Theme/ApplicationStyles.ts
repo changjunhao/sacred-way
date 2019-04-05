@@ -5,7 +5,10 @@ export default StyleSheet.create({
   mainContainer: {
     flex: 1,
     paddingHorizontal: scaleSize(16),
-    paddingTop: scaleSize(15),
+    // paddingTop: scaleSize(15),
+  },
+  container: {
+    marginTop: scaleSize(15),
   },
   hr: {
     width: scaleSize(375),

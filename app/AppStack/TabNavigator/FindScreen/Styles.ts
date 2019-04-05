@@ -16,9 +16,6 @@ export default StyleSheet.create({
     paddingVertical: scaleSize(2),
     marginRight: scaleSize(6),
   },
-  specialColumnListView: {
-    marginBottom: scaleSize(12),
-  },
   specialColumnView: {
     paddingVertical: scaleSize(12),
   },

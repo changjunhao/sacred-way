@@ -239,7 +239,6 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
 
 const styles = StyleSheet.create({
   avatarActionView: {
-    marginTop: scaleSize(-15),
     height: scaleSize(200),
     alignItems: 'center',
     justifyContent: 'center',

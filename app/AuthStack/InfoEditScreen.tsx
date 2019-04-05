@@ -78,6 +78,7 @@ export default class InfoEditScreen extends Component<InterfaceProps> {
 const styles = StyleSheet.create({
   tipView: {
     paddingBottom: scaleSize(12),
+    marginTop: scaleSize(15),
     marginBottom: scaleSize(18),
     borderBottomColor: '#E2E2E2',
     borderBottomWidth: 1,
