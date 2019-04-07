@@ -3,7 +3,8 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
-  Text, TouchableWithoutFeedback,
+  Text,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
@@ -41,11 +42,10 @@ export default class CourseDetail extends Component<InterfaceProps, InterfaceSta
   public componentDidMount(): void {
     const { id, columnId } = this.props.navigation.state.params;
     getCourseDetail({id, column_id: columnId})
-      .then((res) => {
+      .then(async (res) => {
         // console.log(res);
         this.setState({
           baseInfo: res,
-          description: JSON.parse(res.description),
         });
         if (res.type === 2) {
           getSubCurriculum({id})
@@ -60,7 +60,37 @@ export default class CourseDetail extends Component<InterfaceProps, InterfaceSta
             chooseType: 1,
           });
         }
+        const description = JSON.parse(res.description) || [];
+        const infoPromiseArray = description
+          .map((item) => this.getInfo(item));
+        const infos: any[] = await Promise.all(infoPromiseArray);
+        this.setState({
+          description: infos,
+        });
       });
+  }
+
+  public getInfo(originInfo) {
+    return new Promise(async (resolve) => {
+      if (originInfo.type === 3 && originInfo.value.length !== 0) {
+        const infoPromiseArray = originInfo.value
+          .map((item) => this.getImageInfo(item));
+        const infos: any[] = await Promise.all(infoPromiseArray);
+        resolve({...originInfo, value: infos});
+      } else {
+        resolve({...originInfo, width: 0, height: 0});
+      }
+    });
+  }
+
+  public getImageInfo(originInfo) {
+    return new Promise((resolve) => {
+      Image.getSize(originInfo, (width, height) => {
+        resolve({url: originInfo, width, height});
+      }, () => {
+        resolve({url: originInfo, width: 0, height: 0});
+      });
+    });
   }
 
   public render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> {
@@ -79,7 +109,7 @@ export default class CourseDetail extends Component<InterfaceProps, InterfaceSta
               {baseInfo.name}
             </Text>
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={{width: scaleSize(251.5)}}>{baseInfo.summary}</Text>
+              <Text style={styles.summary}>{baseInfo.summary}</Text>
               <View>
                 <Text><Text>{baseInfo.buy_count}</Text>人</Text>
                 <Text>已学习</Text>
@@ -146,7 +176,15 @@ export default class CourseDetail extends Component<InterfaceProps, InterfaceSta
                   ) : null}
                   {item.type === 3 ? (
                     <View style={{paddingBottom: scaleSize(7)}}>
-                      <Image source={{uri: item.value[0]}} style={{width: scaleSize(343)}} />
+                      {
+                        item.value.map((image) => (
+                          <Image
+                            key={image.url}
+                            source={{uri: image.url}}
+                            style={{width: scaleSize(343), height: image.height * 343 / image.width}}
+                          />
+                        ))
+                      }
                     </View>
                   ) : null}
                 </View>

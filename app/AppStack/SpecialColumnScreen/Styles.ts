@@ -4,7 +4,7 @@ import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
 export default StyleSheet.create({
   cover: {
     width: scaleSize(375),
-    height: scaleSize(205),
+    height: scaleSize(187.5),
   },
   baseInfoView: {
     paddingTop: scaleSize(15),
@@ -61,6 +61,21 @@ export default StyleSheet.create({
   },
   infoView: {
     paddingHorizontal: scaleSize(16),
+    paddingTop: scaleSize(16),
     minHeight: Dimensions.get('window').height - scaleSize(100) - 88 - 34,
+  },
+  descriptionContentView: {
+    paddingBottom: scaleSize(7),
+  },
+  descriptionTitle: {
+    color: '#272A32',
+    fontSize: setSpText2(17),
+    fontWeight: '600',
+    lineHeight: setSpText2(24),
+  },
+  descriptionText:  {
+    color: '#666',
+    fontSize: setSpText2(15),
+    lineHeight: setSpText2(22.5),
   },
 });
