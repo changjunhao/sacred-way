@@ -60,19 +60,49 @@ export default class BulletinListScreen extends Component<InterfaceProps, Interf
               onPress={() => {this.props.navigation.navigate('BulletinDetail', {id: item.id, title: item.title}); }}>
               <View style={{marginTop: scaleSize(16), marginBottom: scaleSize(20)}}>
                 <Text style={{color: '#272a32', fontWeight: 'bold', fontSize: setSpText2(15)}}>{item.title}</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <View>
-                    <Text>{item.category_name}</Text>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', marginVertical: scaleSize(12)}}>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text
+                      style={{
+                        color: '#ef3b3b',
+                        fontSize: setSpText2(12),
+                        borderWidth: scaleSize(1),
+                        borderColor: '#ef3b3b',
+                        paddingHorizontal: scaleSize(5),
+                        paddingVertical: scaleSize(1),
+                      }}
+                    >
+                      {item.category_name}
+                    </Text>
+                    {item.is_top === 1 && (
+                      <Text
+                        style={{
+                          color: '#51abff',
+                          fontSize: setSpText2(12),
+                          borderWidth: scaleSize(1),
+                          borderColor: '#51abff',
+                          paddingHorizontal: scaleSize(5),
+                          paddingVertical: scaleSize(1),
+                          marginLeft: scaleSize(5),
+                        }}
+                      >
+                        置顶
+                      </Text>
+                    )}
                   </View>
-                  {item.is_top === 1 && <View><Text>置顶</Text></View>}
+                  <Text style={{color: '#848fac', fontSize: setSpText2(12)}}>{this.formatTime(item.create_time)}</Text>
                 </View>
                 <View>
-                  <Text>{item.content.substring(0, 100)}...</Text>
-                  <View style={{flexDirection: 'row'}}>
+                  <Text style={{color: '#272a32', fontSize: setSpText2(14), lineHeight: setSpText2(21)}}>
+                    {item.content.substring(0, 100)}...
+                  </Text>
+                  <View style={{
+                    flexWrap: 'wrap',
+                    flexDirection: 'row'}}>
                     {item.images.map((image, index) => (
                       <Image
                         key={index}
-                        style={{width: scaleSize(80), height: scaleSize(80)}}
+                        style={{width: scaleSize(80), height: scaleSize(80), margin: scaleSize(5)}}
                         source={{uri: `${image}/thumb_medium`}} />
                     ))}
                   </View>
@@ -109,5 +139,15 @@ export default class BulletinListScreen extends Component<InterfaceProps, Interf
           });
         });
     });
+  }
+
+  private formatTime = (val) => {
+    const time = new Date(parseInt(val, 10) * 1000);
+    const y = time.getFullYear();
+    const m = time.getMonth() + 1;
+    const d = time.getDate();
+    const mm = m < 10 ? '0' + m : m;
+    const dd = d < 10 ? '0' + d : d;
+    return y + '-' + mm + '-' + dd;
   }
 }

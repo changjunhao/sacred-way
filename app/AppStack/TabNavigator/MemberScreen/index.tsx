@@ -126,7 +126,7 @@ export default class MemberScreen extends Component<InterfaceProps, InterfaceSta
                 </View>
                 {recommendList.map((course, index) => (
                   <CourseListComponent
-                    key={course.curriculum_id}
+                    key={course.id}
                     course={course}
                     recommend={true}
                     navigation={this.props.navigation} borderBottom={index !== recommendList.length - 1}>

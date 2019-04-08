@@ -66,6 +66,8 @@ interface InterfaceState {
   publishTime: string | number;
   screenshots: string;
   modalVisible: boolean;
+  imageModalVisible: boolean;
+  currentImage: any;
 }
 
 interface InterFaceStateParams extends NavigationState {
@@ -88,6 +90,8 @@ export default class CommunityDetailScreen extends Component<InterfaceProps, Int
       publishTime: '',
       screenshots: '',
       modalVisible: false,
+      imageModalVisible: false,
+      currentImage: {},
     };
   }
 
@@ -128,7 +132,7 @@ export default class CommunityDetailScreen extends Component<InterfaceProps, Int
   }
 
   public render() {
-    const { title, groupName, readCount, list, modalVisible } = this.state;
+    const { title, groupName, readCount, list, modalVisible, imageModalVisible, currentImage } = this.state;
     return (
       <Fragment>
         <ScrollView
@@ -142,12 +146,12 @@ export default class CommunityDetailScreen extends Component<InterfaceProps, Int
               style={{fontWeight: 'bold', color: '#222', fontSize: setSpText2(17), lineHeight: scaleSize(20)}}>
               {title}
             </Text>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <Text
                 style={{fontWeight: 'bold', color: '#555', fontSize: setSpText2(12)}}>
                 共{list.length}对话 来自：{groupName}
               </Text>
-              <Text>{readCount}次学习</Text>
+              <Text style={{color: '#a0a0a0', fontSize: setSpText2(12)}}>{readCount}次学习</Text>
             </View>
             <View
               style={{
@@ -179,17 +183,21 @@ export default class CommunityDetailScreen extends Component<InterfaceProps, Int
                 <View style={{paddingLeft: scaleSize(9)}}>
                   <Text style={{color: '#666', fontSize: setSpText2(12), marginBottom: scaleSize(4)}}>
                     {item.nick_name}
-                    <Text>@{groupName}</Text>
+                    <Text> @{groupName}</Text>
                   </Text>
                   {item.type === 'IMAGE' ?
                     (
-                      <Image
-                        style={{
-                          width: scaleSize(125),
-                          height: scaleSize(item.height * 125 / item.width),
-                          borderRadius: scaleSize(4)}}
-                        source={{uri: item.content}}
-                      />
+                      <TouchableWithoutFeedback
+                        onPress={() => this.setState({imageModalVisible: true, currentImage: item})}
+                      >
+                        <Image
+                          style={{
+                            width: scaleSize(125),
+                            height: scaleSize(item.height * 125 / item.width),
+                            borderRadius: scaleSize(4)}}
+                          source={{uri: item.content}}
+                        />
+                      </TouchableWithoutFeedback>
                     ) :
                     (
                       <View
@@ -239,6 +247,27 @@ export default class CommunityDetailScreen extends Component<InterfaceProps, Int
             />
             <TouchableWithoutFeedback onPress={() => this.setState({modalVisible: false})}>
               <Icon style={{marginTop: scaleSize(30)}} size={scaleSize(25)} color='#FFF' name={'close'}/>
+            </TouchableWithoutFeedback>
+          </SafeAreaView>
+        </Modal>
+        <Modal
+          animationType='fade'
+          visible={imageModalVisible}
+          onRequestClose={() => {
+            alert('Modal has been closed.');
+          }}
+        >
+          <SafeAreaView
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000'}}
+          >
+            <TouchableWithoutFeedback onPress={() => this.setState({imageModalVisible: false})}>
+            <Image
+              style={{
+                width: scaleSize(375),
+                height: scaleSize(currentImage.height * 375 / currentImage.width),
+              }}
+              source={{uri: currentImage.content}}
+            />
             </TouchableWithoutFeedback>
           </SafeAreaView>
         </Modal>
