@@ -3,11 +3,14 @@ import BulletinDetailScreen from './BulletinScreen/Detail';
 import BulletinListScreen from './BulletinScreen/List';
 import CommunityDetailScreen from './CommunityScreen/Detail';
 import CommunityListScreen from './CommunityScreen/List';
-import CourseDetailScreen from './CourseScreen/Detail'
+import CourseDetailScreen from './CourseScreen/Detail';
 import SpecialColumnDetailScreen from './SpecialColumnScreen/Detail';
 import TabNavigator from './TabNavigator';
+import EarningsScreen from './UserScreen/Earnings';
 import InfoModifyScreen from './UserScreen/InfoModify';
+import InviterScreen from './UserScreen/Inviter';
 import PasswordModifyScreen from './UserScreen/PasswordModify';
+import VisitedScreen from './UserScreen/Visited';
 
 export default createStackNavigator(
   {
@@ -20,6 +23,9 @@ export default createStackNavigator(
     CommunityDetail: CommunityDetailScreen,
     SpecialColumnDetail: SpecialColumnDetailScreen,
     CourseDetail: CourseDetailScreen,
+    Earnings: EarningsScreen,
+    Visited: VisitedScreen,
+    Inviter: InviterScreen,
   },
   {
     defaultNavigationOptions: {

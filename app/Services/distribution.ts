@@ -33,3 +33,48 @@ export function getDirectRecommend() {
       console.error(error);
     });
 }
+
+export function getUserIoList(params) {
+  return fetch(`${BASEURL}/membercenter/Distribution/user_io_list?page=${params.page}&pageSize=${params.pageSize}`, {
+    headers: {
+      USERSIGN: toJS(store).token,
+    },
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson.data;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+export function getScanList(params) {
+  return fetch(`${BASEURL}/membercenter/Distribution/scan_list?page=${params.page}&pageSize=${params.pageSize}`, {
+    headers: {
+      USERSIGN: toJS(store).token,
+    },
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson.data;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+export function getDirectUser(params) {
+  return fetch(`${BASEURL}/membercenter/Distribution/direct_user?page=${params.page}&pageSize=${params.pageSize}`, {
+    headers: {
+      USERSIGN: toJS(store).token,
+    },
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson.data;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}

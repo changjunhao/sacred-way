@@ -73,7 +73,7 @@ export default class MemberScreen extends Component<InterfaceProps, InterfaceSta
           </ImageBackground>
           <View style={styles.mainContainer}>
             <View style={styles.assetsInfoCard}>
-              <TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Earnings')}>
                 <View style={styles.incomeView}>
                   <View style={styles.myIncome}>
                     <View style={{...ApplicationStyles.flexRow}}>
@@ -103,13 +103,13 @@ export default class MemberScreen extends Component<InterfaceProps, InterfaceSta
               <View style={styles.myUsers}>
                 <Text style={styles.infoTitle}>我的用户</Text>
                 <View style={styles.myUsersInfo}>
-                  <TouchableWithoutFeedback>
+                  <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Inviter')}>
                     <View style={{flex: 1}}>
                       <Text style={{...styles.text, ...styles.userNumber}}>{fans}</Text>
                       <Text style={styles.infoTipText}>购课粉丝</Text>
                     </View>
                   </TouchableWithoutFeedback>
-                  <TouchableWithoutFeedback>
+                  <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Visited')}>
                     <View style={{flex: 1}}>
                       <Text style={{...styles.text, ...styles.userNumber}}>{scan}</Text>
                       <Text style={styles.infoTipText}>浏览用户</Text>

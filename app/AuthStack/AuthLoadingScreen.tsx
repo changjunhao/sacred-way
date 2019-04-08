@@ -31,7 +31,13 @@ class AuthLoadingScreen extends Component<InterfaceProps, {}> {
     const userToken = await AsyncStorage.getItem('userToken');
     if (userToken) {
       this.props.tokenStore.setToken(userToken);
-      const userInfo = await getUserInfo();
+      const userInfoResult = await getUserInfo();
+      if (userInfoResult.errno !== 0) {
+        await AsyncStorage.clear();
+        this.props.navigation.navigate('Auth');
+        return;
+      }
+      const userInfo = userInfoResult.data;
       this.props.UserStore.setInfo(userInfo);
       if (userInfo.status === 0) {
         const resetAction = StackActions.reset({

@@ -132,7 +132,7 @@ export function getUserInfo() {
   })
     .then((response) => response.json())
     .then((responseJson) => {
-      return responseJson.data;
+      return responseJson;
     })
     .catch((error) => {
       // console.error(error);

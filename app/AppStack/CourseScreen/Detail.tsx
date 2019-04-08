@@ -216,6 +216,9 @@ export default class CourseDetail extends Component<InterfaceProps, InterfaceSta
           <TouchableWithoutFeedback>
             <View
               style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
                 width: scaleSize(269),
                 height: scaleSize(41),
                 borderRadius: scaleSize(20.5),
@@ -223,7 +226,7 @@ export default class CourseDetail extends Component<InterfaceProps, InterfaceSta
               {
                 !baseInfo.is_buy && Number(baseInfo.present_price) !== 0 && (
                   <Text
-                    style={{color: '#FFF', fontSize: setSpText2(15), lineHeight: scaleSize(41), textAlign: 'center'}}>
+                    style={{color: '#FFF', fontSize: setSpText2(15)}}>
                     立即购买
                   </Text>
                 )
@@ -231,7 +234,7 @@ export default class CourseDetail extends Component<InterfaceProps, InterfaceSta
               {
                 !baseInfo.is_buy && Number(baseInfo.present_price) === 0 && (
                   <Text
-                    style={{color: '#FFF', fontSize: setSpText2(15), lineHeight: scaleSize(41), textAlign: 'center'}}>
+                    style={{color: '#FFF', fontSize: setSpText2(15)}}>
                     免费
                   </Text>
                 )
@@ -239,7 +242,7 @@ export default class CourseDetail extends Component<InterfaceProps, InterfaceSta
               {
                 !!baseInfo.is_buy && (
                   <Text
-                    style={{color: '#FFF', fontSize: setSpText2(15), lineHeight: scaleSize(41), textAlign: 'center'}}>
+                    style={{color: '#FFF', fontSize: setSpText2(15)}}>
                     查看课程
                   </Text>
                 )

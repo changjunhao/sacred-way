@@ -239,7 +239,7 @@ export default class SpecialColumnDetail extends Component<InterfaceProps, Inter
               {
                 !info.is_buy && Number(info.present_price) === 0 && (
                   <Text
-                    style={{color: '#FFF', fontSize: setSpText2(15), lineHeight: scaleSize(41), textAlign: 'center'}}>
+                    style={{color: '#FFF', fontSize: setSpText2(15)}}>
                     免费
                   </Text>
                 )
@@ -247,8 +247,8 @@ export default class SpecialColumnDetail extends Component<InterfaceProps, Inter
               {
                 !!info.is_buy && (
                   <Text
-                    style={{color: '#FFF', fontSize: setSpText2(15), lineHeight: scaleSize(41), textAlign: 'center'}}>
-                    查看课程
+                    style={{color: '#FFF', fontSize: setSpText2(15)}}>
+                    查看专栏
                   </Text>
                 )
               }
