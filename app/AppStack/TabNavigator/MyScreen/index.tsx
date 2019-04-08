@@ -5,13 +5,13 @@ import {
   ActionSheetIOS,
   Alert,
   Image,
-  ImageBackground,
+  ImageBackground, Platform,
   ScrollView,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
   View,
-} from 'react-native';
+} from 'react-native'
 import {NavigationEvents, NavigationScreenProps} from 'react-navigation';
 import CourseListComponent from '../../../Components/CourseList';
 import {scaleSize, setSpText2} from '../../../Lib/ScreenUtil';
@@ -130,30 +130,34 @@ export default class MyScreen extends Component<InterfaceProps, InterfaceMyState
   }
 
   private showActionSheet = () => {
-    ActionSheetIOS.showActionSheetWithOptions({
-        options: ['修改资料', '修改密码', '退出', '取消'],
-        destructiveButtonIndex: 2,
-        cancelButtonIndex: 3,
-      },
-      (buttonIndex) => {
-        if (buttonIndex === 0) {
-          this.props.navigation.navigate('InfoModify');
-        }
-        if (buttonIndex === 1) {
-          this.props.navigation.navigate('PasswordModify');
-        }
-        if (buttonIndex === 2) {
-          Alert.alert(
-            '提示',
-            '确认退出该账号吗',
-            [
-              {text: '取消', style: 'cancel'},
-              {text: '确认退出', onPress: () => this.signOutAsync(), style: 'destructive'},
-            ],
-            { cancelable: false },
-          );
-        }
-      });
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions({
+          options: ['修改资料', '修改密码', '退出', '取消'],
+          destructiveButtonIndex: 2,
+          cancelButtonIndex: 3,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 0) {
+            this.props.navigation.navigate('InfoModify');
+          }
+          if (buttonIndex === 1) {
+            this.props.navigation.navigate('PasswordModify');
+          }
+          if (buttonIndex === 2) {
+            Alert.alert(
+              '提示',
+              '确认退出该账号吗',
+              [
+                {text: '取消', style: 'cancel'},
+                {text: '确认退出', onPress: () => this.signOutAsync(), style: 'destructive'},
+              ],
+              { cancelable: false },
+            );
+          }
+        });
+    } else {
+
+    }
   }
 
   private signOutAsync = async () => {

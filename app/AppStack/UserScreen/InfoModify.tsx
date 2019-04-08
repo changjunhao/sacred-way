@@ -2,6 +2,7 @@ import {inject, observer} from 'mobx-react/native';
 import React, {Component} from 'react';
 import {
   Alert,
+  Platform,
   Image,
   KeyboardAvoidingView,
   SafeAreaView,
@@ -62,7 +63,13 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
     // TODO keyboardVerticalOffset 需判断设备
     return (
       <SafeAreaView style={{flex: 1}}>
-        <KeyboardAvoidingView style={{flex: 1}} behavior='padding' keyboardVerticalOffset={88} enabled>
+        <KeyboardAvoidingView
+          style={{flex: 1}}
+          // @ts-ignore
+          behavior={Platform.OS === 'ios' ? 'padding' : ''}
+          keyboardVerticalOffset={88}
+          enabled
+        >
           <ScrollView
             showsVerticalScrollIndicator={false}
             style={{...ApplicationStyles.mainContainer}}>

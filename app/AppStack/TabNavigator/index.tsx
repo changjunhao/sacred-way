@@ -62,7 +62,7 @@ const TabNavigator = createBottomTabNavigator(
         if (routeName === 'Member' && focused) {
           color = '#444444';
         }
-        return <Text style={{color, fontWeight: 'bold'}}>{label}</Text>;
+        return <Text style={{color, fontWeight: 'bold', textAlign: 'center'}}>{label}</Text>;
       },
       tabBarIcon: ({focused}) => {
         const { routeName } = navigation.state;

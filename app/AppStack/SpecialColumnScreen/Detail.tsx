@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {NavigationScreenProp,  NavigationState} from 'react-navigation';
 import CourseListComponent from '../../Components/CourseList';
-import {scaleSize, setSpText2} from '../../Lib/ScreenUtil'
+import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
 import {getSpecialColumnInfo} from '../../Services/specialColumn';
 import ApplicationStyles from '../../Theme/ApplicationStyles';
 import styles from './Styles';
