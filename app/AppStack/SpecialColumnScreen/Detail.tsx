@@ -98,7 +98,10 @@ export default class SpecialColumnDetail extends Component<InterfaceProps, Inter
           stickyHeaderIndices={[3]}
           automaticallyAdjustContentInsets={false}
           style={{flex: 1}}>
-          {info.pic ? <Image resizeMode={'cover'} source={{uri: info.pic}} style={styles.cover} /> : null}
+          {
+            !info.pic ? null :
+              (<Image resizeMode={'cover'} source={{uri: `${info.pic}/banner_medium`}} style={styles.cover} />)
+          }
           <View style={styles.baseInfoView}>
             <View style={{...ApplicationStyles.flexRow}}>
               <View style={styles.tipView}>
@@ -108,9 +111,19 @@ export default class SpecialColumnDetail extends Component<InterfaceProps, Inter
             </View>
             <View style={styles.headerDesc}>
               <Text numberOfLines={3} style={styles.summary}>{info.summary}</Text>
-              <View>
-                <Text><Text>{info.buy_count}</Text>人</Text>
-                <Text>已学习</Text>
+              <View style={{alignItems: 'center'}}>
+                <Text style={styles.headerDescNumber}>
+                  {info.course_count}/{info.course_total_count}
+                  <Text style={styles.headerDescUnit}>节</Text>
+                </Text>
+                <Text style={styles.headerDescTip}>已更新/总课时</Text>
+              </View>
+              <View style={{alignItems: 'center'}}>
+                <Text style={styles.headerDescNumber}>
+                  {info.buy_count}
+                  <Text style={styles.headerDescUnit}>人</Text>
+                </Text>
+                <Text style={styles.headerDescTip}>已学习</Text>
               </View>
             </View>
           </View>

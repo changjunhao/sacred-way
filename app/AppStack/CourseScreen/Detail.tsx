@@ -103,16 +103,23 @@ export default class CourseDetail extends Component<InterfaceProps, InterfaceSta
           stickyHeaderIndices={[3]}
           automaticallyAdjustContentInsets={false}
           style={{flex: 1}}>
-          {baseInfo.pic ? <Image resizeMode={'cover'} source={{uri: baseInfo.pic}} style={styles.cover} /> : null}
+          {
+            baseInfo.pic ?
+              <Image resizeMode={'cover'} source={{uri: `${baseInfo.pic}/banner_medium`}} style={styles.cover} /> :
+              null
+          }
           <View style={{paddingVertical: scaleSize(14), paddingHorizontal: scaleSize(16)}}>
             <Text style={{color: '#272A32', fontSize: setSpText2(18), paddingBottom: scaleSize(14)}}>
               {baseInfo.name}
             </Text>
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={styles.summary}>{baseInfo.summary}</Text>
-              <View>
-                <Text><Text>{baseInfo.buy_count}</Text>人</Text>
-                <Text>已学习</Text>
+              <Text style={{...styles.summary, ...styles.courseSummary}}>{baseInfo.summary}</Text>
+              <View style={{alignItems: 'center'}}>
+                <Text style={styles.headerDescNumber}>
+                  {baseInfo.buy_count}
+                  <Text style={styles.headerDescUnit}>人</Text>
+                </Text>
+                <Text style={styles.headerDescTip}>已学习</Text>
               </View>
             </View>
           </View>
@@ -194,8 +201,29 @@ export default class CourseDetail extends Component<InterfaceProps, InterfaceSta
           <View style={chooseType === 1 ? {...styles.infoView, display: 'none'} : {...styles.infoView}}>
             {childList.map((item) => (
                 <View
-                  key={item.id} style={{backgroundColor: '#f8f8f8', height: scaleSize(95), marginBottom: scaleSize(6)}}>
-                  <Image source={{uri: item.pic}} style={{width: scaleSize(100), height: scaleSize(66) }} />
+                  key={item.id}
+                  style={{
+                    padding: scaleSize(10),
+                    backgroundColor: '#f8f8f8',
+                    marginBottom: scaleSize(6),
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <View
+                    style={{
+                      width: scaleSize(220),
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <Text style={{fontSize: setSpText2(15)}}>
+                      {item.name}
+                    </Text>
+                    <Text style={{color: '#999', fontSize: setSpText2(12)}}>{item.type_name}：时长{item.duration}分钟</Text>
+                  </View>
+                  <Image
+                    source={{uri: `${item.pic}/thumb_medium`}}
+                    style={{width: scaleSize(100), height: scaleSize(66) }} />
                 </View>
               ))
             }

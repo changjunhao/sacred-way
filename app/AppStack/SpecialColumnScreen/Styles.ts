@@ -33,10 +33,25 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   summary: {
-    width: scaleSize(252),
+    width: scaleSize(195),
     color: '#999999',
     fontSize: setSpText2(12),
     flexWrap: 'wrap',
+  },
+  courseSummary: {
+    width: scaleSize(252),
+  },
+  headerDescNumber: {
+    color: '#272a32',
+    fontWeight: 'bold',
+    fontSize: setSpText2(16),
+  },
+  headerDescUnit: {
+    fontSize: setSpText2(12),
+  },
+  headerDescTip: {
+    color: '#999999',
+    fontSize: setSpText2(12),
   },
   tabView: {
     backgroundColor: '#FFF',
