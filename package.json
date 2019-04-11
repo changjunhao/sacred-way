@@ -8,7 +8,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@react-native-community/async-storage": "^1.2.4",
+    "@react-native-community/async-storage": "^1.3.0",
     "mobx": "^5.9.4",
     "mobx-react": "^5.4.3",
     "mobx-state-tree": "^3.14.0",
@@ -19,7 +19,7 @@
     "react-native-linear-gradient": "^2.5.4",
     "react-native-picker": "^4.3.7",
     "react-native-vector-icons": "^6.4.2",
-    "react-navigation": "^3.6.1"
+    "react-navigation": "^3.7.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
@@ -27,9 +27,9 @@
     "@babel/plugin-proposal-decorators": "^7.4.0",
     "@babel/plugin-transform-flow-strip-types": "^7.4.0",
     "@babel/runtime": "^7.4.3",
-    "@react-native-community/eslint-config": "^0.0.3",
+    "@react-native-community/eslint-config": "^0.0.4",
     "@types/react": "^16.8.13",
-    "@types/react-native": "^0.57.42",
+    "@types/react-native": "^0.57.43",
     "@types/react-navigation": "^3.0.6",
     "babel-jest": "^24.7.1",
     "eslint": "^5.16.0",
