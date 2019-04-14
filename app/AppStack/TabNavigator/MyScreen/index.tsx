@@ -11,12 +11,12 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
-} from 'react-native'
+} from 'react-native';
 import {NavigationEvents, NavigationScreenProps} from 'react-navigation';
 import CourseListComponent from '../../../Components/CourseList';
 import {scaleSize, setSpText2} from '../../../Lib/ScreenUtil';
 // import { getUserInfo } from '../../../Services/user';
-import { getUserBuyCurriculum } from '../../../Services/course';
+import { getUserBuyed } from '../../../Services/course';
 import ApplicationStyles from '../../../Theme/ApplicationStyles';
 
 interface InterfaceMyState {
@@ -91,7 +91,7 @@ export default class MyScreen extends Component<InterfaceProps, InterfaceMyState
                     </Text>
                   )}
                 </View>
-                <Text style={{color: '#FEE3A6', fontSize: setSpText2(11)}}>{userInfo.contact_number}</Text>
+                <Text style={{color: '#FEE3A6', fontSize: setSpText2(11)}}>{userInfo.mobile_number}</Text>
               </View>
             </View>
           </ImageBackground>
@@ -102,6 +102,7 @@ export default class MyScreen extends Component<InterfaceProps, InterfaceMyState
                 key={course.curriculum_id}
                 course={course}
                 recommend={false}
+                purchased={true}
                 navigation={this.props.navigation} borderBottom={index !== purchasedCourses.length - 1}>
               </CourseListComponent>
             ))}
@@ -121,7 +122,7 @@ export default class MyScreen extends Component<InterfaceProps, InterfaceMyState
     //       userInfo,
     //     });
     //   });
-    getUserBuyCurriculum()
+    getUserBuyed()
       .then((res) => {
         this.setState({
           purchasedCourses: res,

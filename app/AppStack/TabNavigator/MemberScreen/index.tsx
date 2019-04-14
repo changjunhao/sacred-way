@@ -85,17 +85,17 @@ export default class MemberScreen extends Component<InterfaceProps, InterfaceSta
                     </View>
                     <View style={styles.incomeInfo}>
                       <View style={{flex: 1}}>
-                        <Text style={{...styles.text, ...styles.todayIncome}}>{todayIncome}</Text>
+                        <Text style={{...styles.text, ...styles.todayIncome}}>{todayIncome / 100}</Text>
                         <Text style={styles.infoTipText}>今日（元）</Text>
                       </View>
                       <View style={{flex: 1}}>
-                        <Text style={{...styles.text, ...styles.totalIncome}}>{totalIncome}</Text>
+                        <Text style={{...styles.text, ...styles.totalIncome}}>{totalIncome / 100}</Text>
                         <Text style={styles.infoTipText}>累计（元）</Text>
                       </View>
                     </View>
                   </View>
                   <View style={styles.canWithdraw}>
-                    <Text style={styles.money}>{money}</Text>
+                    <Text style={styles.money}>{money / 100}</Text>
                     <Text style={styles.infoTipText}>可提现金额（元）</Text>
                   </View>
                 </View>
@@ -129,6 +129,7 @@ export default class MemberScreen extends Component<InterfaceProps, InterfaceSta
                     key={course.id}
                     course={course}
                     recommend={true}
+                    purchased={false}
                     navigation={this.props.navigation} borderBottom={index !== recommendList.length - 1}>
                   </CourseListComponent>
                 ))}

@@ -19,8 +19,8 @@ export function getCurriculumlist() {
     });
 }
 
-export function getUserBuyCurriculum() {
-  return fetch(`${BASEURL}/membercenter/curriculum/getUserBuyCurriculum`, {
+export function getUserBuyed() {
+  return fetch(`${BASEURL}/membercenter/column/getUserBuyed`, {
     headers: {
       USERSIGN: toJS(store).token,
     },

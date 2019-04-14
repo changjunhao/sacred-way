@@ -10,8 +10,8 @@ export default StyleSheet.create({
     marginRight: scaleSize(12),
   },
   cover: {
-    width: scaleSize(102),
-    height: scaleSize(67),
+    width: scaleSize(110),
+    height: scaleSize(55),
   },
   learningNumber: {
     paddingVertical: scaleSize(3),
@@ -21,7 +21,7 @@ export default StyleSheet.create({
     fontSize: setSpText2(12),
   },
   infoView: {
-    height: scaleSize(90),
+    height: scaleSize(78),
     justifyContent: 'space-between',
   },
   title: {
@@ -62,5 +62,18 @@ export default StyleSheet.create({
   },
   sharePriceText: {
     fontSize: setSpText2(14),
+  },
+  specialColumnCoverLabel: {
+    backgroundColor: '#F26522',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: scaleSize(8),
+    width: scaleSize(30),
+    height: scaleSize(16),
+  },
+  specialColumnCoverLabelText: {
+    fontSize: setSpText2(12),
+    fontWeight: 'bold',
+    color: '#FFFEFE',
   },
 });

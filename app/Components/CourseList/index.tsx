@@ -15,19 +15,17 @@ interface InterfaceProps extends NavigationScreenProps<{}> {
   course;
   borderBottom: boolean;
   recommend: boolean;
+  purchased: boolean;
 }
 
 export default class CourseList extends Component<InterfaceProps> {
   public render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> {
-    const { course, borderBottom, recommend } = this.props;
+    const { course, borderBottom, recommend, purchased } = this.props;
 
     return (
       <TouchableWithoutFeedback
         onPress={
-          () => this.props.navigation.navigate(
-            'CourseDetail',
-            {id: course.curriculum_id, columnId: course.column_id},
-          )
+          () => this.navigationToDetail()
         }>
         <View style={ borderBottom ?
           {
@@ -44,23 +42,37 @@ export default class CourseList extends Component<InterfaceProps> {
           ) : null}
           <View
             style={course.pic ?
-              {...styles.infoView, width: scaleSize(229)} :
+              {...styles.infoView, width: scaleSize(221)} :
               {...styles.infoView, width: scaleSize(343)}}>
-            <Text
-              numberOfLines={2}
-              style={styles.title}>
-              {course.name}
-            </Text>
+            {course.curriculum_type === 2 ? (
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View style={styles.specialColumnCoverLabel}>
+                  <Text style={styles.specialColumnCoverLabelText}>
+                    专栏
+                  </Text>
+                </View>
+                <Text
+                  numberOfLines={2}
+                  style={styles.title}>
+                  {course.name}
+                </Text>
+              </View>
+            ) : (
+              <Text
+                numberOfLines={2}
+                style={styles.title}>
+                {course.name}
+              </Text>
+            )}
             <View style={{...ApplicationStyles.flexRow, justifyContent: 'space-between'}}>
               {recommend ? (
                 <Text style={{...styles.recommendPrice}}>
                   ¥{course.present_price / 100}元
                 </Text>
-              ) : (
-                <Text style={{...styles.price}}>
-                  ¥{course.present_price / 100}元/<Text style={styles.unit}>单节</Text>
-                </Text>
-              )}
+              ) : purchased ? (<Text style={{...styles.price}} />) : (<Text style={{...styles.price}}>
+                ¥{course.present_price / 100}元/<Text style={styles.unit}>单节</Text>
+              </Text>)
+              }
               {recommend ? (
                 <TouchableWithoutFeedback>
                   <LinearGradient
@@ -92,10 +104,7 @@ export default class CourseList extends Component<InterfaceProps> {
                   </TouchableWithoutFeedback>
                   <TouchableWithoutFeedback
                     onPress={
-                      () => this.props.navigation.navigate(
-                        'CourseDetail',
-                        {id: course.curriculum_id, columnId: course.column_id},
-                      )
+                      () => this.navigationToDetail()
                     }>
                     <View style={ApplicationStyles.flexRow}>
                       <Image source={require('../../Images/learn_icon.png')} />
@@ -108,6 +117,28 @@ export default class CourseList extends Component<InterfaceProps> {
           </View>
         </View>
       </TouchableWithoutFeedback>
+    );
+  }
+
+  private navigationToDetail() {
+    const { course, purchased } = this.props;
+    if (course.curriculum_type === 2 && !purchased) {
+      this.props.navigation.navigate(
+        'SpecialColumnDetail',
+        {id: course.id},
+      );
+      return;
+    }
+    if (course.curriculum_type === 2 && purchased) {
+      this.props.navigation.navigate(
+        'SpecialColumnDetail',
+        {id: course.curriculum_id},
+      );
+      return;
+    }
+    this.props.navigation.navigate(
+      'CourseDetail',
+      {id: course.curriculum_id, columnId: course.column_id},
     );
   }
 }
