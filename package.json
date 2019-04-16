@@ -8,7 +8,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@react-native-community/async-storage": "1.3.0",
+    "@react-native-community/async-storage": "^1.3.3",
     "mobx": "^5.9.4",
     "mobx-react": "^5.4.3",
     "mobx-state-tree": "^3.14.0",
