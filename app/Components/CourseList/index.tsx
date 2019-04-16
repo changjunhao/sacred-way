@@ -121,7 +121,7 @@ export default class CourseList extends Component<InterfaceProps> {
   }
 
   private navigationToDetail() {
-    const { course, purchased } = this.props;
+    const { course, purchased, recommend } = this.props;
     if (course.curriculum_type === 2 && !purchased) {
       this.props.navigation.navigate(
         'SpecialColumnDetail',
@@ -133,6 +133,13 @@ export default class CourseList extends Component<InterfaceProps> {
       this.props.navigation.navigate(
         'SpecialColumnDetail',
         {id: course.curriculum_id},
+      );
+      return;
+    }
+    if (recommend) {
+      this.props.navigation.navigate(
+        'CourseDetail',
+        {id: course.id, columnId: course.column},
       );
       return;
     }
