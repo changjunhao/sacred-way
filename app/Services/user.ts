@@ -52,7 +52,7 @@ export function checkVerificationCode(params) {
 }
 
 export function login(params: { phone: string; password: string; }) {
-  return fetch(`${BASEURL}/membercenter/Register/LoginWithPassword`, {
+  return fetch(`${BASEURL}/membercenter/H5Register/LoginWithPassword`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
