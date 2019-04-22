@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import Hyperlink from 'react-native-hyperlink';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
 import { getBulletin } from '../../Services/bulletin';
@@ -119,9 +120,11 @@ export default class BulletinDetailScreen extends Component<InterfaceProps, Inte
             <Text style={{color: '#848fac', fontSize: setSpText2(12)}}>{this.formatTime(bulletin.create_time)}</Text>
           </View>
           <View>
-            <Text style={{color: '#272a32', fontSize: setSpText2(14), lineHeight: setSpText2(21)}}>
-              {bulletin.content}
-            </Text>
+            <Hyperlink linkDefault={ true } linkStyle={ { color: '#2980b9' } }>
+              <Text style={{color: '#272a32', fontSize: setSpText2(14), lineHeight: setSpText2(21)}}>
+                {bulletin.content}
+              </Text>
+            </Hyperlink>
             <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
               {bulletin.images.map((image) => (
                 <TouchableWithoutFeedback

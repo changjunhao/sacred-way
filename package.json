@@ -15,6 +15,7 @@
     "react": "16.8.6",
     "react-native": "0.59.6",
     "react-native-gesture-handler": "^1.1.0",
+    "react-native-hyperlink": "^0.0.14",
     "react-native-image-picker": "^0.28.1",
     "react-native-linear-gradient": "^2.5.4",
     "react-native-picker": "^4.3.7",
