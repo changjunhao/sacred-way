@@ -20,7 +20,7 @@
     "react-native-linear-gradient": "^2.5.4",
     "react-native-picker": "^4.3.7",
     "react-native-vector-icons": "^6.4.2",
-    "react-navigation": "^3.8.1"
+    "react-navigation": "^3.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
@@ -30,7 +30,7 @@
     "@babel/runtime": "^7.4.3",
     "@react-native-community/eslint-config": "^0.0.4",
     "@types/react": "^16.8.14",
-    "@types/react-native": "^0.57.47",
+    "@types/react-native": "^0.57.49",
     "@types/react-navigation": "^3.0.6",
     "babel-jest": "^24.7.1",
     "eslint": "^5.16.0",
@@ -38,7 +38,7 @@
     "metro-react-native-babel-preset": "^0.53.1",
     "react-test-renderer": "16.8.6",
     "tslint": "^5.16.0",
-    "typescript": "^3.4.4"
+    "typescript": "^3.4.5"
   },
   "jest": {
     "preset": "react-native"
