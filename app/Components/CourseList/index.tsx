@@ -90,7 +90,8 @@ export default class CourseList extends Component<InterfaceProps> {
                     <Text style={styles.shareText}>
                       分享赚
                       <Text style={styles.sharePriceText}>
-                        ¥{(course.direct_price / 100).toFixed(2)}
+                        {course.direct_price ? `¥${(course.direct_price / 100).toFixed(2)}` : 0}
+                        {/*¥{(course.direct_price / 100).toFixed(2)}*/}
                       </Text>
                       元
                     </Text>

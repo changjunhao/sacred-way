@@ -125,7 +125,7 @@ export default class MyScreen extends Component<InterfaceProps, InterfaceMyState
     getUserBuyed()
       .then((res) => {
         this.setState({
-          purchasedCourses: res,
+          purchasedCourses: res.curriculum_list,
         });
       });
   }
