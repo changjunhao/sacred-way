@@ -2,9 +2,9 @@ import {inject, observer} from 'mobx-react/native';
 import React, {Component} from 'react';
 import {
   Alert,
-  Platform,
   Image,
   KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet, Text,
