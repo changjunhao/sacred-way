@@ -49,7 +49,7 @@ export default class BulletinDetailScreen extends Component<InterfaceProps, Inte
       images: [],
     };
   }
-  public componentWillMount() {
+  public componentDidMount() {
     getBulletin({ id: this.props.navigation.state.params.id })
       .then(async (bulletin) => {
         this.setState({

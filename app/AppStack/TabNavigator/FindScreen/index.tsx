@@ -8,7 +8,7 @@ import CommunityListComponent from '../../../Components/CommunityList';
 import {scaleSize, setSpText2} from '../../../Lib/ScreenUtil';
 import {getBulletinList} from '../../../Services/bulletin';
 import {getCommunityList} from '../../../Services/community';
-import { getCurriculumlist } from '../../../Services/course';
+// import { getCurriculumlist } from '../../../Services/course';
 import ApplicationStyles from '../../../Theme/ApplicationStyles';
 import styles from './Styles';
 
@@ -259,24 +259,24 @@ export default class FindScreen extends Component<InterfaceProps, InterfaceState
           questionsListCount: res.count,
         });
       });
-    getCurriculumlist()
-      .then((res) => {
-        function splitList(list) {
-          const { length } = list;
-          const newList: any[] = [];
-          for (let i = 0; i < length; i += 3) {
-            newList.push(list.slice(i, i + 3));
-          }
-          return newList;
-        }
-        this.setState({
-          specialColumnList: res.data.map((item, index) => ({
-            ...item,
-            curriculums: splitList(item.curriculums),
-            current: index % 3,
-            length: Math.ceil(item.curriculums.length / 3),
-          })),
-        });
-      });
+    // getCurriculumlist()
+    //   .then((res) => {
+    //     function splitList(list) {
+    //       const { length } = list;
+    //       const newList: any[] = [];
+    //       for (let i = 0; i < length; i += 3) {
+    //         newList.push(list.slice(i, i + 3));
+    //       }
+    //       return newList;
+    //     }
+    //     this.setState({
+    //       specialColumnList: res.data.map((item, index) => ({
+    //         ...item,
+    //         curriculums: splitList(item.curriculums),
+    //         current: index % 3,
+    //         length: Math.ceil(item.curriculums.length / 3),
+    //       })),
+    //     });
+    //   });
   }
 }
