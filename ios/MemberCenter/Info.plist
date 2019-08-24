@@ -38,7 +38,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>短视频会员 想要访问您的照片库以更改您的个人资料照片</string>
 	<key>UIAppFonts</key>
