@@ -1,6 +1,7 @@
 import React from 'react';
 import {Image, Text} from 'react-native';
-import {createBottomTabNavigator, createStackNavigator} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
+import {createBottomTabNavigator} from 'react-navigation-tabs';
 import FindScreen from './FindScreen';
 import MemberScreen from './MemberScreen';
 import MyScreen from './MyScreen';

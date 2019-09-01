@@ -1,4 +1,4 @@
-import {createStackNavigator} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
 import InfoEditScreen from './InfoEditScreen';
 import ResetPasswordScreen from './ResetPasswordScreen';
 import SignInScreen from './SignInScreen';

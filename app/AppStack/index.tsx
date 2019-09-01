@@ -1,4 +1,4 @@
-import {createStackNavigator} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
 import BulletinDetailScreen from './BulletinScreen/Detail';
 import BulletinListScreen from './BulletinScreen/List';
 import CommunityDetailScreen from './CommunityScreen/Detail';

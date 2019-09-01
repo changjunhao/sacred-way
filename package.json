@@ -14,12 +14,15 @@
     "react": "^16.9.0",
     "react-native": "0.60.5",
     "react-native-gesture-handler": "^1.4.1",
-    "react-native-hyperlink": "^0.0.14",
-    "react-native-image-picker": "^1.0.2",
+    "react-native-hyperlink": "^0.0.16",
+    "react-native-image-picker": "^1.1.0",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-picker": "^4.3.7",
+    "react-native-reanimated": "^1.2.0",
     "react-native-vector-icons": "^6.6.0",
-    "react-navigation": "^3.12.0"
+    "react-navigation": "^4.0.0",
+    "react-navigation-stack": "^1.5.1",
+    "react-navigation-tabs": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
@@ -30,17 +33,17 @@
     "@react-native-community/eslint-config": "^0.0.5",
     "@types/jest": "^24.0.18",
     "@types/react": "^16.9.2",
-    "@types/react-native": "^0.60.8",
+    "@types/react-native": "^0.60.9",
     "@types/react-navigation": "^3.0.8",
     "@types/react-test-renderer": "^16.9.0",
     "babel-jest": "^24.9.0",
-    "eslint": "^6.2.2",
+    "eslint": "^6.3.0",
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.56.0",
     "react-native-typescript-transformer": "^1.2.13",
     "react-test-renderer": "^16.9.0",
     "tslint": "^5.19.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.2"
   },
   "jest": {
     "preset": "react-native"
