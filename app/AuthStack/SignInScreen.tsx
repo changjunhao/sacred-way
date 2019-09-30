@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {inject, observer} from 'mobx-react/native';
 import React, {Component} from 'react';
 import {Text, TouchableHighlight, View} from 'react-native';
-import {NavigationActions, NavigationScreenProps, SafeAreaView, StackActions} from 'react-navigation';
+import {NavigationActions, NavigationSwitchScreenProps, SafeAreaView, StackActions} from 'react-navigation';
 import LoginInput from '../Components/LoginInput';
 import {login} from '../Services/user';
 import styles from './Styles';
@@ -12,7 +12,7 @@ interface InterfaceStates {
   password: string;
 }
 
-interface InterfaceProps extends NavigationScreenProps<{}> {
+interface InterfaceProps extends NavigationSwitchScreenProps<{}> {
   UserStore;
   tokenStore;
 }

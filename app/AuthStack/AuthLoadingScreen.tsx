@@ -2,10 +2,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { inject, observer } from 'mobx-react/native';
 import React, {Component} from 'react';
 import {ActivityIndicator, StatusBar, View} from 'react-native';
-import {NavigationActions, NavigationScreenProps, StackActions} from 'react-navigation';
+import {NavigationActions, NavigationSwitchScreenProps, StackActions} from 'react-navigation';
 import {getUserInfo} from '../Services/user';
 
-interface InterfaceProps extends NavigationScreenProps<{}> {
+interface InterfaceProps extends NavigationSwitchScreenProps<{}> {
   UserStore;
   tokenStore;
 }

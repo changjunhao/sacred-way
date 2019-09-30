@@ -6,11 +6,11 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {NavigationScreenProps} from 'react-navigation';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
 
-interface InterfaceProps extends NavigationScreenProps<{}> {
+interface InterfaceProps {
   question;
+  navigation;
 }
 
 export default class CommunityList extends Component<InterfaceProps> {

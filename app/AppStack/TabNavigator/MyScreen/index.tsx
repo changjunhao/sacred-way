@@ -12,7 +12,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {NavigationEvents, NavigationScreenProps} from 'react-navigation';
+import {NavigationEvents, NavigationSwitchScreenProps} from 'react-navigation';
 import CourseListComponent from '../../../Components/CourseList';
 import {scaleSize, setSpText2} from '../../../Lib/ScreenUtil';
 // import { getUserInfo } from '../../../Services/user';
@@ -24,7 +24,7 @@ interface InterfaceMyState {
   purchasedCourses: any[];
 }
 
-interface InterfaceProps extends NavigationScreenProps<{}> {
+interface InterfaceProps extends NavigationSwitchScreenProps<{}> {
   UserStore;
 }
 
@@ -157,7 +157,7 @@ export default class MyScreen extends Component<InterfaceProps, InterfaceMyState
           }
         });
     } else {
-
+      // TODO
     }
   }
 

@@ -14,14 +14,14 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {NavigationScreenProps} from 'react-navigation';
+import {NavigationSwitchScreenProps} from 'react-navigation';
 import EditInfo from '../../Components/EditInfo';
 import InputStyles from '../../Components/EditInfo/Styles';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
 import { setUserInfo, uploadAvatar } from '../../Services/user';
 import ApplicationStyles from '../../Theme/ApplicationStyles';
 
-interface InterfaceProps extends NavigationScreenProps<{}> {
+interface InterfaceProps extends NavigationSwitchScreenProps<{}> {
   UserStore;
 }
 

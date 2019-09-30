@@ -8,13 +8,13 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import {NavigationScreenProps} from 'react-navigation';
+import {NavigationSwitchScreenProps} from 'react-navigation';
 import EditInfo from '../Components/EditInfo';
 import {scaleSize, setSpText2} from '../Lib/ScreenUtil';
 import {setUserInfo} from '../Services/user';
 import ApplicationStyles from '../Theme/ApplicationStyles';
 
-interface InterfaceProps extends NavigationScreenProps<{}> {
+interface InterfaceProps extends NavigationSwitchScreenProps<{}> {
   UserStore;
 }
 

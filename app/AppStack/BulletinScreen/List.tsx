@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {NavigationScreenProps} from 'react-navigation';
+import {NavigationSwitchScreenProps} from 'react-navigation';
 import { scaleSize, setSpText2 } from '../../Lib/ScreenUtil';
 import { getBulletinList } from '../../Services/bulletin';
 
@@ -19,7 +19,7 @@ interface InterfaceState {
   count: number;
 }
 
-interface InterfaceProps extends NavigationScreenProps<{}> {}
+interface InterfaceProps extends NavigationSwitchScreenProps<{}> {}
 
 export default class BulletinListScreen extends Component<InterfaceProps, InterfaceState> {
   public static navigationOptions = {

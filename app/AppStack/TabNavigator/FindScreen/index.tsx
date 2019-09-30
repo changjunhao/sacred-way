@@ -3,7 +3,7 @@ import React, {Component, Fragment} from 'react';
 import { Image, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {NavigationEvents, NavigationScreenProps} from 'react-navigation';
+import {NavigationEvents, NavigationSwitchScreenProps} from 'react-navigation';
 import CommunityListComponent from '../../../Components/CommunityList';
 import {scaleSize, setSpText2} from '../../../Lib/ScreenUtil';
 import {getBulletinList} from '../../../Services/bulletin';
@@ -12,7 +12,7 @@ import {getCommunityList} from '../../../Services/community';
 import ApplicationStyles from '../../../Theme/ApplicationStyles';
 import styles from './Styles';
 
-interface InterfaceProps extends NavigationScreenProps<{}> {
+interface InterfaceProps extends NavigationSwitchScreenProps<{}> {
   UserStore;
 }
 

@@ -3,7 +3,6 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import {NavigationScreenProps} from 'react-navigation';
 import CommunityListComponent from '../../Components/CommunityList';
 import {getCommunityList} from '../../Services/community';
 import ApplicationStyles from '../../Theme/ApplicationStyles';
@@ -12,7 +11,9 @@ interface InterfaceState {
   questionsList;
 }
 
-interface InterfaceProps extends NavigationScreenProps<{}> {}
+interface InterfaceProps {
+  navigation;
+}
 
 export default class CommunityListScreen extends Component<InterfaceProps, InterfaceState> {
   public static navigationOptions = {

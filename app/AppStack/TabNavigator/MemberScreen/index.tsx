@@ -10,14 +10,14 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {NavigationEvents, NavigationScreenProps} from 'react-navigation';
+import {NavigationEvents, NavigationSwitchScreenProps} from 'react-navigation';
 import CourseListComponent from '../../../Components/CourseList';
 import {setSpText2} from '../../../Lib/ScreenUtil';
 import {getDirectRecommend, getPersonMoney} from '../../../Services/distribution';
 import ApplicationStyles from '../../../Theme/ApplicationStyles';
 import styles from './Styles';
 
-interface InterfaceProps extends NavigationScreenProps<{}> {
+interface InterfaceProps extends NavigationSwitchScreenProps<{}> {
   UserStore;
 }
 

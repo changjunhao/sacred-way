@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import {Alert, Text, TextInput, TouchableHighlight, View} from 'react-native';
-import {NavigationScreenProps, SafeAreaView} from 'react-navigation';
+import {NavigationSwitchScreenProps, SafeAreaView} from 'react-navigation';
 import {checkVerificationCode, resetPassword, sendMobileMessage} from '../Services/user';
 import styles from './Styles';
 
@@ -15,7 +15,7 @@ interface InterfaceStates {
   next: boolean;
 }
 
-interface InterfaceProps extends NavigationScreenProps<{}> {}
+interface InterfaceProps extends NavigationSwitchScreenProps<{}> {}
 
 export default class ResetPasswordScreen extends Component<InterfaceProps, InterfaceStates> {
 

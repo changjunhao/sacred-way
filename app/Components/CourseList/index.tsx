@@ -6,16 +6,16 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {NavigationScreenProps} from 'react-navigation';
 import {scaleSize} from '../../Lib/ScreenUtil';
 import ApplicationStyles from '../../Theme/ApplicationStyles';
 import styles from './Styles';
 
-interface InterfaceProps extends NavigationScreenProps<{}> {
+interface InterfaceProps {
   course;
   borderBottom: boolean;
   recommend: boolean;
   purchased: boolean;
+  navigation;
 }
 
 export default class CourseList extends Component<InterfaceProps> {

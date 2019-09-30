@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, TextInput, TouchableHighlight, View} from 'react-native';
-import {NavigationScreenProps, SafeAreaView} from 'react-navigation';
+import {NavigationSwitchScreenProps, SafeAreaView} from 'react-navigation';
 import {sendMobileMessage, signUp} from '../Services/user';
 import styles from './Styles';
 
@@ -13,7 +13,7 @@ interface InterfaceStates {
   canClick: boolean;
 }
 
-interface InterfaceProps extends NavigationScreenProps<{}> {}
+interface InterfaceProps extends NavigationSwitchScreenProps<{}> {}
 
 export default class SignUpScreen extends Component<InterfaceProps, InterfaceStates> {
 

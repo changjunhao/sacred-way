@@ -9,7 +9,7 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import {NavigationScreenProps} from 'react-navigation';
+import {NavigationSwitchScreenProps} from 'react-navigation';
 import InputStyles from '../../AuthStack/Styles';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
 import {checkVerificationCode, resetPassword, sendMobileMessage} from '../../Services/user';
@@ -24,7 +24,7 @@ interface InterfaceStates {
   next: boolean;
 }
 
-interface InterfaceProps extends NavigationScreenProps<{}> {
+interface InterfaceProps extends NavigationSwitchScreenProps<{}> {
   UserStore;
 }
 
