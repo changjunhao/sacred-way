@@ -42,6 +42,7 @@ export default class ResetPasswordScreen extends Component<InterfaceProps, Inter
           <TextInput
             style={styles.input}
             autoFocus={true}
+            placeholderTextColor={'#8E8E8E'}
             placeholder={'请输入您的手机号'}
             keyboardType={'phone-pad'}
             textContentType={'username'}
@@ -50,6 +51,7 @@ export default class ResetPasswordScreen extends Component<InterfaceProps, Inter
         <View style={styles.inputView}>
           <TextInput
             style={styles.input}
+            placeholderTextColor={'#8E8E8E'}
             placeholder={'请输入短信验证码'}
             keyboardType={'numeric'}
             textContentType={'oneTimeCode'}
@@ -78,6 +80,7 @@ export default class ResetPasswordScreen extends Component<InterfaceProps, Inter
         <View style={styles.inputView}>
           <TextInput
             style={styles.input}
+            placeholderTextColor={'#8E8E8E'}
             placeholder={'请输入新密码'}
             secureTextEntry={true}
             textContentType={'newPassword'}
@@ -87,6 +90,7 @@ export default class ResetPasswordScreen extends Component<InterfaceProps, Inter
         <View style={styles.inputView}>
           <TextInput
             style={styles.input}
+            placeholderTextColor={'#8E8E8E'}
             placeholder={'请再次输入新密码'}
             secureTextEntry={true}
             textContentType={'newPassword'}

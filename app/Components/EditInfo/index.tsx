@@ -51,6 +51,7 @@ class EditInfo extends Component<InterfaceProps> {
           </View>
           <TextInput
             style={styles.input}
+            placeholderTextColor={'#8E8E8E'}
             placeholder={'请输入姓名（6个字）'}
             defaultValue={this.props.UserStore.baseInfo.name}
             onChangeText={(value) => this.handleNameChange(value)}
@@ -63,6 +64,7 @@ class EditInfo extends Component<InterfaceProps> {
           </View>
           <TextInput
             style={styles.input}
+            placeholderTextColor={'#8E8E8E'}
             placeholder={'请输入联系电话'}
             defaultValue={this.props.UserStore.baseInfo.phone}
             onChangeText={(value) => this.handlePhoneChange(value)}

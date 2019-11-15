@@ -26,7 +26,8 @@ class LoginInput extends Component<InterfaceProps, InterfaceStates> {
     const { borderBottomColor } = this.state;
     const { placeholder, keyboardType, secureTextEntry, textContentType } = this.props;
     return <TextInput
-      style={{ width: scaleSize(300), height: 55, borderBottomColor, borderBottomWidth: 1}}
+      style={{ width: scaleSize(300), height: 55, borderBottomColor, borderBottomWidth: 1, color: '#000000'}}
+      placeholderTextColor={'#8E8E8E'}
       keyboardType={keyboardType || 'default'}
       placeholder={placeholder}
       textContentType={textContentType}

@@ -18,5 +18,6 @@ export default StyleSheet.create({
     borderColor: '#E2E2E2',
     borderWidth: 1,
     fontSize: setSpText2(14),
+    color: '#000',
   },
 });

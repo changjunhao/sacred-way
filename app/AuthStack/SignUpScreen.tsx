@@ -45,6 +45,7 @@ export default class SignUpScreen extends Component<InterfaceProps, InterfaceSta
             <Text style={styles.signUpInputLabel}>手机号</Text>
             <TextInput
               style={styles.input}
+              placeholderTextColor={'#8E8E8E'}
               placeholder={'请输入您的手机号'}
               keyboardType={'phone-pad'}
               textContentType={'username'}
@@ -54,6 +55,7 @@ export default class SignUpScreen extends Component<InterfaceProps, InterfaceSta
             <Text style={styles.signUpInputLabel}>验证码</Text>
             <TextInput
               style={styles.input}
+              placeholderTextColor={'#8E8E8E'}
               placeholder={'请输入短信验证码'}
               keyboardType={'numeric'}
               textContentType={'oneTimeCode'}
@@ -66,6 +68,7 @@ export default class SignUpScreen extends Component<InterfaceProps, InterfaceSta
             <Text style={styles.signUpInputLabel}>密码</Text>
             <TextInput
               style={styles.input}
+              placeholderTextColor={'#8E8E8E'}
               placeholder={'请输入密码'}
               secureTextEntry={true}
               textContentType={'password'}

@@ -58,6 +58,7 @@ export default class PasswordModify extends Component<InterfaceProps, InterfaceS
         <View style={InputStyles.inputView}>
           <TextInput
             style={InputStyles.input}
+            placeholderTextColor={'#8E8E8E'}
             placeholder={'请输入验证码'}
             keyboardType={'numeric'}
             textContentType={'oneTimeCode'}
@@ -85,6 +86,7 @@ export default class PasswordModify extends Component<InterfaceProps, InterfaceS
         <View style={InputStyles.inputView}>
           <TextInput
             style={InputStyles.input}
+            placeholderTextColor={'#8E8E8E'}
             placeholder={'请输入新密码'}
             secureTextEntry={true}
             textContentType={'newPassword'}
@@ -94,6 +96,7 @@ export default class PasswordModify extends Component<InterfaceProps, InterfaceS
         <View style={InputStyles.inputView}>
           <TextInput
             style={InputStyles.input}
+            placeholderTextColor={'#8E8E8E'}
             placeholder={'请再次输入新密码'}
             secureTextEntry={true}
             textContentType={'newPassword'}

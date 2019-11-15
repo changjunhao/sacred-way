@@ -97,6 +97,7 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
                 </View>
                 <TextInput
                   style={InputStyles.input}
+                  placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入昵称（6个字）'}
                   defaultValue={this.props.UserStore.info.nick_name}
                   onChangeText={(nickName) => this.setState({nickName})}
@@ -108,6 +109,7 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
                 </View>
                 <TextInput
                   style={InputStyles.input}
+                  placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入微信号（20个字）'}
                   defaultValue={this.props.UserStore.info.wechat}
                   onChangeText={(weChat) => this.setState({weChat})}
@@ -137,6 +139,7 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
                 </View>
                 <TextInput
                   style={InputStyles.input}
+                  placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入公司名称（20个字）'}
                   defaultValue={this.props.UserStore.info.company}
                   onChangeText={(company) => this.setState({company})}
@@ -148,6 +151,7 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
                 </View>
                 <TextInput
                   style={InputStyles.input}
+                  placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入职务名称（10个字）'}
                   defaultValue={this.props.UserStore.info.duty}
                   onChangeText={(duty) => this.setState({duty})}
@@ -159,6 +163,7 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
                 </View>
                 <TextInput
                   style={InputStyles.input}
+                  placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入所属行业（10个字）'}
                   defaultValue={this.props.UserStore.info.trade}
                   onChangeText={(trade) => this.setState({trade})}
