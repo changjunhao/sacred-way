@@ -197,7 +197,10 @@ export default class MyScreen extends Component<
 
   private signOutAsync = async () => {
     await AsyncStorage.clear();
-    this.props.navigation.navigate('Auth');
+    this.props.navigation.reset({
+      index: 0,
+      routes: [{name: 'Auth'}],
+    });
   };
 }
 
