@@ -27,9 +27,13 @@ export default function AppStack() {
         name="Tabs"
         component={TabNavigator}
         options={({route}) => {
+          let title = '发现';
+          // @ts-ignore
+          if (!route.state) {
+            return {title};
+          }
           // @ts-ignore
           const routeName = route.state.routeNames[route.state.index];
-          let title = '';
           if (routeName === 'Find') {
             title = '发现';
           }
