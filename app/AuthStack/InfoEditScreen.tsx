@@ -1,4 +1,4 @@
-import {inject, observer} from 'mobx-react/native';
+import {inject, observer} from 'mobx-react';
 import React, {Component} from 'react';
 import {
   Alert,
@@ -8,14 +8,27 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import {NavigationSwitchScreenProps} from 'react-navigation';
+import {StackNavigationProp} from '@react-navigation/stack';
 import EditInfo from '../Components/EditInfo';
 import {scaleSize, setSpText2} from '../Lib/ScreenUtil';
 import {setUserInfo} from '../Services/user';
 import ApplicationStyles from '../Theme/ApplicationStyles';
 
-interface InterfaceProps extends NavigationSwitchScreenProps<{}> {
-  UserStore;
+type ScreenNavigationProp = StackNavigationProp<any>;
+
+interface InterfaceProps {
+  UserStore: {
+    baseInfo: any;
+    setInfo?: any;
+    setBaseInfo?: (arg0: {name?: any; phone?: any; location?: any}) => void;
+    info?: {
+      real_name: any;
+      contact_number: any;
+      mobile_number: any;
+      location: any;
+    };
+  };
+  navigation: ScreenNavigationProp;
 }
 
 @inject('UserStore')
@@ -25,31 +38,40 @@ export default class InfoEditScreen extends Component<InterfaceProps> {
     title: '填写资料',
   };
 
-  constructor(prop) {
+  constructor(prop: Readonly<InterfaceProps>) {
     super(prop);
   }
 
   public render() {
-    const { baseInfo } = this.props.UserStore;
+    const {baseInfo} = this.props.UserStore;
 
+    // @ts-ignore
     return (
       <SafeAreaView style={{flex: 1}}>
         <View style={{...ApplicationStyles.mainContainer}}>
           <View style={styles.tipView}>
-            <Text style={styles.tipText}>为了能提供更好的服务，请认真填写以下信息</Text>
+            <Text style={styles.tipText}>
+              为了能提供更好的服务，请认真填写以下信息
+            </Text>
           </View>
           <EditInfo UserStore={this.props.UserStore} />
         </View>
         <TouchableHighlight
-          disabled={baseInfo.phone === '' || baseInfo.name === '' || baseInfo.location === ''}
-          underlayColor='white'
-          onPress={this.handleSubmit}
-        >
-          <View style={
-            baseInfo.phone !== '' && baseInfo.name !== '' && baseInfo.location !== '' ?
-              {...styles.button, ...styles.buttonActive} :
-              {...styles.button, ...styles.buttonDisable}
-          }>
+          disabled={
+            baseInfo.phone === '' ||
+            baseInfo.name === '' ||
+            baseInfo.location === ''
+          }
+          underlayColor="white"
+          onPress={this.handleSubmit}>
+          <View
+            style={
+              baseInfo.phone !== '' &&
+              baseInfo.name !== '' &&
+              baseInfo.location !== ''
+                ? {...styles.button, ...styles.buttonActive}
+                : {...styles.button, ...styles.buttonDisable}
+            }>
             <Text style={styles.buttonText}>完成</Text>
           </View>
         </TouchableHighlight>
@@ -64,15 +86,12 @@ export default class InfoEditScreen extends Component<InterfaceProps> {
       location: this.props.UserStore.baseInfo.location,
     });
     if (response.errno !== 0) {
-      Alert.alert(
-        response.errmsg,
-      );
+      Alert.alert(response.errmsg);
     } else {
       this.props.UserStore.setInfo(response.data);
-      this.props.navigation.navigate( 'App');
+      this.props.navigation.navigate('App');
     }
-  }
-
+  };
 }
 
 const styles = StyleSheet.create({

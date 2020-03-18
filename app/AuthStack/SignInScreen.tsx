@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import {inject, observer} from 'mobx-react/native';
+import {inject, observer} from 'mobx-react';
 import React, {Component} from 'react';
-import {Text, TouchableHighlight, View} from 'react-native';
-import {NavigationActions, NavigationSwitchScreenProps, SafeAreaView, StackActions} from 'react-navigation';
+import {Text, TouchableHighlight, View, SafeAreaView} from 'react-native';
+import {StackActions} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import LoginInput from '../Components/LoginInput';
 import {login} from '../Services/user';
 import styles from './Styles';
@@ -12,16 +13,21 @@ interface InterfaceStates {
   password: string;
 }
 
-interface InterfaceProps extends NavigationSwitchScreenProps<{}> {
-  UserStore;
-  tokenStore;
+type ScreenNavigationProp = StackNavigationProp<any>;
+
+interface InterfaceProps {
+  UserStore: {setInfo: (arg0: any) => void};
+  tokenStore: {setToken: (arg0: any) => void};
+  navigation: ScreenNavigationProp;
 }
 
 @inject('UserStore', 'tokenStore')
 @observer
-export default class SignInScreen extends Component<InterfaceProps, InterfaceStates> {
-
-  constructor(props) {
+export default class SignInScreen extends Component<
+  InterfaceProps,
+  InterfaceStates
+> {
+  constructor(props: Readonly<InterfaceProps>) {
     super(props);
     this.state = {
       phone: '',
@@ -29,43 +35,47 @@ export default class SignInScreen extends Component<InterfaceProps, InterfaceSta
     };
   }
 
-  public render(): React.ReactNode {
+  public render() {
     return (
       <SafeAreaView>
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>
-              美秒短视频会员中心
-            </Text>
+            <Text style={styles.headerTitle}>美秒短视频会员中心</Text>
           </View>
           <LoginInput
             keyboardType={'phone-pad'}
             placeholder={'请输入账号'}
             textContentType={'username'}
-            onChangeText={(phone) => this.setState({phone})} />
+            onChangeText={(phone: any) => this.setState({phone})}
+          />
           <LoginInput
             secureTextEntry={true}
             placeholder={'请输入密码'}
             textContentType={'password'}
-            onChangeText={(password) => this.setState({password})} />
+            onChangeText={(password: any) => this.setState({password})}
+          />
           <TouchableHighlight
             disabled={this.state.phone === '' || this.state.password === ''}
             onPressIn={this.handleLogin}
-            underlayColor='white'>
+            underlayColor="white">
             <View
               style={
-                this.state.phone !== '' && this.state.password !== '' ?
-                  {...styles.button, ...styles.buttonActive} :
-                  {...styles.button, ...styles.buttonDisable}
+                this.state.phone !== '' && this.state.password !== ''
+                  ? {...styles.button, ...styles.buttonActive}
+                  : {...styles.button, ...styles.buttonDisable}
               }>
               <Text style={styles.buttonText}>登录</Text>
             </View>
           </TouchableHighlight>
           <View style={styles.actionContainer}>
-            <TouchableHighlight underlayColor='white' onPress={() => this.props.navigation.navigate('ResetPassword')}>
+            <TouchableHighlight
+              underlayColor="white"
+              onPress={() => this.props.navigation.navigate('ResetPassword')}>
               <Text style={styles.actionButton}>忘记密码</Text>
             </TouchableHighlight>
-            <TouchableHighlight underlayColor='white' onPress={() => this.props.navigation.navigate('SignUp')} >
+            <TouchableHighlight
+              underlayColor="white"
+              onPress={() => this.props.navigation.navigate('SignUp')}>
               <Text style={styles.actionButton}>注册</Text>
             </TouchableHighlight>
           </View>
@@ -84,14 +94,14 @@ export default class SignInScreen extends Component<InterfaceProps, InterfaceSta
       this.props.UserStore.setInfo(response.user_info);
       await AsyncStorage.setItem('userToken', response.usersign);
       if (response.user_info.status === 0) {
-        const resetAction = StackActions.reset({
-          index: 0,
-          actions: [NavigationActions.navigate({ routeName: 'InfoEdit' })],
-        });
+        const resetAction = StackActions.replace('InfoEdit');
         this.props.navigation.dispatch(resetAction);
       } else {
-        this.props.navigation.navigate( 'App');
+        this.props.navigation.reset({
+          index: 0,
+          routes: [{name: 'App'}],
+        });
       }
     }
-  }
+  };
 }

@@ -1,4 +1,4 @@
-export default function formatTime(val) {
+export default function formatTime(val: number) {
   const nowTime = parseInt(String(new Date().getTime() / 1000), 10);
   val = nowTime - val;
   let time;
@@ -11,9 +11,9 @@ export default function formatTime(val) {
   } else if (val < 2592000) {
     const timeValue = Math.ceil(val / 3600 / 24);
     if (timeValue === 1) {
-      time = `昨天`;
+      time = '昨天';
     } else if (timeValue === 2) {
-      time = `前天`;
+      time = '前天';
     } else {
       time = `${Math.ceil(val / 3600 / 24)}天前`;
     }

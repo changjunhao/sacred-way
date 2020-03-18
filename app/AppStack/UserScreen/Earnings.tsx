@@ -1,11 +1,5 @@
 import React, {Component} from 'react';
-import {
-  FlatList,
-  Image,
-  SafeAreaView,
-  Text,
-  View,
-} from 'react-native';
+import {FlatList, Image, SafeAreaView, Text, View} from 'react-native';
 import {getUserIoList} from '../../Services/distribution';
 import styles from './Styles';
 
@@ -21,7 +15,7 @@ export default class Earnings extends Component<{}, InterfaceState> {
     title: '收益',
   };
 
-  constructor(props) {
+  constructor(props: Readonly<{}>) {
     super(props);
     this.state = {
       list: [],
@@ -35,8 +29,8 @@ export default class Earnings extends Component<{}, InterfaceState> {
     this.fetchData();
   }
 
-  public render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> {
-    const { list } = this.state;
+  public render() {
+    const {list} = this.state;
 
     return (
       <SafeAreaView style={{flex: 1}}>
@@ -44,22 +38,20 @@ export default class Earnings extends Component<{}, InterfaceState> {
           style={styles.listView}
           data={list}
           onEndReached={this.onEndReached}
-          keyExtractor={(item) => item.id.toString()}
-          ItemSeparatorComponent={() => (<View style={styles.itemHr}/>)}
+          keyExtractor={item => item.id.toString()}
+          ItemSeparatorComponent={() => <View style={styles.itemHr} />}
           renderItem={({item}) => (
             <View style={styles.itemView}>
-              <Image
-                source={{uri: item.head_img}}
-                style={styles.avatar}
-              />
+              <Image source={{uri: item.head_img}} style={styles.avatar} />
               <View style={{flex: 1}}>
-                <Text style={styles.name}>{item.nick_name}<Text style={styles.realName}>（{item.real_name}）</Text></Text>
+                <Text style={styles.name}>
+                  {item.nick_name}
+                  <Text style={styles.realName}>（{item.real_name}）</Text>
+                </Text>
                 <Text style={styles.info}>购买时间：{item.create_time}</Text>
                 <Text style={styles.info}>购买课程：{item.name}</Text>
               </View>
-              <Text style={styles.earningMoney}>
-                + ¥ {item.price / 100}
-              </Text>
+              <Text style={styles.earningMoney}>+ ¥ {item.price / 100}</Text>
             </View>
           )}
         />
@@ -68,25 +60,29 @@ export default class Earnings extends Component<{}, InterfaceState> {
   }
 
   private fetchData = () => {
-    getUserIoList({page: this.state.page, pageSize: this.state.limit})
-      .then((res) => {
+    getUserIoList({page: this.state.page, pageSize: this.state.limit}).then(
+      res => {
         this.setState({
           list: res.list,
           count: res.count,
         });
-      });
-  }
+      },
+    );
+  };
 
   private onEndReached = () => {
-    if (this.state.page >= this.state.count / this.state.limit) { return; }
+    if (this.state.page >= this.state.count / this.state.limit) {
+      return;
+    }
     this.setState({page: this.state.page + 1}, () => {
-      getUserIoList({page: this.state.page, pageSize: this.state.limit})
-        .then((res) => {
+      getUserIoList({page: this.state.page, pageSize: this.state.limit}).then(
+        res => {
           this.setState({
             list: this.state.list.concat(res.list),
             count: res.count,
           });
-        });
+        },
+      );
     });
-  }
+  };
 }

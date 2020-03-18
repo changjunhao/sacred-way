@@ -1,78 +1,88 @@
-import React, { Component } from 'react';
-import {
-  Image,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import React, {Component} from 'react';
+import {Image, Text, TouchableWithoutFeedback, View} from 'react-native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import LinearGradient from 'react-native-linear-gradient';
 import {scaleSize} from '../../Lib/ScreenUtil';
 import ApplicationStyles from '../../Theme/ApplicationStyles';
 import styles from './Styles';
 
+type ScreenNavigationProp = StackNavigationProp<any>;
+
 interface InterfaceProps {
-  course;
+  course: any;
   borderBottom: boolean;
   recommend: boolean;
   purchased: boolean;
-  navigation;
+  navigation: ScreenNavigationProp;
 }
 
 export default class CourseList extends Component<InterfaceProps> {
-  public render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> {
-    const { course, borderBottom, recommend, purchased } = this.props;
+  public render() {
+    const {course, borderBottom, recommend, purchased} = this.props;
 
     return (
-      <TouchableWithoutFeedback
-        onPress={
-          () => this.navigationToDetail()
-        }>
-        <View style={ borderBottom ?
-          {
-            ...styles.courseView,
-            borderBottomWidth: scaleSize(1),
-            borderBottomColor: '#EBEBEB',
-          } : {...styles.courseView}}
-        >
+      <TouchableWithoutFeedback onPress={() => this.navigationToDetail()}>
+        <View
+          style={
+            borderBottom
+              ? {
+                  ...styles.courseView,
+                  borderBottomWidth: scaleSize(1),
+                  borderBottomColor: '#EBEBEB',
+                }
+              : {...styles.courseView}
+          }>
           {course.pic ? (
             <View style={styles.coverView}>
-              <Image style={styles.cover} resizeMode={'cover'} source={{uri: `${course.pic}/thumb_medium`}} />
-              {recommend ? null : <Text style={styles.learningNumber}>{course.buy_count}人学过</Text>}
+              <Image
+                style={styles.cover}
+                resizeMode={'cover'}
+                source={{uri: `${course.pic}/thumb_medium`}}
+              />
+              {recommend ? null : (
+                <Text style={styles.learningNumber}>
+                  {course.buy_count}人学过
+                </Text>
+              )}
             </View>
           ) : null}
           <View
-            style={course.pic ?
-              {...styles.infoView, width: scaleSize(221)} :
-              {...styles.infoView, width: scaleSize(343)}}>
+            style={
+              course.pic
+                ? {...styles.infoView, width: scaleSize(221)}
+                : {...styles.infoView, width: scaleSize(343)}
+            }>
             {course.curriculum_type === 2 ? (
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View style={styles.specialColumnCoverLabel}>
-                  <Text style={styles.specialColumnCoverLabelText}>
-                    专栏
-                  </Text>
+                  <Text style={styles.specialColumnCoverLabelText}>专栏</Text>
                 </View>
-                <Text
-                  numberOfLines={2}
-                  style={styles.title}>
+                <Text numberOfLines={2} style={styles.title}>
                   {course.name}
                 </Text>
               </View>
             ) : (
-              <Text
-                numberOfLines={2}
-                style={styles.title}>
+              <Text numberOfLines={2} style={styles.title}>
                 {course.name}
               </Text>
             )}
-            <View style={{...ApplicationStyles.flexRow, justifyContent: 'space-between'}}>
+            <View
+              style={{
+                ...ApplicationStyles.flexRow,
+                justifyContent: 'space-between',
+              }}>
               {recommend ? (
                 <Text style={{...styles.recommendPrice}}>
                   ¥{course.present_price / 100}元
                 </Text>
-              ) : purchased ? (<Text style={{...styles.price}} />) : (<Text style={{...styles.price}}>
-                ¥{course.present_price / 100}元/<Text style={styles.unit}>单节</Text>
-              </Text>)
-              }
+              ) : purchased ? (
+                <Text style={{...styles.price}} />
+              ) : (
+                <Text style={{...styles.price}}>
+                  ¥{course.present_price / 100}元/
+                  <Text style={styles.unit}>单节</Text>
+                </Text>
+              )}
               {recommend ? (
                 <TouchableWithoutFeedback>
                   <LinearGradient
@@ -90,7 +100,9 @@ export default class CourseList extends Component<InterfaceProps> {
                     <Text style={styles.shareText}>
                       分享赚
                       <Text style={styles.sharePriceText}>
-                        {course.direct_price ? `¥${(course.direct_price / 100).toFixed(2)}` : 0}
+                        {course.direct_price
+                          ? `¥${(course.direct_price / 100).toFixed(2)}`
+                          : 0}
                         {/*¥{(course.direct_price / 100).toFixed(2)}*/}
                       </Text>
                       元
@@ -101,12 +113,13 @@ export default class CourseList extends Component<InterfaceProps> {
               ) : (
                 <View style={{...ApplicationStyles.flexRow}}>
                   <TouchableWithoutFeedback>
-                    <Image style={styles.shareIcon} source={require('../../Images/share_icon.png')} />
+                    <Image
+                      style={styles.shareIcon}
+                      source={require('../../Images/share_icon.png')}
+                    />
                   </TouchableWithoutFeedback>
                   <TouchableWithoutFeedback
-                    onPress={
-                      () => this.navigationToDetail()
-                    }>
+                    onPress={() => this.navigationToDetail()}>
                     <View style={ApplicationStyles.flexRow}>
                       <Image source={require('../../Images/learn_icon.png')} />
                       <Text style={styles.learningText}>学习</Text>
@@ -122,31 +135,27 @@ export default class CourseList extends Component<InterfaceProps> {
   }
 
   private navigationToDetail() {
-    const { course, purchased, recommend } = this.props;
+    const {course, purchased, recommend} = this.props;
     if (course.curriculum_type === 2 && !purchased) {
-      this.props.navigation.navigate(
-        'SpecialColumnDetail',
-        {id: course.id},
-      );
+      this.props.navigation.navigate('SpecialColumnDetail', {id: course.id});
       return;
     }
     if (course.curriculum_type === 2 && purchased) {
-      this.props.navigation.navigate(
-        'SpecialColumnDetail',
-        {id: course.curriculum_id},
-      );
+      this.props.navigation.navigate('SpecialColumnDetail', {
+        id: course.curriculum_id,
+      });
       return;
     }
     if (recommend) {
-      this.props.navigation.navigate(
-        'CourseDetail',
-        {id: course.id, columnId: course.column},
-      );
+      this.props.navigation.navigate('CourseDetail', {
+        id: course.id,
+        columnId: course.column,
+      });
       return;
     }
-    this.props.navigation.navigate(
-      'CourseDetail',
-      {id: course.curriculum_id, columnId: course.column_id},
-    );
+    this.props.navigation.navigate('CourseDetail', {
+      id: course.curriculum_id,
+      columnId: course.column_id,
+    });
   }
 }

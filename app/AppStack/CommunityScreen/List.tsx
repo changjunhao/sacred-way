@@ -1,27 +1,29 @@
 import React, {Component} from 'react';
-import {
-  ScrollView,
-  View,
-} from 'react-native';
+import {ScrollView, View} from 'react-native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import CommunityListComponent from '../../Components/CommunityList';
 import {getCommunityList} from '../../Services/community';
 import ApplicationStyles from '../../Theme/ApplicationStyles';
 
 interface InterfaceState {
-  questionsList;
+  questionsList: any;
 }
+
+type ScreenNavigationProp = StackNavigationProp<any>;
 
 interface InterfaceProps {
-  navigation;
+  navigation: ScreenNavigationProp;
 }
 
-export default class CommunityListScreen extends Component<InterfaceProps, InterfaceState> {
+export default class CommunityListScreen extends Component<
+  InterfaceProps,
+  InterfaceState
+> {
   public static navigationOptions = {
-    headerBackTitle: null,
     title: '美秒社群精华问答',
   };
 
-  constructor(props) {
+  constructor(props: Readonly<InterfaceProps>) {
     super(props);
     this.state = {
       questionsList: [],
@@ -29,24 +31,27 @@ export default class CommunityListScreen extends Component<InterfaceProps, Inter
   }
 
   public componentDidMount() {
-    getCommunityList({type: 3})
-      .then((res) => {
-        this.setState({
-          questionsList: res.list,
-        });
+    getCommunityList({type: 3}).then(res => {
+      this.setState({
+        questionsList: res.list,
       });
+    });
   }
 
   public render() {
-    const { questionsList } = this.state;
+    const {questionsList} = this.state;
 
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{...ApplicationStyles.mainContainer}}>
         <View style={{...ApplicationStyles.container}}>
-          {questionsList.map((question) => (
-            <CommunityListComponent key={question.id} question={question} navigation={this.props.navigation}/>
+          {questionsList.map((question: {id: string | number | undefined}) => (
+            <CommunityListComponent
+              key={question.id}
+              question={question}
+              navigation={this.props.navigation}
+            />
           ))}
         </View>
       </ScrollView>

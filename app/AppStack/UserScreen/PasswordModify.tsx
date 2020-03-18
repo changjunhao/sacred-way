@@ -1,18 +1,23 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import {inject, observer} from 'mobx-react/native';
+import {inject, observer} from 'mobx-react';
 import React, {Component, Fragment} from 'react';
 import {
   Alert,
-  SafeAreaView, StyleSheet,
+  SafeAreaView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableHighlight,
   View,
 } from 'react-native';
-import {NavigationSwitchScreenProps} from 'react-navigation';
+import {StackNavigationProp} from '@react-navigation/stack';
 import InputStyles from '../../AuthStack/Styles';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
-import {checkVerificationCode, resetPassword, sendMobileMessage} from '../../Services/user';
+import {
+  checkVerificationCode,
+  resetPassword,
+  sendMobileMessage,
+} from '../../Services/user';
 
 interface InterfaceStates {
   password: string;
@@ -24,14 +29,20 @@ interface InterfaceStates {
   next: boolean;
 }
 
-interface InterfaceProps extends NavigationSwitchScreenProps<{}> {
-  UserStore;
+type ScreenNavigationProp = StackNavigationProp<any>;
+
+interface InterfaceProps {
+  UserStore: any;
+  navigation: ScreenNavigationProp;
 }
 
 @inject('UserStore')
 @observer
-export default class PasswordModify extends Component<InterfaceProps, InterfaceStates> {
-  constructor(props) {
+export default class PasswordModify extends Component<
+  InterfaceProps,
+  InterfaceStates
+> {
+  constructor(props: Readonly<InterfaceProps>) {
     super(props);
     this.state = {
       password: '',
@@ -45,14 +56,17 @@ export default class PasswordModify extends Component<InterfaceProps, InterfaceS
   }
 
   public render() {
-    const { next } = this.state;
+    const {next} = this.state;
 
     const VerificationCode = (
       <Fragment>
         <View>
           <Text style={styles.phone}>当前注册手机号</Text>
           <Text style={styles.phone}>
-            {this.props.UserStore.info.mobile_number.replace(/^(\d{3})\d{4}(\d+)/, '$1****$2')}
+            {this.props.UserStore.info.mobile_number.replace(
+              /^(\d{3})\d{4}(\d+)/,
+              '$1****$2',
+            )}
           </Text>
         </View>
         <View style={InputStyles.inputView}>
@@ -62,19 +76,24 @@ export default class PasswordModify extends Component<InterfaceProps, InterfaceS
             placeholder={'请输入验证码'}
             keyboardType={'numeric'}
             textContentType={'oneTimeCode'}
-            onChangeText={(code) => this.setState({code})}/>
-          <TouchableHighlight underlayColor='white' onPress={this.sendMobileMessage} >
+            onChangeText={code => this.setState({code})}
+          />
+          <TouchableHighlight
+            underlayColor="white"
+            onPress={this.sendMobileMessage}>
             <Text>{this.state.content}</Text>
           </TouchableHighlight>
         </View>
         <TouchableHighlight
           disabled={this.state.code === ''}
           onPressIn={this.next}
-          underlayColor='white'>
-          <View style={this.state.code !== '' ?
-              {...InputStyles.button, ...InputStyles.buttonActive} :
-              {...InputStyles.button, ...InputStyles.buttonDisable}
-          }>
+          underlayColor="white">
+          <View
+            style={
+              this.state.code !== ''
+                ? {...InputStyles.button, ...InputStyles.buttonActive}
+                : {...InputStyles.button, ...InputStyles.buttonDisable}
+            }>
             <Text style={InputStyles.buttonText}>下一步</Text>
           </View>
         </TouchableHighlight>
@@ -91,7 +110,8 @@ export default class PasswordModify extends Component<InterfaceProps, InterfaceS
             secureTextEntry={true}
             textContentType={'newPassword'}
             value={this.state.password}
-            onChangeText={(password) => this.setState({password})}/>
+            onChangeText={password => this.setState({password})}
+          />
         </View>
         <View style={InputStyles.inputView}>
           <TextInput
@@ -101,17 +121,21 @@ export default class PasswordModify extends Component<InterfaceProps, InterfaceS
             secureTextEntry={true}
             textContentType={'newPassword'}
             value={this.state.repeatPassword}
-            onChangeText={(repeatPassword) => this.setState({repeatPassword})}/>
+            onChangeText={repeatPassword => this.setState({repeatPassword})}
+          />
         </View>
         <TouchableHighlight
-          disabled={this.state.password === '' && this.state.repeatPassword === ''}
+          disabled={
+            this.state.password === '' && this.state.repeatPassword === ''
+          }
           onPressIn={this.resetPassword}
-          underlayColor='white'>
-          <View style={
-            this.state.password !== '' && this.state.repeatPassword !== '' ?
-              {...InputStyles.button, ...InputStyles.buttonActive} :
-              {...InputStyles.button, ...InputStyles.buttonDisable}
-          }>
+          underlayColor="white">
+          <View
+            style={
+              this.state.password !== '' && this.state.repeatPassword !== ''
+                ? {...InputStyles.button, ...InputStyles.buttonActive}
+                : {...InputStyles.button, ...InputStyles.buttonDisable}
+            }>
             <Text style={InputStyles.buttonText}>完成</Text>
           </View>
         </TouchableHighlight>
@@ -121,12 +145,8 @@ export default class PasswordModify extends Component<InterfaceProps, InterfaceS
     return (
       <SafeAreaView>
         <View style={{...InputStyles.container, paddingTop: scaleSize(20)}}>
-          <View style={!next ? {display: 'none'} : {}}>
-            {PassWord}
-          </View>
-          <View style={next ? {display: 'none'} : {}}>
-            {VerificationCode}
-          </View>
+          <View style={!next ? {display: 'none'} : {}}>{PassWord}</View>
+          <View style={next ? {display: 'none'} : {}}>{VerificationCode}</View>
         </View>
       </SafeAreaView>
     );
@@ -138,15 +158,13 @@ export default class PasswordModify extends Component<InterfaceProps, InterfaceS
       code: this.state.code,
     });
     if (response.errno !== 0) {
-      Alert.alert(
-        response.errmsg,
-      );
+      Alert.alert(response.errmsg);
     } else {
       this.setState({
         next: true,
       });
     }
-  }
+  };
 
   private resetPassword = async () => {
     const response = await resetPassword({
@@ -156,46 +174,47 @@ export default class PasswordModify extends Component<InterfaceProps, InterfaceS
       repeatPassword: this.state.repeatPassword,
     });
     if (response.errno !== 0) {
-      Alert.alert(
-        response.errmsg,
-      );
+      Alert.alert(response.errmsg);
     } else {
       Alert.alert(
         '提示',
         '密码已修改，请重新登录',
-        [
-          {text: '确定', onPress: () => this.signOutAsync()},
-        ],
-        { cancelable: false },
+        [{text: '确定', onPress: () => this.signOutAsync()}],
+        {cancelable: false},
       );
     }
-  }
+  };
 
   private signOutAsync = async () => {
     await AsyncStorage.clear();
     this.props.navigation.navigate('Auth');
-  }
+  };
 
   private sendMobileMessage = async () => {
-    if (!this.state.canClick) { return; }
+    if (!this.state.canClick) {
+      return;
+    }
     this.setState({
       canClick: false,
       content: `${this.state.totalTime}s`,
     });
     const siv = setInterval(() => {
-      this.setState({
-        totalTime: this.state.totalTime - 1,
-        content: `${this.state.totalTime}s`,
-      }, () => {
-        if (this.state.totalTime === 0) {
-          clearInterval(siv);
-          this.setState({
-            canClick: true,
-            totalTime: 60,
-            content: '重新发送',
-          });
-        }
-      });
+      this.setState(
+        {
+          totalTime: this.state.totalTime - 1,
+          content: `${this.state.totalTime}s`,
+        },
+        () => {
+          if (this.state.totalTime === 0) {
+            clearInterval(siv);
+            this.setState({
+              canClick: true,
+              totalTime: 60,
+              content: '重新发送',
+            });
+          }
+        },
+      );
     }, 1000);
     const result = await sendMobileMessage({
       phone: this.props.UserStore.info.mobile_number,
@@ -211,7 +230,7 @@ export default class PasswordModify extends Component<InterfaceProps, InterfaceS
         });
       }, 1500);
     }
-  }
+  };
 }
 
 const styles = StyleSheet.create({

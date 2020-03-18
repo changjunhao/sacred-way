@@ -1,9 +1,9 @@
-import { action, observable } from 'mobx';
+import {action, observable} from 'mobx';
 
 class TokenStore {
   @observable public token = '';
 
-  @action public setToken(data) {
+  @action public setToken(data: string) {
     this.token = data;
   }
 }

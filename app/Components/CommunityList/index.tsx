@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Image,
   StyleSheet,
@@ -9,20 +9,25 @@ import {
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
 
 interface InterfaceProps {
-  question;
-  navigation;
+  question: any;
+  navigation: {navigate: (arg0: string, arg1: {id: any}) => void};
 }
 
 export default class CommunityList extends Component<InterfaceProps> {
-  public render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> {
-    const { question } = this.props;
+  public render() {
+    const {question} = this.props;
     return (
       <TouchableWithoutFeedback
-        onPress={() => {this.props.navigation.navigate('CommunityDetail', {id: question.id}); }}>
-        <View  style={styles.questionItem}>
-          {question.category_pic ?
-            <Image style={styles.questionsListHeadImg} source={{uri: question.category_pic}}/> :
-            null}
+        onPress={() => {
+          this.props.navigation.navigate('CommunityDetail', {id: question.id});
+        }}>
+        <View style={styles.questionItem}>
+          {question.category_pic ? (
+            <Image
+              style={styles.questionsListHeadImg}
+              source={{uri: question.category_pic}}
+            />
+          ) : null}
           <View>
             <Text
               numberOfLines={2}
@@ -32,8 +37,8 @@ export default class CommunityList extends Component<InterfaceProps> {
                 fontWeight: '600',
                 color: '#212121',
                 fontSize: setSpText2(16),
-                lineHeight: setSpText2(20)}}
-            >
+                lineHeight: setSpText2(20),
+              }}>
               {question.title}
             </Text>
             <View
@@ -41,12 +46,19 @@ export default class CommunityList extends Component<InterfaceProps> {
                 flexDirection: 'row',
                 alignItems: 'baseline',
                 marginTop: scaleSize(6),
-                marginBottom: scaleSize(8)}}
-            >
-              <Text style={{color: '#555', fontSize: setSpText2(12), marginRight: scaleSize(12)}}>
+                marginBottom: scaleSize(8),
+              }}>
+              <Text
+                style={{
+                  color: '#555',
+                  fontSize: setSpText2(12),
+                  marginRight: scaleSize(12),
+                }}>
                 共{question.dialogue_count}对话
               </Text>
-              <Text style={{color: '#555', fontSize: setSpText2(12)}}>来自：{question.group_name}</Text>
+              <Text style={{color: '#555', fontSize: setSpText2(12)}}>
+                来自：{question.group_name}
+              </Text>
             </View>
           </View>
         </View>

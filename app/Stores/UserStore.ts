@@ -1,4 +1,4 @@
-import { action, observable } from 'mobx';
+import {action, observable} from 'mobx';
 
 class UserStore {
   @observable public info = {};
@@ -9,11 +9,15 @@ class UserStore {
     location: '',
   };
 
-  @action public setInfo(data) {
+  @action public setInfo(data: {}) {
     this.info = data;
   }
 
-  @action public setBaseInfo(data) {
+  @action public setBaseInfo(data: {
+    name: string;
+    phone: string;
+    location: string;
+  }) {
     this.baseInfo = {...this.baseInfo, ...data};
   }
 }

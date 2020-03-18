@@ -6,11 +6,7 @@
  * height:1334px
  * @2x
  */
-import {
-  Dimensions,
-  PixelRatio,
-  Platform,
-} from 'react-native';
+import {Dimensions, PixelRatio, Platform} from 'react-native';
 
 export let screenW = Dimensions.get('window').width;
 export let screenH = Dimensions.get('window').height;
@@ -41,7 +37,7 @@ const X_HEIGHT = 812;
  * @param size 设计图的尺寸
  * @returns {number}
  */
-export function scaleSize(size) {
+export function scaleSize(size: number) {
   return size * widthScale;
 }
 
@@ -51,7 +47,7 @@ export function scaleSize(size) {
  * @param size 设计图的尺寸
  * @returns {number}
  */
-export function scaleHeight(size) {
+export function scaleHeight(size: number) {
   return size * heightScale;
 }
 
@@ -70,19 +66,19 @@ export function scaleSize(size: Number) {
  * @param allowFontScaling
  * @returns {Number} 返回实际sp
  */
-export function setSpText(size, allowFontScaling = false) {
+export function setSpText(size: number, allowFontScaling = false) {
   const scale = Math.min(widthScale, heightScale);
   const fontSize = allowFontScaling ? 1 : fontScale;
-  return size * scale / fontSize;
+  return (size * scale) / fontSize;
 }
 
-export function setSpText2(size) {
+export function setSpText2(size: number) {
   const scaleWidth = screenW / w2;
   // const scaleHeight = screenH / h2;
   const scale = Math.min(scaleWidth, screenH / h2);
-  size = Math.round((size * scale + 0.5));
+  size = Math.round(size * scale + 0.5);
 
-  return size / DEFAULT_DENSITY * fontScale;
+  return (size / DEFAULT_DENSITY) * fontScale;
 }
 
 /**
@@ -104,13 +100,15 @@ export function isIphoneX() {
  * @param androidStyle
  * @returns {*}
  */
-export function ifIphoneX(iphoneXStyle, iosStyle = {}, androidStyle) {
+export function ifIphoneX(iphoneXStyle: any, iosStyle = {}, androidStyle: any) {
   if (isIphoneX()) {
     return iphoneXStyle;
   } else if (Platform.OS === 'ios') {
     return iosStyle;
   } else {
-    if (androidStyle) { return androidStyle; }
+    if (androidStyle) {
+      return androidStyle;
+    }
     return iosStyle;
   }
 }
@@ -120,7 +118,7 @@ export function ifIphoneX(iphoneXStyle, iosStyle = {}, androidStyle) {
  * @param str  (null|undefined|''|'   '|[]|{}) 均判断为空，返回true
  * @returns {boolean}
  */
-export function isEmpty(str) {
+export function isEmpty(str: {replace?: any}) {
   if (!str) {
     return true;
   } else if (typeof str === 'object' && Object.keys(str).length === 0) {

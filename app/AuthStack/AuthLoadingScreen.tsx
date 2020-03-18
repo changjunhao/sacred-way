@@ -1,28 +1,32 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import { inject, observer } from 'mobx-react/native';
+import {inject, observer} from 'mobx-react';
 import React, {Component} from 'react';
 import {ActivityIndicator, StatusBar, View} from 'react-native';
-import {NavigationActions, NavigationSwitchScreenProps, StackActions} from 'react-navigation';
+import {StackActions} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {getUserInfo} from '../Services/user';
 
-interface InterfaceProps extends NavigationSwitchScreenProps<{}> {
-  UserStore;
-  tokenStore;
+type ScreenNavigationProp = StackNavigationProp<any>;
+
+interface InterfaceProps {
+  UserStore: any;
+  tokenStore: any;
+  navigation: ScreenNavigationProp;
 }
 
 @inject('UserStore', 'tokenStore')
 @observer
-class AuthLoadingScreen extends Component<InterfaceProps, {}> {
-  constructor(props) {
+class AuthLoadingScreen extends Component<InterfaceProps, any> {
+  constructor(props: Readonly<InterfaceProps>) {
     super(props);
     this.bootstrapAsync();
   }
 
   public render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <ActivityIndicator />
-        <StatusBar barStyle='default' />
+        <StatusBar barStyle="default" />
       </View>
     );
   }
@@ -34,24 +38,33 @@ class AuthLoadingScreen extends Component<InterfaceProps, {}> {
       const userInfoResult = await getUserInfo();
       if (userInfoResult.errno !== 0) {
         await AsyncStorage.clear();
-        this.props.navigation.navigate('Auth');
+        this.props.navigation.reset({
+          index: 0,
+          routes: [{name: 'Auth'}],
+        });
         return;
       }
       const userInfo = userInfoResult.data;
       this.props.UserStore.setInfo(userInfo);
       if (userInfo.status === 0) {
-        const resetAction = StackActions.reset({
-          index: 0,
-          actions: [NavigationActions.navigate({ routeName: 'InfoEdit' })],
-        });
-        this.props.navigation.dispatch(resetAction);
+        this.props.navigation.dispatch(
+          StackActions.replace('Auth', {
+            screen: 'InfoEdit',
+          }),
+        );
       } else {
-        this.props.navigation.navigate( 'App');
+        this.props.navigation.reset({
+          index: 0,
+          routes: [{name: 'App'}],
+        });
       }
     } else {
-      this.props.navigation.navigate('Auth');
+      this.props.navigation.reset({
+        index: 0,
+        routes: [{name: 'Auth'}],
+      });
     }
-  }
+  };
 }
 
 export default AuthLoadingScreen;

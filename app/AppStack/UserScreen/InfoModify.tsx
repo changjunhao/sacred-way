@@ -1,4 +1,4 @@
-import {inject, observer} from 'mobx-react/native';
+import {inject, observer} from 'mobx-react';
 import React, {Component} from 'react';
 import {
   Alert,
@@ -7,22 +7,26 @@ import {
   Platform,
   SafeAreaView,
   ScrollView,
-  StyleSheet, Text,
+  StyleSheet,
+  Text,
   TextInput,
   TouchableHighlight,
   View,
 } from 'react-native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import ImagePicker from 'react-native-image-picker';
+// @ts-ignore
 import Icon from 'react-native-vector-icons/AntDesign';
-import {NavigationSwitchScreenProps} from 'react-navigation';
 import EditInfo from '../../Components/EditInfo';
 import InputStyles from '../../Components/EditInfo/Styles';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
-import { setUserInfo, uploadAvatar } from '../../Services/user';
+import {setUserInfo, uploadAvatar} from '../../Services/user';
 import ApplicationStyles from '../../Theme/ApplicationStyles';
 
-interface InterfaceProps extends NavigationSwitchScreenProps<{}> {
-  UserStore;
+type ScreenNavigationProp = StackNavigationProp<any>;
+interface InterfaceProps {
+  UserStore: any;
+  navigation: ScreenNavigationProp;
 }
 
 interface InterfaceStates {
@@ -37,11 +41,14 @@ interface InterfaceStates {
 
 @inject('UserStore')
 @observer
-export default class InfoModify extends Component<InterfaceProps, InterfaceStates> {
-  constructor(prop) {
+export default class InfoModify extends Component<
+  InterfaceProps,
+  InterfaceStates
+> {
+  constructor(prop: Readonly<InterfaceProps>) {
     super(prop);
     this.state = {
-      avatar: '',
+      avatar: this.props.UserStore.info.head_img,
       nickName: '',
       weChat: '',
       weChatQR: '',
@@ -51,14 +58,8 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
     };
   }
 
-  public componentDidMount(): void {
-    this.setState({
-      avatar: this.props.UserStore.info.head_img,
-    });
-  }
-
   public render() {
-    const { baseInfo } = this.props.UserStore;
+    const {baseInfo} = this.props.UserStore;
 
     // TODO keyboardVerticalOffset 需判断设备
     return (
@@ -68,17 +69,22 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
           // @ts-ignore
           behavior={Platform.OS === 'ios' ? 'padding' : ''}
           keyboardVerticalOffset={88}
-          enabled
-        >
+          enabled>
           <ScrollView
             showsVerticalScrollIndicator={false}
             style={{...ApplicationStyles.mainContainer}}>
             <View style={styles.avatarActionView}>
-              <TouchableHighlight underlayColor='white'  onPress={() => this.handleSelectImage('avatar')}>
+              <TouchableHighlight
+                underlayColor="white"
+                onPress={() => this.handleSelectImage('avatar')}>
                 <View>
                   <Image
                     style={styles.avatar}
-                    source={this.state.avatar ? {uri: this.state.avatar} : require('../../Images/mrtx.png')}
+                    source={
+                      this.state.avatar
+                        ? {uri: this.state.avatar}
+                        : require('../../Images/mrtx.png')
+                    }
                     resizeMode={'cover'}
                   />
                   <Text style={styles.avatarTip}>点击修改头像</Text>
@@ -100,7 +106,7 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
                   placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入昵称（6个字）'}
                   defaultValue={this.props.UserStore.info.nick_name}
-                  onChangeText={(nickName) => this.setState({nickName})}
+                  onChangeText={nickName => this.setState({nickName})}
                 />
               </View>
               <View>
@@ -112,23 +118,35 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
                   placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入微信号（20个字）'}
                   defaultValue={this.props.UserStore.info.wechat}
-                  onChangeText={(weChat) => this.setState({weChat})}
+                  onChangeText={weChat => this.setState({weChat})}
                 />
               </View>
               <View>
                 <View style={InputStyles.labelView}>
                   <Text style={InputStyles.labelText}>微信二维码</Text>
                 </View>
-                <TouchableHighlight underlayColor='white'  onPress={this.handleSelectImage}>
+                <TouchableHighlight
+                  underlayColor="white"
+                  // @ts-ignore
+                  onPress={this.handleSelectImage}>
                   <View style={{...styles.weChatQRView}}>
-                    {this.state.weChatQR || this.props.UserStore.info.wechat_qrcode ? (
+                    {this.state.weChatQR ||
+                    this.props.UserStore.info.wechat_qrcode ? (
                       <Image
                         style={{...styles.weChatQR}}
                         resizeMode={'cover'}
-                        source={{uri: this.state.weChatQR || this.props.UserStore.info.wechat_qrcode}}
+                        source={{
+                          uri:
+                            this.state.weChatQR ||
+                            this.props.UserStore.info.wechat_qrcode,
+                        }}
                       />
                     ) : (
-                      <Icon size={setSpText2(40)} color={'#272A32'} name={'plus'}/>
+                      <Icon
+                        size={setSpText2(40)}
+                        color={'#272A32'}
+                        name={'plus'}
+                      />
                     )}
                   </View>
                 </TouchableHighlight>
@@ -142,7 +160,7 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
                   placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入公司名称（20个字）'}
                   defaultValue={this.props.UserStore.info.company}
-                  onChangeText={(company) => this.setState({company})}
+                  onChangeText={company => this.setState({company})}
                 />
               </View>
               <View>
@@ -154,7 +172,7 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
                   placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入职务名称（10个字）'}
                   defaultValue={this.props.UserStore.info.duty}
-                  onChangeText={(duty) => this.setState({duty})}
+                  onChangeText={duty => this.setState({duty})}
                 />
               </View>
               <View>
@@ -166,22 +184,28 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
                   placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入所属行业（10个字）'}
                   defaultValue={this.props.UserStore.info.trade}
-                  onChangeText={(trade) => this.setState({trade})}
+                  onChangeText={trade => this.setState({trade})}
                 />
               </View>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
         <TouchableHighlight
-          disabled={baseInfo.phone === '' || baseInfo.name === '' || baseInfo.location === ''}
-          underlayColor='white'
-          onPress={this.handleSubmit}
-        >
-          <View style={
-            baseInfo.phone !== '' && baseInfo.name !== '' && baseInfo.location !== '' ?
-              {...styles.button, ...styles.buttonActive} :
-              {...styles.button, ...styles.buttonDisable}
-          }>
+          disabled={
+            baseInfo.phone === '' ||
+            baseInfo.name === '' ||
+            baseInfo.location === ''
+          }
+          underlayColor="white"
+          onPress={this.handleSubmit}>
+          <View
+            style={
+              baseInfo.phone !== '' &&
+              baseInfo.name !== '' &&
+              baseInfo.location !== ''
+                ? {...styles.button, ...styles.buttonActive}
+                : {...styles.button, ...styles.buttonDisable}
+            }>
             <Text style={styles.buttonText}>完成</Text>
           </View>
         </TouchableHighlight>
@@ -191,7 +215,15 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
 
   private handleSubmit = async () => {
     const {name, phone, location} = this.props.UserStore.baseInfo;
-    const {avatar, nickName, weChat, weChatQR, company, duty, trade} = this.state;
+    const {
+      avatar,
+      nickName,
+      weChat,
+      weChatQR,
+      company,
+      duty,
+      trade,
+    } = this.state;
     await setUserInfo({
       name,
       phone,
@@ -203,18 +235,17 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
       company,
       duty,
       trade,
-    })
-      .then((res) => {
-        if (res.errno === 0) {
-          this.props.UserStore.setInfo(res.data);
-          this.props.navigation.goBack();
-        } else {
-          Alert.alert(res.errmsg);
-        }
-      });
-  }
+    }).then(res => {
+      if (res.errno === 0) {
+        this.props.UserStore.setInfo(res.data);
+        this.props.navigation.goBack();
+      } else {
+        Alert.alert(res.errmsg);
+      }
+    });
+  };
 
-  private handleSelectImage = (type) => {
+  private handleSelectImage = (type: string) => {
     const options = {
       title: '选取图片',
       cancelButtonTitle: '取消',
@@ -224,31 +255,30 @@ export default class InfoModify extends Component<InterfaceProps, InterfaceState
     };
 
     // @ts-ignore
-    ImagePicker.launchImageLibrary(options, (response) => {
+    ImagePicker.launchImageLibrary(options, response => {
       if (response.didCancel) {
         // console.log('User cancelled image picker');
       } else if (response.error) {
         Alert.alert(response.error);
       } else {
-        uploadAvatar({uri: response.uri, name: response.fileName})
-          .then((res) => {
-            if (res.errno === 0) {
-              if (type === 'avatar') {
-                this.setState({
-                  avatar: res.data.info.file_url,
-                });
-              } else {
-                this.setState({
-                  weChatQR: res.data.info.file_url,
-                });
-              }
+        uploadAvatar({uri: response.uri, name: response.fileName}).then(res => {
+          if (res.errno === 0) {
+            if (type === 'avatar') {
+              this.setState({
+                avatar: res.data.info.file_url,
+              });
             } else {
-              Alert.alert(res.errmsg);
+              this.setState({
+                weChatQR: res.data.info.file_url,
+              });
             }
-          });
+          } else {
+            Alert.alert(res.errmsg);
+          }
+        });
       }
     });
-  }
+  };
 }
 
 const styles = StyleSheet.create({

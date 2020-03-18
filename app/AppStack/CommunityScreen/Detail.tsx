@@ -10,10 +10,12 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+// @ts-ignore
 import Icon from 'react-native-vector-icons/AntDesign';
-import {NavigationScreenProp, NavigationState} from 'react-navigation';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
-import { getCommunityInfo } from '../../Services/community';
+import {getCommunityInfo} from '../../Services/community';
+import {RouteProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 const colorSet = [
   {
@@ -70,17 +72,24 @@ interface InterfaceState {
   currentImage: any;
 }
 
-interface InterFaceStateParams extends NavigationState {
-  params: { id: string; };
-}
+type StackParamList = {
+  CommunityDetailScreen: {id: string};
+};
+
+type ScreenRouteProp = RouteProp<StackParamList, 'CommunityDetailScreen'>;
+
+type ScreenNavigationProp = StackNavigationProp<any>;
 
 interface InterfaceProps {
-  navigation: NavigationScreenProp<InterFaceStateParams>;
+  navigation: ScreenNavigationProp;
+  route: ScreenRouteProp;
 }
 
-export default class CommunityDetailScreen extends Component<InterfaceProps, InterfaceState> {
-
-  constructor(props) {
+export default class CommunityDetailScreen extends Component<
+  InterfaceProps,
+  InterfaceState
+> {
+  constructor(props: Readonly<InterfaceProps>) {
     super(props);
     this.state = {
       title: '',
@@ -96,35 +105,37 @@ export default class CommunityDetailScreen extends Component<InterfaceProps, Int
   }
 
   public componentDidMount() {
-    const { id } = this.props.navigation.state.params;
-    getCommunityInfo({id})
-      .then(async (res) => {
-        const infoPromiseArray = res.list
-          .map((item) => this.getInfo(item));
-        const infos: any[] = await Promise.all(infoPromiseArray);
-        const userIds = [...new Set(infos.map((item) => item.nick_name))];
-        this.setState({
-          title: res.title,
-          groupName: res.group_name,
-          readCount: res.read_count,
-          list: infos.map((item) => ({
-            ...item,
-            color: colorSet[userIds.indexOf(item.nick_name) % 10],
-          })),
-          publishTime: res.publish_time,
-          screenshots: res.screenshots,
-        });
+    const {id} = this.props.route.params;
+    getCommunityInfo({id}).then(async res => {
+      const infoPromiseArray = res.list.map((item: any) => this.getInfo(item));
+      const infos: any[] = await Promise.all(infoPromiseArray);
+      const userIds = [...new Set(infos.map(item => item.nick_name))];
+      this.setState({
+        title: res.title,
+        groupName: res.group_name,
+        readCount: res.read_count,
+        list: infos.map(item => ({
+          ...item,
+          color: colorSet[userIds.indexOf(item.nick_name) % 10],
+        })),
+        publishTime: res.publish_time,
+        screenshots: res.screenshots,
       });
+    });
   }
 
-  public getInfo(originInfo) {
-    return new Promise((resolve) => {
+  public getInfo(originInfo: any) {
+    return new Promise(resolve => {
       if (originInfo.type === 'IMAGE' && originInfo.content) {
-        Image.getSize(originInfo.content, (width, height) => {
-          resolve({...originInfo, width, height});
-        }, () => {
-          resolve({...originInfo, width: 0, height: 0});
-        });
+        Image.getSize(
+          originInfo.content,
+          (width, height) => {
+            resolve({...originInfo, width, height});
+          },
+          () => {
+            resolve({...originInfo, width: 0, height: 0});
+          },
+        );
       } else {
         resolve({...originInfo, width: 0, height: 0});
       }
@@ -132,7 +143,15 @@ export default class CommunityDetailScreen extends Component<InterfaceProps, Int
   }
 
   public render() {
-    const { title, groupName, readCount, list, modalVisible, imageModalVisible, currentImage } = this.state;
+    const {
+      title,
+      groupName,
+      readCount,
+      list,
+      modalVisible,
+      imageModalVisible,
+      currentImage,
+    } = this.state;
     return (
       <Fragment>
         <ScrollView
@@ -143,15 +162,27 @@ export default class CommunityDetailScreen extends Component<InterfaceProps, Int
             style={{minHeight: '100%', width: '100%'}}
             imageStyle={{resizeMode: 'repeat', opacity: 1}}>
             <Text
-              style={{fontWeight: 'bold', color: '#222', fontSize: setSpText2(17), lineHeight: scaleSize(20)}}>
+              style={{
+                fontWeight: 'bold',
+                color: '#222',
+                fontSize: setSpText2(17),
+                lineHeight: scaleSize(20),
+              }}>
               {title}
             </Text>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <Text
-                style={{fontWeight: 'bold', color: '#555', fontSize: setSpText2(12)}}>
+                style={{
+                  fontWeight: 'bold',
+                  color: '#555',
+                  fontSize: setSpText2(12),
+                }}>
                 共{list.length}对话 来自：{groupName}
               </Text>
-              <Text style={{color: '#a0a0a0', fontSize: setSpText2(12)}}>{readCount}次学习</Text>
+              <Text style={{color: '#a0a0a0', fontSize: setSpText2(12)}}>
+                {readCount}次学习
+              </Text>
             </View>
             <View
               style={{
@@ -159,115 +190,172 @@ export default class CommunityDetailScreen extends Component<InterfaceProps, Int
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 marginTop: scaleSize(42.5),
-                marginBottom: scaleSize(25)}}
-            >
-              <View style={{backgroundColor: '#ded9d9', height: scaleSize(1), width: scaleSize(90)}} />
+                marginBottom: scaleSize(25),
+              }}>
+              <View
+                style={{
+                  backgroundColor: '#ded9d9',
+                  height: scaleSize(1),
+                  width: scaleSize(90),
+                }}
+              />
               <View>
-                <Text style={{textAlign: 'center', color: '#a5a5a5', fontSize: setSpText2(12)}}>以下为群内对话摘录</Text>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    color: '#a5a5a5',
+                    fontSize: setSpText2(12),
+                  }}>
+                  以下为群内对话摘录
+                </Text>
               </View>
-              <View style={{backgroundColor: '#ded9d9', height: scaleSize(1), width: scaleSize(90)}} />
+              <View
+                style={{
+                  backgroundColor: '#ded9d9',
+                  height: scaleSize(1),
+                  width: scaleSize(90),
+                }}
+              />
             </View>
-            {list.filter((item) => item.content).map((item) => (
-              <View key={item.id} style={{flexDirection: 'row', marginBottom: scaleSize(14)}}>
-                <LinearGradient colors={item.color.back} style={{width: scaleSize(40), height: scaleSize(40)}}>
-                  <Text
-                    style={{
-                      lineHeight: scaleSize(40),
-                      textAlign: 'center',
-                      fontSize: setSpText2(18),
-                      fontWeight: 'bold', color: item.color.font}}
-                  >
-                    {item.nick_name.trim().substr(0, 1)}
-                  </Text>
-                </LinearGradient>
-                <View style={{paddingLeft: scaleSize(9)}}>
-                  <Text style={{color: '#666', fontSize: setSpText2(12), marginBottom: scaleSize(4)}}>
-                    {item.nick_name}
-                    <Text> @{groupName}</Text>
-                  </Text>
-                  {item.type === 'IMAGE' ?
-                    (
+            {list
+              .filter(item => item.content)
+              .map(item => (
+                <View
+                  key={item.id}
+                  style={{flexDirection: 'row', marginBottom: scaleSize(14)}}>
+                  <LinearGradient
+                    colors={item.color.back}
+                    style={{width: scaleSize(40), height: scaleSize(40)}}>
+                    <Text
+                      style={{
+                        lineHeight: scaleSize(40),
+                        textAlign: 'center',
+                        fontSize: setSpText2(18),
+                        fontWeight: 'bold',
+                        color: item.color.font,
+                      }}>
+                      {item.nick_name.trim().substr(0, 1)}
+                    </Text>
+                  </LinearGradient>
+                  <View style={{paddingLeft: scaleSize(9)}}>
+                    <Text
+                      style={{
+                        color: '#666',
+                        fontSize: setSpText2(12),
+                        marginBottom: scaleSize(4),
+                      }}>
+                      {item.nick_name}
+                      <Text> @{groupName}</Text>
+                    </Text>
+                    {item.type === 'IMAGE' ? (
                       <TouchableWithoutFeedback
-                        onPress={() => this.setState({imageModalVisible: true, currentImage: item})}
-                      >
+                        onPress={() =>
+                          this.setState({
+                            imageModalVisible: true,
+                            currentImage: item,
+                          })
+                        }>
                         <Image
                           style={{
                             width: scaleSize(125),
-                            height: scaleSize(item.height * 125 / item.width),
-                            borderRadius: scaleSize(4)}}
+                            height: scaleSize((item.height * 125) / item.width),
+                            borderRadius: scaleSize(4),
+                          }}
                           source={{uri: item.content}}
                         />
                       </TouchableWithoutFeedback>
-                    ) :
-                    (
+                    ) : (
                       <View
                         style={{
                           maxWidth: scaleSize(238),
                           backgroundColor: '#FFF',
                           paddingHorizontal: scaleSize(14),
-                          paddingVertical: scaleSize(12)}}
-                      >
+                          paddingVertical: scaleSize(12),
+                        }}>
                         <Text
                           selectable={true}
                           style={{
                             fontSize: setSpText2(17),
-                            lineHeight: scaleSize(22)}}
-                        >
+                            lineHeight: scaleSize(22),
+                          }}>
                           {item.content.replace(/<br\/>/g, '\n')}
                         </Text>
                       </View>
-                    )
-                  }
+                    )}
+                  </View>
                 </View>
-              </View>
-            ))}
-            <View style={{marginTop: scaleSize(30), marginBottom: scaleSize(44)}}>
-              <TouchableWithoutFeedback onPress={() => this.setState({modalVisible: true})}>
-                <Text style={{textAlign: 'center', fontSize: setSpText2(12), fontWeight: 'bold', color: '#555'}}>
-                  也想加入干货讨论？<Text style={{color: '#f26522'}}>点击这里</Text>
+              ))}
+            <View
+              style={{marginTop: scaleSize(30), marginBottom: scaleSize(44)}}>
+              <TouchableWithoutFeedback
+                onPress={() => this.setState({modalVisible: true})}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    fontSize: setSpText2(12),
+                    fontWeight: 'bold',
+                    color: '#555',
+                  }}>
+                  也想加入干货讨论？
+                  <Text style={{color: '#f26522'}}>点击这里</Text>
                 </Text>
               </TouchableWithoutFeedback>
             </View>
           </ImageBackground>
         </ScrollView>
         <Modal
-          animationType='fade'
+          animationType="fade"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
-            alert('Modal has been closed.');
-          }}
-        >
+            // alert('Modal has been closed.');
+          }}>
           <SafeAreaView
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(37,38,45,.7)'}}
-          >
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: 'rgba(37,38,45,.7)',
+            }}>
             <Image
               style={{width: scaleSize(250), height: scaleSize(250)}}
               source={require('../../Images/Wechat.jpeg')}
             />
-            <TouchableWithoutFeedback onPress={() => this.setState({modalVisible: false})}>
-              <Icon style={{marginTop: scaleSize(30)}} size={scaleSize(25)} color='#FFF' name={'close'}/>
+            <TouchableWithoutFeedback
+              onPress={() => this.setState({modalVisible: false})}>
+              <Icon
+                style={{marginTop: scaleSize(30)}}
+                size={scaleSize(25)}
+                color="#FFF"
+                name={'close'}
+              />
             </TouchableWithoutFeedback>
           </SafeAreaView>
         </Modal>
         <Modal
-          animationType='fade'
+          animationType="fade"
           visible={imageModalVisible}
           onRequestClose={() => {
-            alert('Modal has been closed.');
-          }}
-        >
+            // alert('Modal has been closed.');
+          }}>
           <SafeAreaView
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000'}}
-          >
-            <TouchableWithoutFeedback onPress={() => this.setState({imageModalVisible: false})}>
-            <Image
-              style={{
-                width: scaleSize(375),
-                height: scaleSize(currentImage.height * 375 / currentImage.width),
-              }}
-              source={{uri: currentImage.content}}
-            />
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#000',
+            }}>
+            <TouchableWithoutFeedback
+              onPress={() => this.setState({imageModalVisible: false})}>
+              <Image
+                style={{
+                  width: scaleSize(375),
+                  height: scaleSize(
+                    (currentImage.height * 375) / currentImage.width,
+                  ),
+                }}
+                source={{uri: currentImage.content}}
+              />
             </TouchableWithoutFeedback>
           </SafeAreaView>
         </Modal>

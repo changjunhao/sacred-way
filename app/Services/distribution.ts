@@ -1,8 +1,8 @@
-import { toJS } from 'mobx';
+import {toJS} from 'mobx';
 import store from '../Stores/TokenStore';
 import config from './config';
 
-const { BASEURL } = config;
+const {BASEURL} = config;
 
 export function getPersonMoney() {
   return fetch(`${BASEURL}/membercenter/Distribution/person_money`, {
@@ -10,11 +10,11 @@ export function getPersonMoney() {
       USERSIGN: toJS(store).token,
     },
   })
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson.data;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error);
     });
 }
@@ -25,56 +25,71 @@ export function getDirectRecommend() {
       USERSIGN: toJS(store).token,
     },
   })
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson.data;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error);
     });
 }
 
-export function getUserIoList(params) {
-  return fetch(`${BASEURL}/membercenter/Distribution/user_io_list?page=${params.page}&pageSize=${params.pageSize}`, {
-    headers: {
-      USERSIGN: toJS(store).token,
+export function getUserIoList(params: {page: any; pageSize: any}) {
+  return fetch(
+    `${BASEURL}/membercenter/Distribution/user_io_list?page=${
+      params.page
+    }&pageSize=${params.pageSize}`,
+    {
+      headers: {
+        USERSIGN: toJS(store).token,
+      },
     },
-  })
-    .then((response) => response.json())
-    .then((responseJson) => {
+  )
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson.data;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error);
     });
 }
 
-export function getScanList(params) {
-  return fetch(`${BASEURL}/membercenter/Distribution/scan_list?page=${params.page}&pageSize=${params.pageSize}`, {
-    headers: {
-      USERSIGN: toJS(store).token,
+export function getScanList(params: {page: any; pageSize: any}) {
+  return fetch(
+    `${BASEURL}/membercenter/Distribution/scan_list?page=${
+      params.page
+    }&pageSize=${params.pageSize}`,
+    {
+      headers: {
+        USERSIGN: toJS(store).token,
+      },
     },
-  })
-    .then((response) => response.json())
-    .then((responseJson) => {
+  )
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson.data;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error);
     });
 }
 
-export function getDirectUser(params) {
-  return fetch(`${BASEURL}/membercenter/Distribution/direct_user?page=${params.page}&pageSize=${params.pageSize}`, {
-    headers: {
-      USERSIGN: toJS(store).token,
+export function getDirectUser(params: {page: any; pageSize: any}) {
+  return fetch(
+    `${BASEURL}/membercenter/Distribution/direct_user?page=${
+      params.page
+    }&pageSize=${params.pageSize}`,
+    {
+      headers: {
+        USERSIGN: toJS(store).token,
+      },
     },
-  })
-    .then((response) => response.json())
-    .then((responseJson) => {
+  )
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson.data;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error);
     });
 }

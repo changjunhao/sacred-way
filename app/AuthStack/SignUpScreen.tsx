@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
-import {Text, TextInput, TouchableHighlight, View} from 'react-native';
-import {NavigationSwitchScreenProps, SafeAreaView} from 'react-navigation';
+import {
+  Text,
+  TextInput,
+  TouchableHighlight,
+  View,
+  SafeAreaView,
+} from 'react-native';
 import {sendMobileMessage, signUp} from '../Services/user';
 import styles from './Styles';
 
@@ -13,11 +18,8 @@ interface InterfaceStates {
   canClick: boolean;
 }
 
-interface InterfaceProps extends NavigationSwitchScreenProps<{}> {}
-
-export default class SignUpScreen extends Component<InterfaceProps, InterfaceStates> {
-
-  constructor(props) {
+export default class SignUpScreen extends Component<any, InterfaceStates> {
+  constructor(props: any) {
     super(props);
     this.state = {
       phone: '',
@@ -34,12 +36,8 @@ export default class SignUpScreen extends Component<InterfaceProps, InterfaceSta
       <SafeAreaView>
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>
-              美秒短视频会员中心
-            </Text>
-            <Text style={styles.headerSubtitle}>
-              注册
-            </Text>
+            <Text style={styles.headerTitle}>美秒短视频会员中心</Text>
+            <Text style={styles.headerSubtitle}>注册</Text>
           </View>
           <View style={styles.inputView}>
             <Text style={styles.signUpInputLabel}>手机号</Text>
@@ -49,7 +47,8 @@ export default class SignUpScreen extends Component<InterfaceProps, InterfaceSta
               placeholder={'请输入您的手机号'}
               keyboardType={'phone-pad'}
               textContentType={'username'}
-              onChangeText={(phone) => this.setState({phone})} />
+              onChangeText={phone => this.setState({phone})}
+            />
           </View>
           <View style={styles.inputView}>
             <Text style={styles.signUpInputLabel}>验证码</Text>
@@ -59,8 +58,11 @@ export default class SignUpScreen extends Component<InterfaceProps, InterfaceSta
               placeholder={'请输入短信验证码'}
               keyboardType={'numeric'}
               textContentType={'oneTimeCode'}
-              onChangeText={(code) => this.setState({code})}/>
-            <TouchableHighlight underlayColor='white' onPress={this.sendMobileMessage} >
+              onChangeText={code => this.setState({code})}
+            />
+            <TouchableHighlight
+              underlayColor="white"
+              onPress={this.sendMobileMessage}>
               <Text>{this.state.content}</Text>
             </TouchableHighlight>
           </View>
@@ -72,22 +74,31 @@ export default class SignUpScreen extends Component<InterfaceProps, InterfaceSta
               placeholder={'请输入密码'}
               secureTextEntry={true}
               textContentType={'password'}
-              onChangeText={(password) => this.setState({password})}/>
+              onChangeText={password => this.setState({password})}
+            />
           </View>
           <TouchableHighlight
-            disabled={this.state.phone === '' || this.state.password === '' || this.state.code === ''}
+            disabled={
+              this.state.phone === '' ||
+              this.state.password === '' ||
+              this.state.code === ''
+            }
             onPressIn={this.signUp}
-            underlayColor='white'>
+            underlayColor="white">
             <View
               style={
-                this.state.phone !== '' && this.state.password !== '' && this.state.code !== '' ?
-                  {...styles.button, ...styles.buttonActive} :
-                  {...styles.button, ...styles.buttonDisable}
+                this.state.phone !== '' &&
+                this.state.password !== '' &&
+                this.state.code !== ''
+                  ? {...styles.button, ...styles.buttonActive}
+                  : {...styles.button, ...styles.buttonDisable}
               }>
               <Text style={styles.buttonText}>下一步</Text>
             </View>
           </TouchableHighlight>
-          <TouchableHighlight underlayColor='white' onPress={() => this.props.navigation.goBack()}>
+          <TouchableHighlight
+            underlayColor="white"
+            onPress={() => this.props.navigation.goBack()}>
             <View style={styles.signInTipView}>
               <Text style={styles.signInTip}>已有账号？请点击此处登录</Text>
             </View>
@@ -106,28 +117,33 @@ export default class SignUpScreen extends Component<InterfaceProps, InterfaceSta
     if (Number(result.errno) === 0) {
       this.props.navigation.navigate('InfoEdit');
     }
-  }
+  };
 
   private sendMobileMessage = async () => {
-    if (!this.state.canClick) { return; }
+    if (!this.state.canClick) {
+      return;
+    }
     this.setState({
       canClick: false,
       content: `${this.state.totalTime}s`,
     });
     const siv = setInterval(() => {
-      this.setState({
-        totalTime: this.state.totalTime - 1,
-        content: `${this.state.totalTime}s`,
-      }, () => {
-        if (this.state.totalTime === 0) {
-          clearInterval(siv);
-          this.setState({
-            canClick: true,
-            totalTime: 60,
-            content: '重新发送',
-          });
-        }
-      });
+      this.setState(
+        {
+          totalTime: this.state.totalTime - 1,
+          content: `${this.state.totalTime}s`,
+        },
+        () => {
+          if (this.state.totalTime === 0) {
+            clearInterval(siv);
+            this.setState({
+              canClick: true,
+              totalTime: 60,
+              content: '重新发送',
+            });
+          }
+        },
+      );
     }, 1000);
     const result = await sendMobileMessage({
       phone: this.state.phone,
@@ -143,5 +159,5 @@ export default class SignUpScreen extends Component<InterfaceProps, InterfaceSta
         });
       }, 1500);
     }
-  }
+  };
 }

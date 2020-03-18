@@ -1,7 +1,17 @@
 import React, {Component, Fragment} from 'react';
-import {Alert, Text, TextInput, TouchableHighlight, View} from 'react-native';
-import {NavigationSwitchScreenProps, SafeAreaView} from 'react-navigation';
-import {checkVerificationCode, resetPassword, sendMobileMessage} from '../Services/user';
+import {
+  Alert,
+  Text,
+  TextInput,
+  TouchableHighlight,
+  View,
+  SafeAreaView,
+} from 'react-native';
+import {
+  checkVerificationCode,
+  resetPassword,
+  sendMobileMessage,
+} from '../Services/user';
 import styles from './Styles';
 
 interface InterfaceStates {
@@ -15,11 +25,11 @@ interface InterfaceStates {
   next: boolean;
 }
 
-interface InterfaceProps extends NavigationSwitchScreenProps<{}> {}
-
-export default class ResetPasswordScreen extends Component<InterfaceProps, InterfaceStates> {
-
-  constructor(props) {
+export default class ResetPasswordScreen extends Component<
+  any,
+  InterfaceStates
+> {
+  constructor(props: any) {
     super(props);
     this.state = {
       phone: '',
@@ -34,7 +44,7 @@ export default class ResetPasswordScreen extends Component<InterfaceProps, Inter
   }
 
   public render() {
-    const { next } = this.state;
+    const {next} = this.state;
 
     const VerificationCode = (
       <Fragment>
@@ -46,7 +56,8 @@ export default class ResetPasswordScreen extends Component<InterfaceProps, Inter
             placeholder={'请输入您的手机号'}
             keyboardType={'phone-pad'}
             textContentType={'username'}
-            onChangeText={(phone) => this.setState({phone})} />
+            onChangeText={phone => this.setState({phone})}
+          />
         </View>
         <View style={styles.inputView}>
           <TextInput
@@ -55,20 +66,24 @@ export default class ResetPasswordScreen extends Component<InterfaceProps, Inter
             placeholder={'请输入短信验证码'}
             keyboardType={'numeric'}
             textContentType={'oneTimeCode'}
-            onChangeText={(code) => this.setState({code})}/>
-          <TouchableHighlight underlayColor='white' onPress={this.sendMobileMessage} >
+            onChangeText={code => this.setState({code})}
+          />
+          <TouchableHighlight
+            underlayColor="white"
+            onPress={this.sendMobileMessage}>
             <Text>{this.state.content}</Text>
           </TouchableHighlight>
         </View>
         <TouchableHighlight
           disabled={this.state.phone === '' || this.state.code === ''}
           onPressIn={this.next}
-          underlayColor='white'>
-          <View style={
-            this.state.phone !== '' && this.state.code !== '' ?
-              {...styles.button, ...styles.buttonActive} :
-              {...styles.button, ...styles.buttonDisable}
-          }>
+          underlayColor="white">
+          <View
+            style={
+              this.state.phone !== '' && this.state.code !== ''
+                ? {...styles.button, ...styles.buttonActive}
+                : {...styles.button, ...styles.buttonDisable}
+            }>
             <Text style={styles.buttonText}>下一步</Text>
           </View>
         </TouchableHighlight>
@@ -85,7 +100,8 @@ export default class ResetPasswordScreen extends Component<InterfaceProps, Inter
             secureTextEntry={true}
             textContentType={'newPassword'}
             value={this.state.password}
-            onChangeText={(password) => this.setState({password})}/>
+            onChangeText={password => this.setState({password})}
+          />
         </View>
         <View style={styles.inputView}>
           <TextInput
@@ -95,17 +111,21 @@ export default class ResetPasswordScreen extends Component<InterfaceProps, Inter
             secureTextEntry={true}
             textContentType={'newPassword'}
             value={this.state.repeatPassword}
-            onChangeText={(repeatPassword) => this.setState({repeatPassword})}/>
+            onChangeText={repeatPassword => this.setState({repeatPassword})}
+          />
         </View>
         <TouchableHighlight
-          disabled={this.state.password === '' && this.state.repeatPassword === ''}
+          disabled={
+            this.state.password === '' && this.state.repeatPassword === ''
+          }
           onPressIn={this.resetPassword}
-          underlayColor='white'>
-          <View style={
-            this.state.password !== '' && this.state.repeatPassword !== '' ?
-              {...styles.button, ...styles.buttonActive} :
-              {...styles.button, ...styles.buttonDisable}
-          }>
+          underlayColor="white">
+          <View
+            style={
+              this.state.password !== '' && this.state.repeatPassword !== ''
+                ? {...styles.button, ...styles.buttonActive}
+                : {...styles.button, ...styles.buttonDisable}
+            }>
             <Text style={styles.buttonText}>完成</Text>
           </View>
         </TouchableHighlight>
@@ -116,19 +136,11 @@ export default class ResetPasswordScreen extends Component<InterfaceProps, Inter
       <SafeAreaView>
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>
-              美秒短视频会员中心
-            </Text>
-            <Text style={styles.headerSubtitle}>
-              重置密码
-            </Text>
+            <Text style={styles.headerTitle}>美秒短视频会员中心</Text>
+            <Text style={styles.headerSubtitle}>重置密码</Text>
           </View>
-          <View style={!next ? {display: 'none'} : {}}>
-            {PassWord}
-          </View>
-          <View style={next ? {display: 'none'} : {}}>
-            {VerificationCode}
-          </View>
+          <View style={!next ? {display: 'none'} : {}}>{PassWord}</View>
+          <View style={next ? {display: 'none'} : {}}>{VerificationCode}</View>
         </View>
       </SafeAreaView>
     );
@@ -140,15 +152,13 @@ export default class ResetPasswordScreen extends Component<InterfaceProps, Inter
       code: this.state.code,
     });
     if (response.errno !== 0) {
-      Alert.alert(
-        response.errmsg,
-      );
+      Alert.alert(response.errmsg);
     } else {
       this.setState({
         next: true,
       });
     }
-  }
+  };
 
   private resetPassword = async () => {
     const response = await resetPassword({
@@ -158,34 +168,37 @@ export default class ResetPasswordScreen extends Component<InterfaceProps, Inter
       repeatPassword: this.state.repeatPassword,
     });
     if (response.errno !== 0) {
-      Alert.alert(
-        response.errmsg,
-      );
+      Alert.alert(response.errmsg);
     } else {
       this.props.navigation.goBack();
     }
-  }
+  };
 
   private sendMobileMessage = async () => {
-    if (!this.state.canClick) { return; }
+    if (!this.state.canClick) {
+      return;
+    }
     this.setState({
       canClick: false,
       content: `${this.state.totalTime}s`,
     });
     const siv = setInterval(() => {
-      this.setState({
-        totalTime: this.state.totalTime - 1,
-        content: `${this.state.totalTime}s`,
-      }, () => {
-        if (this.state.totalTime === 0) {
-          clearInterval(siv);
-          this.setState({
-            canClick: true,
-            totalTime: 60,
-            content: '重新发送',
-          });
-        }
-      });
+      this.setState(
+        {
+          totalTime: this.state.totalTime - 1,
+          content: `${this.state.totalTime}s`,
+        },
+        () => {
+          if (this.state.totalTime === 0) {
+            clearInterval(siv);
+            this.setState({
+              canClick: true,
+              totalTime: 60,
+              content: '重新发送',
+            });
+          }
+        },
+      );
     }, 1000);
     const result = await sendMobileMessage({
       phone: this.state.phone,
@@ -201,5 +214,5 @@ export default class ResetPasswordScreen extends Component<InterfaceProps, Inter
         });
       }, 1500);
     }
-  }
+  };
 }

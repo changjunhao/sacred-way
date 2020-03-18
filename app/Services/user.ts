@@ -1,11 +1,11 @@
-import { toJS } from 'mobx';
+import {toJS} from 'mobx';
 import {Alert} from 'react-native';
 import store from '../Stores/TokenStore';
 import config from './config';
 
-const { BASEURL } = config;
+const {BASEURL} = config;
 
-export function sendMobileMessage(params) {
+export function sendMobileMessage(params: {phone: any; type: any}) {
   return fetch(`${BASEURL}/utility/MobileMessage/sendMobileMessage`, {
     method: 'POST',
     headers: {
@@ -17,21 +17,19 @@ export function sendMobileMessage(params) {
       check_mobile_exist: params.type,
     }),
   })
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       if (responseJson.errno !== 0) {
-        Alert.alert(
-          responseJson.errmsg,
-        );
+        Alert.alert(responseJson.errmsg);
       }
       return responseJson;
     })
-    .catch((error) => {
+    .catch(() => {
       // console.error(error);
     });
 }
 
-export function checkVerificationCode(params) {
+export function checkVerificationCode(params: {phone: any; code: any}) {
   return fetch(`${BASEURL}/utility/MobileMessage/checkCode`, {
     method: 'POST',
     headers: {
@@ -42,16 +40,16 @@ export function checkVerificationCode(params) {
       code: params.code,
     }),
   })
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson;
     })
-    .catch((error) => {
+    .catch(() => {
       // console.error(error);
     });
 }
 
-export function login(params: { phone: string; password: string; }) {
+export function login(params: {phone: string; password: string}) {
   return fetch(`${BASEURL}/membercenter/H5Register/LoginWithPassword`, {
     method: 'POST',
     headers: {
@@ -62,21 +60,19 @@ export function login(params: { phone: string; password: string; }) {
       password: params.password,
     }),
   })
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       if (responseJson.errno !== 0) {
-        Alert.alert(
-          responseJson.errmsg,
-        );
+        Alert.alert(responseJson.errmsg);
       }
       return responseJson.data;
     })
-    .catch((error) => {
+    .catch(() => {
       // console.error(error);
     });
 }
 
-export function signUp(params) {
+export function signUp(params: {phone: any; code: any; password: any}) {
   return fetch(`${BASEURL}/membercenter/H5Register/registerWithPassWord`, {
     method: 'POST',
     headers: {
@@ -88,21 +84,24 @@ export function signUp(params) {
       password: params.password,
     }),
   })
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       if (responseJson.errno !== 0) {
-        Alert.alert(
-          responseJson.errmsg,
-        );
+        Alert.alert(responseJson.errmsg);
       }
       return responseJson;
     })
-    .catch((error) => {
+    .catch(() => {
       // console.error(error);
     });
 }
 
-export function resetPassword(params) {
+export function resetPassword(params: {
+  phone: any;
+  code: any;
+  password: any;
+  repeatPassword: any;
+}) {
   return fetch(`${BASEURL}/membercenter/Password/setPassword`, {
     method: 'POST',
     headers: {
@@ -115,11 +114,11 @@ export function resetPassword(params) {
       password_repeat: params.repeatPassword,
     }),
   })
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson;
     })
-    .catch((error) => {
+    .catch(() => {
       // console.error(error);
     });
 }
@@ -130,16 +129,33 @@ export function getUserInfo() {
       USERSIGN: toJS(store).token,
     },
   })
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson;
     })
-    .catch((error) => {
+    .catch(() => {
       // console.error(error);
     });
 }
 
-export function setUserInfo(params) {
+export function setUserInfo(params: {
+  duty?: any;
+  company?: any;
+  weChatQR?: any;
+  weChat?: any;
+  trade?: any;
+  nickName?: any;
+  avatar?: any;
+  phone: any;
+  name: any;
+  location: {
+    latitude: number;
+    longitude: number;
+    altitude: number;
+    heading: number;
+    speed: number;
+  };
+}) {
   return fetch(`${BASEURL}/membercenter/Userinfo/setUserInfo`, {
     method: 'POST',
     headers: {
@@ -159,29 +175,33 @@ export function setUserInfo(params) {
       trade: params.trade,
     }),
   })
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson;
     })
-    .catch((error) => {
+    .catch(() => {
       // console.error(error);
     });
 }
 
-export function uploadAvatar(params) {
+export function uploadAvatar(params: {uri: any; name: any}) {
   const formData = new FormData();
   // @ts-ignore
-  formData.append('file', {uri: params.uri, type: 'application/octet-stream', name: params.name});
+  formData.append('file', {
+    uri: params.uri,
+    type: 'application/octet-stream',
+    name: params.name,
+  });
   formData.append('dir', 'headImg');
   return fetch(`${BASEURL}/utility/FileUpload/uploadFtoOss`, {
     method: 'POST',
     body: formData,
   })
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson;
     })
-    .catch((error) => {
+    .catch(() => {
       // console.error(error);
     });
 }
