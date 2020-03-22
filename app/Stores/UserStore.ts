@@ -1,6 +1,7 @@
 import {action, observable} from 'mobx';
 
 class UserStore {
+  @observable public infoEdit = false;
   @observable public info = {};
 
   @observable public baseInfo = {
@@ -11,6 +12,10 @@ class UserStore {
 
   @action public setInfo(data: {}) {
     this.info = data;
+  }
+
+  @action public setInfoEdit(data: boolean) {
+    this.infoEdit = data;
   }
 
   @action public setBaseInfo(data: {

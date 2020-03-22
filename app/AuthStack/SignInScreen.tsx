@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {inject, observer} from 'mobx-react';
 import React, {Component} from 'react';
 import {Text, TouchableHighlight, View, SafeAreaView} from 'react-native';
-import {StackActions} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import LoginInput from '../Components/LoginInput';
 import {login} from '../Services/user';
@@ -16,8 +15,8 @@ interface InterfaceStates {
 type ScreenNavigationProp = StackNavigationProp<any>;
 
 interface InterfaceProps {
-  UserStore: {setInfo: (arg0: any) => void};
-  tokenStore: {setToken: (arg0: any) => void};
+  UserStore: any;
+  tokenStore: any;
   navigation: ScreenNavigationProp;
 }
 
@@ -94,13 +93,7 @@ export default class SignInScreen extends Component<
       this.props.UserStore.setInfo(response.user_info);
       await AsyncStorage.setItem('userToken', response.usersign);
       if (response.user_info.status === 0) {
-        const resetAction = StackActions.replace('InfoEdit');
-        this.props.navigation.dispatch(resetAction);
-      } else {
-        this.props.navigation.reset({
-          index: 0,
-          routes: [{name: 'App'}],
-        });
+        this.props.UserStore.setInfoEdit(true);
       }
     }
   };

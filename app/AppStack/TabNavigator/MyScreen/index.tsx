@@ -29,10 +29,11 @@ interface InterfaceMyState {
 
 interface InterfaceProps {
   UserStore: any;
+  tokenStore: any;
   navigation: ScreenNavigationProp;
 }
 
-@inject('UserStore')
+@inject('UserStore', 'tokenStore')
 @observer
 export default class MyScreen extends Component<
   InterfaceProps,
@@ -197,10 +198,7 @@ export default class MyScreen extends Component<
 
   private signOutAsync = async () => {
     await AsyncStorage.clear();
-    this.props.navigation.reset({
-      index: 0,
-      routes: [{name: 'Auth'}],
-    });
+    this.props.tokenStore.setToken('');
   };
 }
 

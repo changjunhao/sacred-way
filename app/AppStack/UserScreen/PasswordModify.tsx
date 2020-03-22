@@ -33,10 +33,11 @@ type ScreenNavigationProp = StackNavigationProp<any>;
 
 interface InterfaceProps {
   UserStore: any;
+  tokenStore: any;
   navigation: ScreenNavigationProp;
 }
 
-@inject('UserStore')
+@inject('UserStore', 'tokenStore')
 @observer
 export default class PasswordModify extends Component<
   InterfaceProps,
@@ -187,7 +188,7 @@ export default class PasswordModify extends Component<
 
   private signOutAsync = async () => {
     await AsyncStorage.clear();
-    this.props.navigation.navigate('Auth');
+    this.props.tokenStore.setToken('');
   };
 
   private sendMobileMessage = async () => {

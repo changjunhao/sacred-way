@@ -17,17 +17,7 @@ import ApplicationStyles from '../Theme/ApplicationStyles';
 type ScreenNavigationProp = StackNavigationProp<any>;
 
 interface InterfaceProps {
-  UserStore: {
-    baseInfo: any;
-    setInfo?: any;
-    setBaseInfo?: (arg0: {name?: any; phone?: any; location?: any}) => void;
-    info?: {
-      real_name: any;
-      contact_number: any;
-      mobile_number: any;
-      location: any;
-    };
-  };
+  UserStore: any;
   navigation: ScreenNavigationProp;
 }
 
@@ -45,7 +35,6 @@ export default class InfoEditScreen extends Component<InterfaceProps> {
   public render() {
     const {baseInfo} = this.props.UserStore;
 
-    // @ts-ignore
     return (
       <SafeAreaView style={{flex: 1}}>
         <View style={{...ApplicationStyles.mainContainer}}>
@@ -89,7 +78,7 @@ export default class InfoEditScreen extends Component<InterfaceProps> {
       Alert.alert(response.errmsg);
     } else {
       this.props.UserStore.setInfo(response.data);
-      this.props.navigation.navigate('App');
+      this.props.UserStore.setInfoEdit(false);
     }
   };
 }

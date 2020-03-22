@@ -115,7 +115,7 @@ export default class SignUpScreen extends Component<any, InterfaceStates> {
       password: this.state.password,
     });
     if (Number(result.errno) === 0) {
-      this.props.navigation.navigate('InfoEdit');
+      this.props.UserStore.setInfoEdit(true);
     }
   };
 
