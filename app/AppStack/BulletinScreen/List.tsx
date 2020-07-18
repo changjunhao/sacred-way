@@ -55,9 +55,14 @@ export default class BulletinListScreen extends Component<
           onEndReached={this.onEndReached}
           initialNumToRender={10}
           onEndReachedThreshold={0}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => (
-            <View style={{height: scaleSize(1), backgroundColor: '#e2e2e2'}} />
+            <View
+              style={{
+                height: scaleSize(1),
+                backgroundColor: '#e2e2e2',
+              }}
+            />
           )}
           data={bulletinList}
           renderItem={({item}) => (
@@ -69,7 +74,10 @@ export default class BulletinListScreen extends Component<
                 });
               }}>
               <View
-                style={{marginTop: scaleSize(16), marginBottom: scaleSize(20)}}>
+                style={{
+                  marginTop: scaleSize(16),
+                  marginBottom: scaleSize(20),
+                }}>
                 <Text
                   style={{
                     color: '#272a32',
@@ -111,7 +119,11 @@ export default class BulletinListScreen extends Component<
                       </Text>
                     )}
                   </View>
-                  <Text style={{color: '#848fac', fontSize: setSpText2(12)}}>
+                  <Text
+                    style={{
+                      color: '#848fac',
+                      fontSize: setSpText2(12),
+                    }}>
                     {this.formatTime(item.create_time)}
                   </Text>
                 </View>
@@ -155,7 +167,7 @@ export default class BulletinListScreen extends Component<
   private fetchData = () => {
     this.setState({page: 1}, () => {
       getBulletinList({page: this.state.page, count: this.state.limit}).then(
-        res => {
+        (res) => {
           this.setState({
             bulletinList: res.list,
             count: res.count,
@@ -172,7 +184,7 @@ export default class BulletinListScreen extends Component<
     }
     this.setState({page: this.state.page + 1}, () => {
       getBulletinList({page: this.state.page, count: this.state.limit}).then(
-        res => {
+        (res) => {
           this.setState({
             bulletinList: this.state.bulletinList.concat(res.list),
             count: res.count,

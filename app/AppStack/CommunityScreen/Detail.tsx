@@ -106,15 +106,15 @@ export default class CommunityDetailScreen extends Component<
 
   public componentDidMount() {
     const {id} = this.props.route.params;
-    getCommunityInfo({id}).then(async res => {
+    getCommunityInfo({id}).then(async (res) => {
       const infoPromiseArray = res.list.map((item: any) => this.getInfo(item));
       const infos: any[] = await Promise.all(infoPromiseArray);
-      const userIds = [...new Set(infos.map(item => item.nick_name))];
+      const userIds = [...new Set(infos.map((item) => item.nick_name))];
       this.setState({
         title: res.title,
         groupName: res.group_name,
         readCount: res.read_count,
-        list: infos.map(item => ({
+        list: infos.map((item) => ({
           ...item,
           color: colorSet[userIds.indexOf(item.nick_name) % 10],
         })),
@@ -125,7 +125,7 @@ export default class CommunityDetailScreen extends Component<
   }
 
   public getInfo(originInfo: any) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (originInfo.type === 'IMAGE' && originInfo.content) {
         Image.getSize(
           originInfo.content,
@@ -156,11 +156,20 @@ export default class CommunityDetailScreen extends Component<
       <Fragment>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={{backgroundColor: '#f0f0f0', padding: scaleSize(16)}}>
+          style={{
+            backgroundColor: '#f0f0f0',
+            padding: scaleSize(16),
+          }}>
           <ImageBackground
             source={require('../../Images/watermark.png')}
-            style={{minHeight: '100%', width: '100%'}}
-            imageStyle={{resizeMode: 'repeat', opacity: 1}}>
+            style={{
+              minHeight: '100%',
+              width: '100%',
+            }}
+            imageStyle={{
+              resizeMode: 'repeat',
+              opacity: 1,
+            }}>
             <Text
               style={{
                 fontWeight: 'bold',
@@ -171,7 +180,10 @@ export default class CommunityDetailScreen extends Component<
               {title}
             </Text>
             <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
               <Text
                 style={{
                   fontWeight: 'bold',
@@ -180,7 +192,11 @@ export default class CommunityDetailScreen extends Component<
                 }}>
                 共{list.length}对话 来自：{groupName}
               </Text>
-              <Text style={{color: '#a0a0a0', fontSize: setSpText2(12)}}>
+              <Text
+                style={{
+                  color: '#a0a0a0',
+                  fontSize: setSpText2(12),
+                }}>
                 {readCount}次学习
               </Text>
             </View>
@@ -218,14 +234,20 @@ export default class CommunityDetailScreen extends Component<
               />
             </View>
             {list
-              .filter(item => item.content)
-              .map(item => (
+              .filter((item) => item.content)
+              .map((item) => (
                 <View
                   key={item.id}
-                  style={{flexDirection: 'row', marginBottom: scaleSize(14)}}>
+                  style={{
+                    flexDirection: 'row',
+                    marginBottom: scaleSize(14),
+                  }}>
                   <LinearGradient
                     colors={item.color.back}
-                    style={{width: scaleSize(40), height: scaleSize(40)}}>
+                    style={{
+                      width: scaleSize(40),
+                      height: scaleSize(40),
+                    }}>
                     <Text
                       style={{
                         lineHeight: scaleSize(40),
@@ -286,7 +308,10 @@ export default class CommunityDetailScreen extends Component<
                 </View>
               ))}
             <View
-              style={{marginTop: scaleSize(30), marginBottom: scaleSize(44)}}>
+              style={{
+                marginTop: scaleSize(30),
+                marginBottom: scaleSize(44),
+              }}>
               <TouchableWithoutFeedback
                 onPress={() => this.setState({modalVisible: true})}>
                 <Text
@@ -318,7 +343,10 @@ export default class CommunityDetailScreen extends Component<
               backgroundColor: 'rgba(37,38,45,.7)',
             }}>
             <Image
-              style={{width: scaleSize(250), height: scaleSize(250)}}
+              style={{
+                width: scaleSize(250),
+                height: scaleSize(250),
+              }}
               source={require('../../Images/Wechat.jpeg')}
             />
             <TouchableWithoutFeedback

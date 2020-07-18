@@ -31,7 +31,7 @@ export default class CommunityListScreen extends Component<
   }
 
   public componentDidMount() {
-    getCommunityList({type: 3}).then(res => {
+    getCommunityList({type: 3}).then((res) => {
       this.setState({
         questionsList: res.list,
       });
@@ -44,8 +44,13 @@ export default class CommunityListScreen extends Component<
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{...ApplicationStyles.mainContainer}}>
-        <View style={{...ApplicationStyles.container}}>
+        style={{
+          ...ApplicationStyles.mainContainer,
+        }}>
+        <View
+          style={{
+            ...ApplicationStyles.container,
+          }}>
           {questionsList.map((question: {id: string | number | undefined}) => (
             <CommunityListComponent
               key={question.id}

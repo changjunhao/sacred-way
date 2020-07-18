@@ -57,7 +57,7 @@ export default class CourseDetail extends Component<
           baseInfo: res,
         });
         if (res.type === 2) {
-          getSubCurriculum({id}).then(data => {
+          getSubCurriculum({id}).then((data) => {
             this.setState({
               childList: data.list,
               chooseType: 2,
@@ -81,7 +81,7 @@ export default class CourseDetail extends Component<
   }
 
   public getInfo(originInfo: any) {
-    return new Promise(async resolve => {
+    return new Promise(async (resolve) => {
       if (originInfo.type === 3 && originInfo.value.length !== 0) {
         const infoPromiseArray = originInfo.value.map((item: any) =>
           this.getImageInfo(item),
@@ -95,7 +95,7 @@ export default class CourseDetail extends Component<
   }
 
   public getImageInfo(originInfo: any) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       Image.getSize(
         originInfo,
         (width, height) => {
@@ -139,8 +139,15 @@ export default class CourseDetail extends Component<
               {baseInfo.name}
             </Text>
             <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={{...styles.summary, ...styles.courseSummary}}>
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <Text
+                style={{
+                  ...styles.summary,
+                  ...styles.courseSummary,
+                }}>
                 {baseInfo.summary}
               </Text>
               <View style={{alignItems: 'center'}}>
@@ -152,7 +159,12 @@ export default class CourseDetail extends Component<
               </View>
             </View>
           </View>
-          <View style={{...ApplicationStyles.hr, marginLeft: 0}} />
+          <View
+            style={{
+              ...ApplicationStyles.hr,
+              marginLeft: 0,
+            }}
+          />
           <View style={styles.tabView}>
             <View style={ApplicationStyles.flexRow}>
               <TouchableWithoutFeedback
@@ -243,7 +255,7 @@ export default class CourseDetail extends Component<
                 ? {...styles.infoView, display: 'none'}
                 : {...styles.infoView}
             }>
-            {childList.map(item => (
+            {childList.map((item) => (
               <View
                 key={item.id}
                 style={{
@@ -259,13 +271,20 @@ export default class CourseDetail extends Component<
                     justifyContent: 'space-between',
                   }}>
                   <Text style={{fontSize: setSpText2(15)}}>{item.name}</Text>
-                  <Text style={{color: '#999', fontSize: setSpText2(12)}}>
+                  <Text
+                    style={{
+                      color: '#999',
+                      fontSize: setSpText2(12),
+                    }}>
                     {item.type_name}：时长{item.duration}分钟
                   </Text>
                 </View>
                 <Image
                   source={{uri: `${item.pic}/thumb_medium`}}
-                  style={{width: scaleSize(100), height: scaleSize(66)}}
+                  style={{
+                    width: scaleSize(100),
+                    height: scaleSize(66),
+                  }}
                 />
               </View>
             ))}
@@ -308,17 +327,29 @@ export default class CourseDetail extends Component<
                 backgroundColor: '#f26522',
               }}>
               {!baseInfo.is_buy && Number(baseInfo.present_price) !== 0 && (
-                <Text style={{color: '#FFF', fontSize: setSpText2(15)}}>
+                <Text
+                  style={{
+                    color: '#FFF',
+                    fontSize: setSpText2(15),
+                  }}>
                   立即购买
                 </Text>
               )}
               {!baseInfo.is_buy && Number(baseInfo.present_price) === 0 && (
-                <Text style={{color: '#FFF', fontSize: setSpText2(15)}}>
+                <Text
+                  style={{
+                    color: '#FFF',
+                    fontSize: setSpText2(15),
+                  }}>
                   免费
                 </Text>
               )}
               {!!baseInfo.is_buy && (
-                <Text style={{color: '#FFF', fontSize: setSpText2(15)}}>
+                <Text
+                  style={{
+                    color: '#FFF',
+                    fontSize: setSpText2(15),
+                  }}>
                   查看课程
                 </Text>
               )}

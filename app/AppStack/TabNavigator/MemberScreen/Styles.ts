@@ -34,7 +34,7 @@ export default StyleSheet.create({
     borderRadius: scaleSize(6),
     backgroundColor: '#FFF',
     shadowColor: 'rgb(85, 85, 85)',
-    shadowOffset: { width: 0, height: 2},
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 10,
     padding: scaleSize(16),

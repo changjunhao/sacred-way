@@ -44,7 +44,7 @@ class LoginInput extends Component<InterfaceProps, InterfaceStates> {
         placeholder={placeholder}
         textContentType={textContentType}
         secureTextEntry={secureTextEntry || false}
-        onChangeText={text => this.props.onChangeText(text)}
+        onChangeText={(text) => this.props.onChangeText(text)}
         onFocus={() => this.setState({borderBottomColor: '#272A32'})}
         onBlur={() => this.setState({borderBottomColor: '#E2E2E2'})}
       />

@@ -44,7 +44,7 @@ export default class Visited extends Component<{}, InterfaceState> {
           style={styles.listView}
           data={list}
           onEndReached={this.onEndReached}
-          keyExtractor={item => item.real_name + item.nick_name}
+          keyExtractor={(item) => item.real_name + item.nick_name}
           ItemSeparatorComponent={() => <View style={styles.itemHr} />}
           renderItem={({item}) => (
             <View style={styles.itemView}>
@@ -65,7 +65,7 @@ export default class Visited extends Component<{}, InterfaceState> {
 
   private fetchData = () => {
     getScanList({page: this.state.page, pageSize: this.state.limit}).then(
-      res => {
+      (res) => {
         console.log(res);
         this.setState({
           list: res.list,
@@ -81,7 +81,7 @@ export default class Visited extends Component<{}, InterfaceState> {
     }
     this.setState({page: this.state.page + 1}, () => {
       getScanList({page: this.state.page, pageSize: this.state.limit}).then(
-        res => {
+        (res) => {
           this.setState({
             list: this.state.list.concat(res.list),
             count: res.count,

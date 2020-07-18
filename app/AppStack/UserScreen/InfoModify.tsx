@@ -72,7 +72,9 @@ export default class InfoModify extends Component<
           enabled>
           <ScrollView
             showsVerticalScrollIndicator={false}
-            style={{...ApplicationStyles.mainContainer}}>
+            style={{
+              ...ApplicationStyles.mainContainer,
+            }}>
             <View style={styles.avatarActionView}>
               <TouchableHighlight
                 underlayColor="white"
@@ -106,7 +108,7 @@ export default class InfoModify extends Component<
                   placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入昵称（6个字）'}
                   defaultValue={this.props.UserStore.info.nick_name}
-                  onChangeText={nickName => this.setState({nickName})}
+                  onChangeText={(nickName) => this.setState({nickName})}
                 />
               </View>
               <View>
@@ -118,7 +120,7 @@ export default class InfoModify extends Component<
                   placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入微信号（20个字）'}
                   defaultValue={this.props.UserStore.info.wechat}
-                  onChangeText={weChat => this.setState({weChat})}
+                  onChangeText={(weChat) => this.setState({weChat})}
                 />
               </View>
               <View>
@@ -129,11 +131,16 @@ export default class InfoModify extends Component<
                   underlayColor="white"
                   // @ts-ignore
                   onPress={this.handleSelectImage}>
-                  <View style={{...styles.weChatQRView}}>
+                  <View
+                    style={{
+                      ...styles.weChatQRView,
+                    }}>
                     {this.state.weChatQR ||
                     this.props.UserStore.info.wechat_qrcode ? (
                       <Image
-                        style={{...styles.weChatQR}}
+                        style={{
+                          ...styles.weChatQR,
+                        }}
                         resizeMode={'cover'}
                         source={{
                           uri:
@@ -160,7 +167,7 @@ export default class InfoModify extends Component<
                   placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入公司名称（20个字）'}
                   defaultValue={this.props.UserStore.info.company}
-                  onChangeText={company => this.setState({company})}
+                  onChangeText={(company) => this.setState({company})}
                 />
               </View>
               <View>
@@ -172,7 +179,7 @@ export default class InfoModify extends Component<
                   placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入职务名称（10个字）'}
                   defaultValue={this.props.UserStore.info.duty}
-                  onChangeText={duty => this.setState({duty})}
+                  onChangeText={(duty) => this.setState({duty})}
                 />
               </View>
               <View>
@@ -184,7 +191,7 @@ export default class InfoModify extends Component<
                   placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入所属行业（10个字）'}
                   defaultValue={this.props.UserStore.info.trade}
-                  onChangeText={trade => this.setState({trade})}
+                  onChangeText={(trade) => this.setState({trade})}
                 />
               </View>
             </View>
@@ -235,7 +242,7 @@ export default class InfoModify extends Component<
       company,
       duty,
       trade,
-    }).then(res => {
+    }).then((res) => {
       if (res.errno === 0) {
         this.props.UserStore.setInfo(res.data);
         this.props.navigation.goBack();
@@ -255,27 +262,29 @@ export default class InfoModify extends Component<
     };
 
     // @ts-ignore
-    ImagePicker.launchImageLibrary(options, response => {
+    ImagePicker.launchImageLibrary(options, (response) => {
       if (response.didCancel) {
         // console.log('User cancelled image picker');
       } else if (response.error) {
         Alert.alert(response.error);
       } else {
-        uploadAvatar({uri: response.uri, name: response.fileName}).then(res => {
-          if (res.errno === 0) {
-            if (type === 'avatar') {
-              this.setState({
-                avatar: res.data.info.file_url,
-              });
+        uploadAvatar({uri: response.uri, name: response.fileName}).then(
+          (res) => {
+            if (res.errno === 0) {
+              if (type === 'avatar') {
+                this.setState({
+                  avatar: res.data.info.file_url,
+                });
+              } else {
+                this.setState({
+                  weChatQR: res.data.info.file_url,
+                });
+              }
             } else {
-              this.setState({
-                weChatQR: res.data.info.file_url,
-              });
+              Alert.alert(res.errmsg);
             }
-          } else {
-            Alert.alert(res.errmsg);
-          }
-        });
+          },
+        );
       }
     });
   };

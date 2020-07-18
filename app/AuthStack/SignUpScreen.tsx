@@ -47,7 +47,7 @@ export default class SignUpScreen extends Component<any, InterfaceStates> {
               placeholder={'请输入您的手机号'}
               keyboardType={'phone-pad'}
               textContentType={'username'}
-              onChangeText={phone => this.setState({phone})}
+              onChangeText={(phone) => this.setState({phone})}
             />
           </View>
           <View style={styles.inputView}>
@@ -58,7 +58,7 @@ export default class SignUpScreen extends Component<any, InterfaceStates> {
               placeholder={'请输入短信验证码'}
               keyboardType={'numeric'}
               textContentType={'oneTimeCode'}
-              onChangeText={code => this.setState({code})}
+              onChangeText={(code) => this.setState({code})}
             />
             <TouchableHighlight
               underlayColor="white"
@@ -74,7 +74,7 @@ export default class SignUpScreen extends Component<any, InterfaceStates> {
               placeholder={'请输入密码'}
               secureTextEntry={true}
               textContentType={'password'}
-              onChangeText={password => this.setState({password})}
+              onChangeText={(password) => this.setState({password})}
             />
           </View>
           <TouchableHighlight

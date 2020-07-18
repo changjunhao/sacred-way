@@ -6,20 +6,18 @@ const {BASEURL} = config;
 
 export function getCommunityList(params: {type: any}) {
   return fetch(
-    `${BASEURL}/membercenter/communityEssence/getCommunityList?type=${
-      params.type
-    }`,
+    `${BASEURL}/membercenter/communityEssence/getCommunityList?type=${params.type}`,
     {
       headers: {
         USERSIGN: toJS(store).token,
       },
     },
   )
-    .then(response => response.json())
-    .then(responseJson => {
+    .then((response) => response.json())
+    .then((responseJson) => {
       return responseJson.data;
     })
-    .catch(error => {
+    .catch((error) => {
       console.error(error);
     });
 }
@@ -33,11 +31,11 @@ export function getCommunityInfo(params: {id: any}) {
       },
     },
   )
-    .then(response => response.json())
-    .then(responseJson => {
+    .then((response) => response.json())
+    .then((responseJson) => {
       return responseJson.data;
     })
-    .catch(error => {
+    .catch((error) => {
       console.error(error);
     });
 }

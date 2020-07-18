@@ -37,7 +37,10 @@ export default class InfoEditScreen extends Component<InterfaceProps> {
 
     return (
       <SafeAreaView style={{flex: 1}}>
-        <View style={{...ApplicationStyles.mainContainer}}>
+        <View
+          style={{
+            ...ApplicationStyles.mainContainer,
+          }}>
           <View style={styles.tipView}>
             <Text style={styles.tipText}>
               为了能提供更好的服务，请认真填写以下信息

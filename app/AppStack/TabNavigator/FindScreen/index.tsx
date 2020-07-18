@@ -63,7 +63,7 @@ export default class FindScreen extends Component<
       specialColumnList,
     } = this.state;
 
-    const CommunityList = questionsList.map(question => (
+    const CommunityList = questionsList.map((question) => (
       <CommunityListComponent
         key={question.id}
         question={question}
@@ -94,16 +94,28 @@ export default class FindScreen extends Component<
                     justifyContent: 'space-between',
                     alignItems: 'center',
                   }}>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
                     <Image
                       style={{marginRight: scaleSize(7)}}
                       source={require('../../../Images/tishi.png')}
                     />
-                    <Text style={{color: '#EF3B3B', fontSize: setSpText2(12)}}>
+                    <Text
+                      style={{
+                        color: '#EF3B3B',
+                        fontSize: setSpText2(12),
+                      }}>
                       完善资料，获得更多的合作机会
                     </Text>
                   </View>
-                  <View style={{borderColor: '#EF3B3B', borderWidth: 1}}>
+                  <View
+                    style={{
+                      borderColor: '#EF3B3B',
+                      borderWidth: 1,
+                    }}>
                     <Text
                       style={{
                         color: '#EF3B3B',
@@ -120,8 +132,14 @@ export default class FindScreen extends Component<
             <TouchableWithoutFeedback
               onPress={() => this.props.navigation.navigate('BulletinList')}>
               <LinearGradient
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 0}}
+                start={{
+                  x: 0,
+                  y: 0,
+                }}
+                end={{
+                  x: 1,
+                  y: 0,
+                }}
                 colors={['#E9C58F', '#F4E1BD']}
                 style={{
                   ...ApplicationStyles.flexRow,
@@ -132,7 +150,10 @@ export default class FindScreen extends Component<
                   paddingHorizontal: scaleSize(8),
                   borderRadius: scaleSize(4),
                 }}>
-                <View style={{...ApplicationStyles.flexRow}}>
+                <View
+                  style={{
+                    ...ApplicationStyles.flexRow,
+                  }}>
                   <Image
                     source={require('../../../Images/tab_find_images/bulletin_icon.png')}
                   />
@@ -148,7 +169,7 @@ export default class FindScreen extends Component<
                 <Icon size={setSpText2(12)} color={'#FFF'} name={'right'} />
               </LinearGradient>
             </TouchableWithoutFeedback>
-            {bulletinList.map(bulletin => (
+            {bulletinList.map((bulletin) => (
               <TouchableWithoutFeedback
                 key={bulletin.id}
                 onPress={() => {
@@ -175,7 +196,12 @@ export default class FindScreen extends Component<
               </TouchableWithoutFeedback>
             ))}
           </View>
-          <View style={{...ApplicationStyles.hr, marginLeft: scaleSize(-12)}} />
+          <View
+            style={{
+              ...ApplicationStyles.hr,
+              marginLeft: scaleSize(-12),
+            }}
+          />
           <View>
             <View style={ApplicationStyles.contentListHeader}>
               <Text style={ApplicationStyles.contentListTitle}>
@@ -186,8 +212,16 @@ export default class FindScreen extends Component<
                   onPress={() =>
                     this.props.navigation.navigate('CommunityList')
                   }>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{fontSize: setSpText2(13), color: '#272A32'}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: setSpText2(13),
+                        color: '#272A32',
+                      }}>
                       查看全部
                     </Text>
                     <Icon
@@ -201,7 +235,12 @@ export default class FindScreen extends Component<
             </View>
             {CommunityList}
           </View>
-          <View style={{...ApplicationStyles.hr, marginLeft: scaleSize(-12)}} />
+          <View
+            style={{
+              ...ApplicationStyles.hr,
+              marginLeft: scaleSize(-12),
+            }}
+          />
           <View>
             {specialColumnList.map((specialColumn, index) => (
               <Fragment key={specialColumn.id}>
@@ -228,7 +267,9 @@ export default class FindScreen extends Component<
                     ) : null}
                     <Text
                       numberOfLines={2}
-                      style={{...ApplicationStyles.contentListTitle}}>
+                      style={{
+                        ...ApplicationStyles.contentListTitle,
+                      }}>
                       {specialColumn.name}
                     </Text>
                     <View style={styles.specialColumnInfoView}>
@@ -241,7 +282,10 @@ export default class FindScreen extends Component<
                           {specialColumn.course_total_count}节
                         </Text>
                       </View>
-                      <View style={{...styles.subscribeButton}}>
+                      <View
+                        style={{
+                          ...styles.subscribeButton,
+                        }}>
                         <Text
                           style={{
                             ...styles.subscribeButtonText,
@@ -255,7 +299,10 @@ export default class FindScreen extends Component<
                             ...styles.subscribeButtonPrice,
                           }}>
                           {specialColumn.column_price / 100}元/
-                          <Text style={{...styles.subscribeButtonUnit}}>
+                          <Text
+                            style={{
+                              ...styles.subscribeButtonUnit,
+                            }}>
                             {specialColumn.course_total_count}节
                           </Text>
                         </Text>
@@ -283,7 +330,7 @@ export default class FindScreen extends Component<
                               }
                             : {...styles.curriculumColumn}
                         }>
-                        {curriculumList.map(curriculum => (
+                        {curriculumList.map((curriculum) => (
                           <TouchableWithoutFeedback
                             key={curriculum.curriculum_id}
                             onPress={() =>
@@ -337,13 +384,13 @@ export default class FindScreen extends Component<
   }
 
   private fetchData = async () => {
-    getBulletinList().then(res => {
+    getBulletinList().then((res) => {
       this.setState({
         // @ts-ignore
-        bulletinList: res.list.filter(bulletin => bulletin.is_top === 1),
+        bulletinList: res.list.filter((bulletin) => bulletin.is_top === 1),
       });
     });
-    getCommunityList({type: 2}).then(res => {
+    getCommunityList({type: 2}).then((res) => {
       this.setState({
         questionsList: res.list,
         questionsListCount: res.count,

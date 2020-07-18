@@ -88,7 +88,7 @@ export default StyleSheet.create({
     fontWeight: '600',
     lineHeight: setSpText2(24),
   },
-  descriptionText:  {
+  descriptionText: {
     color: '#666',
     fontSize: setSpText2(15),
     lineHeight: setSpText2(22.5),

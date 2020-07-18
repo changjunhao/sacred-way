@@ -60,11 +60,16 @@ export default class MyScreen extends Component<
       <Fragment>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={{...ApplicationStyles.mainContainer}}>
+          style={{
+            ...ApplicationStyles.mainContainer,
+          }}>
           <ImageBackground
             source={require('../../../Images/tab_member_images/bg.png')}
             style={styles.cardBackgroundImage}
-            imageStyle={{resizeMode: 'cover', borderRadius: 4}}>
+            imageStyle={{
+              resizeMode: 'cover',
+              borderRadius: 4,
+            }}>
             <View style={{flexDirection: 'row-reverse'}}>
               <TouchableWithoutFeedback onPress={this.showActionSheet}>
                 <Image
@@ -94,7 +99,11 @@ export default class MyScreen extends Component<
                   height: scaleSize(50),
                   justifyContent: 'space-around',
                 }}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
                   <Text
                     style={{
                       color: '#FEE3A6',
@@ -116,14 +125,21 @@ export default class MyScreen extends Component<
                     </Text>
                   )}
                 </View>
-                <Text style={{color: '#FEE3A6', fontSize: setSpText2(11)}}>
+                <Text
+                  style={{
+                    color: '#FEE3A6',
+                    fontSize: setSpText2(11),
+                  }}>
                   {userInfo.mobile_number}
                 </Text>
               </View>
             </View>
           </ImageBackground>
           <View style={{paddingVertical: scaleSize(25)}}>
-            <Text style={{...ApplicationStyles.contentListTitle}}>
+            <Text
+              style={{
+                ...ApplicationStyles.contentListTitle,
+              }}>
               我学习的课程
             </Text>
             {purchasedCourses.map((course, index) => (
@@ -152,7 +168,7 @@ export default class MyScreen extends Component<
     //       userInfo,
     //     });
     //   });
-    getUserBuyed().then(res => {
+    getUserBuyed().then((res) => {
       this.setState({
         purchasedCourses: res.curriculum_list,
       });
@@ -167,7 +183,7 @@ export default class MyScreen extends Component<
           destructiveButtonIndex: 2,
           cancelButtonIndex: 3,
         },
-        buttonIndex => {
+        (buttonIndex) => {
           if (buttonIndex === 0) {
             this.props.navigation.navigate('InfoModify');
           }

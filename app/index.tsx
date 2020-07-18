@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from '@react-native-community/async-storage';
 import {inject, observer} from 'mobx-react';
 import React, {Component} from 'react';
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
@@ -43,10 +43,18 @@ export default class RootStack extends Component<any, any> {
       return <SplashScreen />;
     }
     return (
-      <NavigationContainer theme={{...DefaultTheme, ...Theme}}>
+      <NavigationContainer
+        theme={{
+          ...DefaultTheme,
+          ...Theme,
+        }}>
         <Stack.Navigator headerMode={'none'}>
           {this.props.tokenStore.token ? (
-            this.props.UserStore.infoEdit ? <Stack.Screen name="InfoEdit" component={InfoEdit} /> : <Stack.Screen name="App" component={AppStack} />
+            this.props.UserStore.infoEdit ? (
+              <Stack.Screen name="InfoEdit" component={InfoEdit} />
+            ) : (
+              <Stack.Screen name="App" component={AppStack} />
+            )
           ) : (
             <Stack.Screen name="Auth" component={AuthStack} />
           )}
@@ -60,7 +68,7 @@ export default class RootStack extends Component<any, any> {
     if (userToken) {
       this.props.tokenStore.setToken(userToken);
       const userInfoResult = await getUserInfo();
-      this.props.tokenStore.setIsLoading(false)
+      this.props.tokenStore.setIsLoading(false);
       if (userInfoResult.errno !== 0) {
         await AsyncStorage.clear();
         this.props.tokenStore.setToken('');
@@ -74,7 +82,7 @@ export default class RootStack extends Component<any, any> {
         this.props.UserStore.setInfoEdit(false);
       }
     } else {
-      this.props.tokenStore.setIsLoading(false)
+      this.props.tokenStore.setIsLoading(false);
     }
   };
 }

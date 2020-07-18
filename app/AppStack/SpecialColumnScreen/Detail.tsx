@@ -53,7 +53,7 @@ export default class SpecialColumnDetail extends Component<
 
   public componentDidMount(): void {
     const {id} = this.props.route.params;
-    getSpecialColumnInfo({id}).then(async res => {
+    getSpecialColumnInfo({id}).then(async (res) => {
       this.setState({
         info: res.info,
         direct: res.direct,
@@ -71,7 +71,7 @@ export default class SpecialColumnDetail extends Component<
   }
 
   public getInfo(originInfo: any) {
-    return new Promise(async resolve => {
+    return new Promise(async (resolve) => {
       if (originInfo.type === 3 && originInfo.value.length !== 0) {
         const infoPromiseArray = originInfo.value.map((item: any) =>
           this.getImageInfo(item),
@@ -85,7 +85,7 @@ export default class SpecialColumnDetail extends Component<
   }
 
   public getImageInfo(originInfo: any) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       Image.getSize(
         originInfo,
         (width, height) => {
@@ -116,7 +116,10 @@ export default class SpecialColumnDetail extends Component<
             />
           )}
           <View style={styles.baseInfoView}>
-            <View style={{...ApplicationStyles.flexRow}}>
+            <View
+              style={{
+                ...ApplicationStyles.flexRow,
+              }}>
               <View style={styles.tipView}>
                 <Text style={styles.tip}>专栏</Text>
               </View>
@@ -142,7 +145,12 @@ export default class SpecialColumnDetail extends Component<
               </View>
             </View>
           </View>
-          <View style={{...ApplicationStyles.hr, marginLeft: 0}} />
+          <View
+            style={{
+              ...ApplicationStyles.hr,
+              marginLeft: 0,
+            }}
+          />
           <View style={styles.tabView}>
             <View style={ApplicationStyles.flexRow}>
               <TouchableWithoutFeedback
@@ -266,11 +274,19 @@ export default class SpecialColumnDetail extends Component<
               }}>
               {!info.is_buy && Number(info.present_price) !== 0 && (
                 <Fragment>
-                  <Text style={{color: '#FFF', fontSize: setSpText2(15)}}>
+                  <Text
+                    style={{
+                      color: '#FFF',
+                      fontSize: setSpText2(15),
+                    }}>
                     购买专栏
                   </Text>
                   <View style={{marginHorizontal: scaleSize(9)}}>
-                    <Text style={{color: '#FFF', fontSize: setSpText2(15)}}>
+                    <Text
+                      style={{
+                        color: '#FFF',
+                        fontSize: setSpText2(15),
+                      }}>
                       ¥{info.present_price / 100}
                     </Text>
                   </View>
@@ -287,12 +303,20 @@ export default class SpecialColumnDetail extends Component<
                 </Fragment>
               )}
               {!info.is_buy && Number(info.present_price) === 0 && (
-                <Text style={{color: '#FFF', fontSize: setSpText2(15)}}>
+                <Text
+                  style={{
+                    color: '#FFF',
+                    fontSize: setSpText2(15),
+                  }}>
                   免费
                 </Text>
               )}
               {!!info.is_buy && (
-                <Text style={{color: '#FFF', fontSize: setSpText2(15)}}>
+                <Text
+                  style={{
+                    color: '#FFF',
+                    fontSize: setSpText2(15),
+                  }}>
                   查看专栏
                 </Text>
               )}

@@ -65,7 +65,12 @@ function TabNavigator() {
             color = '#444444';
           }
           return (
-            <Text style={{color, fontWeight: 'bold', textAlign: 'center'}}>
+            <Text
+              style={{
+                color,
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}>
               {label}
             </Text>
           );

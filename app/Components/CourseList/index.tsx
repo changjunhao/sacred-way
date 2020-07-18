@@ -53,7 +53,11 @@ export default class CourseList extends Component<InterfaceProps> {
                 : {...styles.infoView, width: scaleSize(343)}
             }>
             {course.curriculum_type === 2 ? (
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
                 <View style={styles.specialColumnCoverLabel}>
                   <Text style={styles.specialColumnCoverLabelText}>专栏</Text>
                 </View>
@@ -72,13 +76,23 @@ export default class CourseList extends Component<InterfaceProps> {
                 justifyContent: 'space-between',
               }}>
               {recommend ? (
-                <Text style={{...styles.recommendPrice}}>
+                <Text
+                  style={{
+                    ...styles.recommendPrice,
+                  }}>
                   ¥{course.present_price / 100}元
                 </Text>
               ) : purchased ? (
-                <Text style={{...styles.price}} />
+                <Text
+                  style={{
+                    ...styles.price,
+                  }}
+                />
               ) : (
-                <Text style={{...styles.price}}>
+                <Text
+                  style={{
+                    ...styles.price,
+                  }}>
                   ¥{course.present_price / 100}元/
                   <Text style={styles.unit}>单节</Text>
                 </Text>
@@ -86,8 +100,14 @@ export default class CourseList extends Component<InterfaceProps> {
               {recommend ? (
                 <TouchableWithoutFeedback>
                   <LinearGradient
-                    start={{x: 0, y: 0}}
-                    end={{x: 1, y: 0}}
+                    start={{
+                      x: 0,
+                      y: 0,
+                    }}
+                    end={{
+                      x: 1,
+                      y: 0,
+                    }}
                     style={{
                       width: scaleSize(141),
                       height: scaleSize(30),
@@ -111,7 +131,10 @@ export default class CourseList extends Component<InterfaceProps> {
                   </LinearGradient>
                 </TouchableWithoutFeedback>
               ) : (
-                <View style={{...ApplicationStyles.flexRow}}>
+                <View
+                  style={{
+                    ...ApplicationStyles.flexRow,
+                  }}>
                   <TouchableWithoutFeedback>
                     <Image
                       style={styles.shareIcon}

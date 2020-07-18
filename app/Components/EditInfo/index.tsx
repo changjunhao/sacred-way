@@ -35,7 +35,7 @@ class EditInfo extends Component<InterfaceProps> {
   }
 
   public _keyboardDidShow() {
-    Picker.isPickerShow(status => {
+    Picker.isPickerShow((status) => {
       if (status) {
         Picker.hide();
       }
@@ -60,7 +60,7 @@ class EditInfo extends Component<InterfaceProps> {
             placeholderTextColor={'#8E8E8E'}
             placeholder={'请输入姓名（6个字）'}
             defaultValue={this.props.UserStore.baseInfo.name}
-            onChangeText={value => this.handleNameChange(value)}
+            onChangeText={(value) => this.handleNameChange(value)}
           />
         </View>
         <View>
@@ -73,7 +73,7 @@ class EditInfo extends Component<InterfaceProps> {
             placeholderTextColor={'#8E8E8E'}
             placeholder={'请输入联系电话'}
             defaultValue={this.props.UserStore.baseInfo.phone}
-            onChangeText={value => this.handlePhoneChange(value)}
+            onChangeText={(value) => this.handlePhoneChange(value)}
           />
         </View>
         <View>
@@ -114,7 +114,7 @@ class EditInfo extends Component<InterfaceProps> {
       pickerRowHeight: 45,
       pickerData: district,
       selectedValue: [59],
-      onPickerConfirm: data => {
+      onPickerConfirm: (data) => {
         let location = data[0];
         if (data[1]) {
           location += `-${data[1]}`;

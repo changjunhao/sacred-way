@@ -99,7 +99,10 @@ export default class MemberScreen extends Component<
                 onPress={() => this.props.navigation.navigate('Earnings')}>
                 <View style={styles.incomeView}>
                   <View style={styles.myIncome}>
-                    <View style={{...ApplicationStyles.flexRow}}>
+                    <View
+                      style={{
+                        ...ApplicationStyles.flexRow,
+                      }}>
                       <Text style={styles.infoTitle}>我的收益</Text>
                       <Icon
                         style={styles.infoTitleIcon}
@@ -110,13 +113,21 @@ export default class MemberScreen extends Component<
                     </View>
                     <View style={styles.incomeInfo}>
                       <View style={{flex: 1}}>
-                        <Text style={{...styles.text, ...styles.todayIncome}}>
+                        <Text
+                          style={{
+                            ...styles.text,
+                            ...styles.todayIncome,
+                          }}>
                           {todayIncome / 100}
                         </Text>
                         <Text style={styles.infoTipText}>今日（元）</Text>
                       </View>
                       <View style={{flex: 1}}>
-                        <Text style={{...styles.text, ...styles.totalIncome}}>
+                        <Text
+                          style={{
+                            ...styles.text,
+                            ...styles.totalIncome,
+                          }}>
                           {totalIncome / 100}
                         </Text>
                         <Text style={styles.infoTipText}>累计（元）</Text>
@@ -135,7 +146,11 @@ export default class MemberScreen extends Component<
                   <TouchableWithoutFeedback
                     onPress={() => this.props.navigation.navigate('Inviter')}>
                     <View style={{flex: 1}}>
-                      <Text style={{...styles.text, ...styles.userNumber}}>
+                      <Text
+                        style={{
+                          ...styles.text,
+                          ...styles.userNumber,
+                        }}>
                         {fans}
                       </Text>
                       <Text style={styles.infoTipText}>购课粉丝</Text>
@@ -144,7 +159,11 @@ export default class MemberScreen extends Component<
                   <TouchableWithoutFeedback
                     onPress={() => this.props.navigation.navigate('Visited')}>
                     <View style={{flex: 1}}>
-                      <Text style={{...styles.text, ...styles.userNumber}}>
+                      <Text
+                        style={{
+                          ...styles.text,
+                          ...styles.userNumber,
+                        }}>
                         {scan}
                       </Text>
                       <Text style={styles.infoTipText}>浏览用户</Text>
@@ -155,7 +174,11 @@ export default class MemberScreen extends Component<
             </View>
             {recommendList.length === 0 ? null : (
               <View>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
                   <LinearGradient
                     style={styles.recommendTitleBorder}
                     colors={['#F5E3C1', '#E8C38D']}
@@ -181,7 +204,7 @@ export default class MemberScreen extends Component<
   }
 
   private fetchData = async () => {
-    getPersonMoney().then(res => {
+    getPersonMoney().then((res) => {
       this.setState({
         todayIncome: res.today,
         totalIncome: res.dis_money,
@@ -190,7 +213,7 @@ export default class MemberScreen extends Component<
         scan: res.scan,
       });
     });
-    getDirectRecommend().then(res => {
+    getDirectRecommend().then((res) => {
       this.setState({
         recommendList: res,
       });

@@ -17,8 +17,8 @@ export function sendMobileMessage(params: {phone: any; type: any}) {
       check_mobile_exist: params.type,
     }),
   })
-    .then(response => response.json())
-    .then(responseJson => {
+    .then((response) => response.json())
+    .then((responseJson) => {
       if (responseJson.errno !== 0) {
         Alert.alert(responseJson.errmsg);
       }
@@ -40,8 +40,8 @@ export function checkVerificationCode(params: {phone: any; code: any}) {
       code: params.code,
     }),
   })
-    .then(response => response.json())
-    .then(responseJson => {
+    .then((response) => response.json())
+    .then((responseJson) => {
       return responseJson;
     })
     .catch(() => {
@@ -60,8 +60,8 @@ export function login(params: {phone: string; password: string}) {
       password: params.password,
     }),
   })
-    .then(response => response.json())
-    .then(responseJson => {
+    .then((response) => response.json())
+    .then((responseJson) => {
       if (responseJson.errno !== 0) {
         Alert.alert(responseJson.errmsg);
       }
@@ -84,8 +84,8 @@ export function signUp(params: {phone: any; code: any; password: any}) {
       password: params.password,
     }),
   })
-    .then(response => response.json())
-    .then(responseJson => {
+    .then((response) => response.json())
+    .then((responseJson) => {
       if (responseJson.errno !== 0) {
         Alert.alert(responseJson.errmsg);
       }
@@ -114,8 +114,8 @@ export function resetPassword(params: {
       password_repeat: params.repeatPassword,
     }),
   })
-    .then(response => response.json())
-    .then(responseJson => {
+    .then((response) => response.json())
+    .then((responseJson) => {
       return responseJson;
     })
     .catch(() => {
@@ -129,8 +129,8 @@ export function getUserInfo() {
       USERSIGN: toJS(store).token,
     },
   })
-    .then(response => response.json())
-    .then(responseJson => {
+    .then((response) => response.json())
+    .then((responseJson) => {
       return responseJson;
     })
     .catch(() => {
@@ -175,8 +175,8 @@ export function setUserInfo(params: {
       trade: params.trade,
     }),
   })
-    .then(response => response.json())
-    .then(responseJson => {
+    .then((response) => response.json())
+    .then((responseJson) => {
       return responseJson;
     })
     .catch(() => {
@@ -197,8 +197,8 @@ export function uploadAvatar(params: {uri: any; name: any}) {
     method: 'POST',
     body: formData,
   })
-    .then(response => response.json())
-    .then(responseJson => {
+    .then((response) => response.json())
+    .then((responseJson) => {
       return responseJson;
     })
     .catch(() => {

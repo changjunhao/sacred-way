@@ -56,7 +56,11 @@ export default class CommunityList extends Component<InterfaceProps> {
                 }}>
                 共{question.dialogue_count}对话
               </Text>
-              <Text style={{color: '#555', fontSize: setSpText2(12)}}>
+              <Text
+                style={{
+                  color: '#555',
+                  fontSize: setSpText2(12),
+                }}>
                 来自：{question.group_name}
               </Text>
             </View>

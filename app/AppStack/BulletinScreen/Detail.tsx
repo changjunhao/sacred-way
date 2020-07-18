@@ -53,7 +53,7 @@ export default class BulletinDetailScreen extends Component<
     };
   }
   public componentDidMount() {
-    getBulletin({id: this.props.route.params.id}).then(async bulletin => {
+    getBulletin({id: this.props.route.params.id}).then(async (bulletin) => {
       this.setState({
         id: this.props.route.params.id,
         bulletin,
@@ -70,7 +70,7 @@ export default class BulletinDetailScreen extends Component<
   }
 
   public getInfo(originInfo: any) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       Image.getSize(
         originInfo.url,
         (width, height) => {
@@ -90,7 +90,9 @@ export default class BulletinDetailScreen extends Component<
       <SafeAreaView style={{flex: 1}}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={{...ApplicationStyles.mainContainer}}>
+          style={{
+            ...ApplicationStyles.mainContainer,
+          }}>
           <View style={{marginTop: scaleSize(15)}}>
             <Text
               style={{
@@ -134,7 +136,11 @@ export default class BulletinDetailScreen extends Component<
                 </Text>
               )}
             </View>
-            <Text style={{color: '#848fac', fontSize: setSpText2(12)}}>
+            <Text
+              style={{
+                color: '#848fac',
+                fontSize: setSpText2(12),
+              }}>
               {this.formatTime(bulletin.create_time)}
             </Text>
           </View>
@@ -149,7 +155,11 @@ export default class BulletinDetailScreen extends Component<
                 {bulletin.content}
               </Text>
             </Hyperlink>
-            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}>
               {bulletin.images.map(
                 (image: {id: string | number | undefined; url: any}) => (
                   <TouchableWithoutFeedback
@@ -157,7 +167,7 @@ export default class BulletinDetailScreen extends Component<
                     onPress={() =>
                       this.setState({
                         imageModalVisible: true,
-                        currentImage: images.find(img => img.id === image.id),
+                        currentImage: images.find((img) => img.id === image.id),
                       })
                     }>
                     <Image
