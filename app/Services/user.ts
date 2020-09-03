@@ -184,13 +184,13 @@ export function setUserInfo(params: {
     });
 }
 
-export function uploadAvatar(params: {uri: any; name: any}) {
+export function uploadAvatar(params: { data: string; name: string | undefined; uri: string }) {
   const formData = new FormData();
   // @ts-ignore
   formData.append('file', {
-    uri: params.uri,
-    type: 'application/octet-stream',
-    name: params.name,
+    uri: 'data:image/jpeg;base64,' + params.data,
+    type: 'multipart/form-data',
+    name: params.name || params.uri.slice(params.uri.lastIndexOf('/') + 1),
   });
   formData.append('dir', 'headImg');
   return fetch(`${BASEURL}/utility/FileUpload/uploadFtoOss`, {

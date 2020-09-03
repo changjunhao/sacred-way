@@ -268,7 +268,7 @@ export default class InfoModify extends Component<
       } else if (response.error) {
         Alert.alert(response.error);
       } else {
-        uploadAvatar({uri: response.uri, name: response.fileName}).then(
+        uploadAvatar({data: response.data, uri: response.uri, name: response.fileName}).then(
           (res) => {
             if (res.errno === 0) {
               if (type === 'avatar') {
