@@ -1,24 +1,28 @@
-import {action, observable} from 'mobx';
+import {makeAutoObservable} from 'mobx';
 
 class UserStore {
-  @observable public infoEdit = false;
-  @observable public info = {};
 
-  @observable public baseInfo = {
+  constructor() {
+    makeAutoObservable(this)
+  }
+  public infoEdit = false;
+  public info = {};
+
+  public baseInfo = {
     name: '',
     phone: '',
     location: '',
   };
 
-  @action public setInfo(data: {}) {
+  public setInfo(data: {}) {
     this.info = data;
   }
 
-  @action public setInfoEdit(data: boolean) {
+  public setInfoEdit(data: boolean) {
     this.infoEdit = data;
   }
 
-  @action public setBaseInfo(data: {
+  public setBaseInfo(data: {
     name: string;
     phone: string;
     location: string;

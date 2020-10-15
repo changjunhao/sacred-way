@@ -1,13 +1,16 @@
-import {action, observable} from 'mobx';
+import {makeAutoObservable} from 'mobx';
 
 class TokenStore {
-  @observable public isLoading = true;
-  @observable public token = '';
+  constructor() {
+    makeAutoObservable(this)
+  }
+  public isLoading = true;
+  public token = '';
 
-  @action public setToken(data: string) {
+  public setToken(data: string) {
     this.token = data;
   }
-  @action public setIsLoading(data: boolean) {
+  public setIsLoading(data: boolean) {
     this.isLoading = data;
   }
 }
