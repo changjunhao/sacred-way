@@ -14,7 +14,8 @@ import {
   View,
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import ImagePicker from 'react-native-image-picker';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {ImageLibraryOptions} from 'react-native-image-picker/src/types';
 // @ts-ignore
 import Icon from 'react-native-vector-icons/AntDesign';
 import EditInfo from '../../Components/EditInfo';
@@ -253,38 +254,36 @@ export default class InfoModify extends Component<
   };
 
   private handleSelectImage = (type: string) => {
-    const options = {
-      title: '选取图片',
-      cancelButtonTitle: '取消',
-      takePhotoButtonTitle: null,
-      chooseFromLibraryButtonTitle: null,
+    const options: ImageLibraryOptions = {
+      includeBase64: true,
       mediaType: 'photo',
     };
 
-    // @ts-ignore
-    ImagePicker.launchImageLibrary(options, (response) => {
+    launchImageLibrary(options, (response) => {
       if (response.didCancel) {
         // console.log('User cancelled image picker');
-      } else if (response.error) {
-        Alert.alert(response.error);
+      } else if (response.errorMessage) {
+        Alert.alert(response.errorMessage);
       } else {
-        uploadAvatar({data: response.data, uri: response.uri, name: response.fileName}).then(
-          (res) => {
-            if (res.errno === 0) {
-              if (type === 'avatar') {
-                this.setState({
-                  avatar: res.data.info.file_url,
-                });
-              } else {
-                this.setState({
-                  weChatQR: res.data.info.file_url,
-                });
-              }
+        uploadAvatar({
+          data: response.base64,
+          uri: response.uri,
+          name: response.fileName,
+        }).then((res) => {
+          if (res.errno === 0) {
+            if (type === 'avatar') {
+              this.setState({
+                avatar: res.data.info.file_url,
+              });
             } else {
-              Alert.alert(res.errmsg);
+              this.setState({
+                weChatQR: res.data.info.file_url,
+              });
             }
-          },
-        );
+          } else {
+            Alert.alert(res.errmsg);
+          }
+        });
       }
     });
   };

@@ -1,5 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import BulletinDetailScreen from './BulletinScreen/Detail';
 import BulletinListScreen from './BulletinScreen/List';
 import CommunityDetailScreen from './CommunityScreen/Detail';
@@ -15,6 +16,19 @@ import VisitedScreen from './UserScreen/Visited';
 
 const Stack = createStackNavigator();
 
+function getHeaderTitle(route: any) {
+  const routeName = getFocusedRouteNameFromRoute(route) ?? '发现';
+
+  switch (routeName) {
+    case 'Find':
+      return '发现';
+    case 'Member':
+      return '会员';
+    case 'My':
+      return '我';
+  }
+}
+
 export default function AppStack() {
   return (
     <Stack.Navigator
@@ -26,25 +40,9 @@ export default function AppStack() {
       <Stack.Screen
         name="Tabs"
         component={TabNavigator}
-        options={({route}) => {
-          let title = '发现';
-          // @ts-ignore
-          if (!route.state) {
-            return {title};
-          }
-          // @ts-ignore
-          const routeName = route.state.routeNames[route.state.index];
-          if (routeName === 'Find') {
-            title = '发现';
-          }
-          if (routeName === 'Member') {
-            title = '会员';
-          }
-          if (routeName === 'My') {
-            title = '我';
-          }
-          return {title};
-        }}
+        options={({route}) => ({
+          title: getHeaderTitle(route),
+        })}
       />
       <Stack.Screen name="InfoModify" component={InfoModifyScreen} />
       <Stack.Screen name="PasswordModify" component={PasswordModifyScreen} />
