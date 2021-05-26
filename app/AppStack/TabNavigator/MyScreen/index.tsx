@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {inject, observer} from 'mobx-react';
 import React, {Component, Fragment} from 'react';
 import {
