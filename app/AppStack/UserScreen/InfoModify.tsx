@@ -248,7 +248,7 @@ export default class InfoModify extends Component<
 
   private handleSelectImage = (type: string) => {
     const options: ImageLibraryOptions = {
-      includeBase64: true,
+      // includeBase64: true,
       mediaType: 'photo',
     };
 
@@ -258,10 +258,11 @@ export default class InfoModify extends Component<
       } else if (response.errorMessage) {
         Alert.alert(response.errorMessage);
       } else {
+        const assets = response.assets;
         uploadAvatar({
-          data: response.base64,
-          uri: response.uri,
-          name: response.fileName,
+          // data: assets[0].base64,
+          uri: assets[0].uri,
+          name: assets[0].fileName,
         }).then(res => {
           if (res.errno === 0) {
             if (type === 'avatar') {
