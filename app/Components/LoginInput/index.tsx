@@ -24,12 +24,8 @@ class LoginInput extends Component<InterfaceProps, InterfaceStates> {
 
   public render() {
     const {borderBottomColor} = this.state;
-    const {
-      placeholder,
-      keyboardType,
-      secureTextEntry,
-      textContentType,
-    } = this.props;
+    const {placeholder, keyboardType, secureTextEntry, textContentType} =
+      this.props;
     return (
       <TextInput
         style={{
@@ -44,7 +40,7 @@ class LoginInput extends Component<InterfaceProps, InterfaceStates> {
         placeholder={placeholder}
         textContentType={textContentType}
         secureTextEntry={secureTextEntry || false}
-        onChangeText={(text) => this.props.onChangeText(text)}
+        onChangeText={text => this.props.onChangeText(text)}
         onFocus={() => this.setState({borderBottomColor: '#272A32'})}
         onBlur={() => this.setState({borderBottomColor: '#E2E2E2'})}
       />

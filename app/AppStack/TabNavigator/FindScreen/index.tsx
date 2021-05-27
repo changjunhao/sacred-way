@@ -56,14 +56,10 @@ export default class FindScreen extends Component<
 
   public render() {
     const userInfo = this.props.UserStore.info;
-    const {
-      bulletinList,
-      questionsList,
-      questionsListCount,
-      specialColumnList,
-    } = this.state;
+    const {bulletinList, questionsList, questionsListCount, specialColumnList} =
+      this.state;
 
-    const CommunityList = questionsList.map((question) => (
+    const CommunityList = questionsList.map(question => (
       <CommunityListComponent
         key={question.id}
         question={question}
@@ -169,7 +165,7 @@ export default class FindScreen extends Component<
                 <Icon size={setSpText2(12)} color={'#FFF'} name={'right'} />
               </LinearGradient>
             </TouchableWithoutFeedback>
-            {bulletinList.map((bulletin) => (
+            {bulletinList.map(bulletin => (
               <TouchableWithoutFeedback
                 key={bulletin.id}
                 onPress={() => {
@@ -330,7 +326,7 @@ export default class FindScreen extends Component<
                               }
                             : {...styles.curriculumColumn}
                         }>
-                        {curriculumList.map((curriculum) => (
+                        {curriculumList.map(curriculum => (
                           <TouchableWithoutFeedback
                             key={curriculum.curriculum_id}
                             onPress={() =>
@@ -384,13 +380,13 @@ export default class FindScreen extends Component<
   }
 
   private fetchData = async () => {
-    getBulletinList().then((res) => {
+    getBulletinList().then(res => {
       this.setState({
         // @ts-ignore
-        bulletinList: res.list.filter((bulletin) => bulletin.is_top === 1),
+        bulletinList: res.list.filter(bulletin => bulletin.is_top === 1),
       });
     });
-    getCommunityList({type: 2}).then((res) => {
+    getCommunityList({type: 2}).then(res => {
       this.setState({
         questionsList: res.list,
         questionsListCount: res.count,

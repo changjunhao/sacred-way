@@ -38,7 +38,7 @@ export default class Earnings extends Component<{}, InterfaceState> {
           style={styles.listView}
           data={list}
           onEndReached={this.onEndReached}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={item => item.id.toString()}
           ItemSeparatorComponent={() => <View style={styles.itemHr} />}
           renderItem={({item}) => (
             <View style={styles.itemView}>
@@ -61,7 +61,7 @@ export default class Earnings extends Component<{}, InterfaceState> {
 
   private fetchData = () => {
     getUserIoList({page: this.state.page, pageSize: this.state.limit}).then(
-      (res) => {
+      res => {
         this.setState({
           list: res.list,
           count: res.count,
@@ -76,7 +76,7 @@ export default class Earnings extends Component<{}, InterfaceState> {
     }
     this.setState({page: this.state.page + 1}, () => {
       getUserIoList({page: this.state.page, pageSize: this.state.limit}).then(
-        (res) => {
+        res => {
           this.setState({
             list: this.state.list.concat(res.list),
             count: res.count,

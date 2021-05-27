@@ -13,11 +13,11 @@ export function getBulletinList(params = {page: 1, count: 5}) {
       },
     },
   )
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson.data;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error);
     });
 }
@@ -31,11 +31,11 @@ export function getBulletin(params: {id: any}) {
       },
     },
   )
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson.data;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error);
     });
 }

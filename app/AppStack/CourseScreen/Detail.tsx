@@ -57,7 +57,7 @@ export default class CourseDetail extends Component<
           baseInfo: res,
         });
         if (res.type === 2) {
-          getSubCurriculum({id}).then((data) => {
+          getSubCurriculum({id}).then(data => {
             this.setState({
               childList: data.list,
               chooseType: 2,
@@ -81,7 +81,7 @@ export default class CourseDetail extends Component<
   }
 
   public getInfo(originInfo: any) {
-    return new Promise(async (resolve) => {
+    return new Promise(async resolve => {
       if (originInfo.type === 3 && originInfo.value.length !== 0) {
         const infoPromiseArray = originInfo.value.map((item: any) =>
           this.getImageInfo(item),
@@ -95,7 +95,7 @@ export default class CourseDetail extends Component<
   }
 
   public getImageInfo(originInfo: any) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       Image.getSize(
         originInfo,
         (width, height) => {
@@ -255,7 +255,7 @@ export default class CourseDetail extends Component<
                 ? {...styles.infoView, display: 'none'}
                 : {...styles.infoView}
             }>
-            {childList.map((item) => (
+            {childList.map(item => (
               <View
                 key={item.id}
                 style={{

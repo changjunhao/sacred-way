@@ -53,7 +53,7 @@ export default class SpecialColumnDetail extends Component<
 
   public componentDidMount(): void {
     const {id} = this.props.route.params;
-    getSpecialColumnInfo({id}).then(async (res) => {
+    getSpecialColumnInfo({id}).then(async res => {
       this.setState({
         info: res.info,
         direct: res.direct,
@@ -71,7 +71,7 @@ export default class SpecialColumnDetail extends Component<
   }
 
   public getInfo(originInfo: any) {
-    return new Promise(async (resolve) => {
+    return new Promise(async resolve => {
       if (originInfo.type === 3 && originInfo.value.length !== 0) {
         const infoPromiseArray = originInfo.value.map((item: any) =>
           this.getImageInfo(item),
@@ -85,7 +85,7 @@ export default class SpecialColumnDetail extends Component<
   }
 
   public getImageInfo(originInfo: any) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       Image.getSize(
         originInfo,
         (width, height) => {

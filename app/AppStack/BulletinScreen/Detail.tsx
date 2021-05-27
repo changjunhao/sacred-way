@@ -53,7 +53,7 @@ export default class BulletinDetailScreen extends Component<
     };
   }
   public componentDidMount() {
-    getBulletin({id: this.props.route.params.id}).then(async (bulletin) => {
+    getBulletin({id: this.props.route.params.id}).then(async bulletin => {
       this.setState({
         id: this.props.route.params.id,
         bulletin,
@@ -70,7 +70,7 @@ export default class BulletinDetailScreen extends Component<
   }
 
   public getInfo(originInfo: any) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       Image.getSize(
         originInfo.url,
         (width, height) => {
@@ -167,7 +167,7 @@ export default class BulletinDetailScreen extends Component<
                     onPress={() =>
                       this.setState({
                         imageModalVisible: true,
-                        currentImage: images.find((img) => img.id === image.id),
+                        currentImage: images.find(img => img.id === image.id),
                       })
                     }>
                     <Image

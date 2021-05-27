@@ -55,7 +55,7 @@ export default class BulletinListScreen extends Component<
           onEndReached={this.onEndReached}
           initialNumToRender={10}
           onEndReachedThreshold={0}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={item => item.id.toString()}
           ItemSeparatorComponent={() => (
             <View
               style={{
@@ -167,7 +167,7 @@ export default class BulletinListScreen extends Component<
   private fetchData = () => {
     this.setState({page: 1}, () => {
       getBulletinList({page: this.state.page, count: this.state.limit}).then(
-        (res) => {
+        res => {
           this.setState({
             bulletinList: res.list,
             count: res.count,
@@ -184,7 +184,7 @@ export default class BulletinListScreen extends Component<
     }
     this.setState({page: this.state.page + 1}, () => {
       getBulletinList({page: this.state.page, count: this.state.limit}).then(
-        (res) => {
+        res => {
           this.setState({
             bulletinList: this.state.bulletinList.concat(res.list),
             count: res.count,

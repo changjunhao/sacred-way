@@ -168,7 +168,7 @@ export default class MyScreen extends Component<
     //       userInfo,
     //     });
     //   });
-    getUserBuyed().then((res) => {
+    getUserBuyed().then(res => {
       this.setState({
         purchasedCourses: res.curriculum_list,
       });
@@ -183,7 +183,7 @@ export default class MyScreen extends Component<
           destructiveButtonIndex: 2,
           cancelButtonIndex: 3,
         },
-        (buttonIndex) => {
+        buttonIndex => {
           if (buttonIndex === 0) {
             this.props.navigation.navigate('InfoModify');
           }

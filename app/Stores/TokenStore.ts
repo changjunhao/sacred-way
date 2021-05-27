@@ -8,6 +8,7 @@ class TokenStore {
     makeObservable(this, {
       isLoading: observable,
       token: observable,
+      setToken: action,
       setIsLoading: action,
     });
   }

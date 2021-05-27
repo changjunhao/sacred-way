@@ -77,7 +77,7 @@ export default class PasswordModify extends Component<
             placeholder={'请输入验证码'}
             keyboardType={'numeric'}
             textContentType={'oneTimeCode'}
-            onChangeText={(code) => this.setState({code})}
+            onChangeText={code => this.setState({code})}
           />
           <TouchableHighlight
             underlayColor="white"
@@ -111,7 +111,7 @@ export default class PasswordModify extends Component<
             secureTextEntry={true}
             textContentType={'newPassword'}
             value={this.state.password}
-            onChangeText={(password) => this.setState({password})}
+            onChangeText={password => this.setState({password})}
           />
         </View>
         <View style={InputStyles.inputView}>
@@ -122,7 +122,7 @@ export default class PasswordModify extends Component<
             secureTextEntry={true}
             textContentType={'newPassword'}
             value={this.state.repeatPassword}
-            onChangeText={(repeatPassword) => this.setState({repeatPassword})}
+            onChangeText={repeatPassword => this.setState({repeatPassword})}
           />
         </View>
         <TouchableHighlight

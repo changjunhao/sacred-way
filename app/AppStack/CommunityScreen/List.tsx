@@ -31,7 +31,7 @@ export default class CommunityListScreen extends Component<
   }
 
   public componentDidMount() {
-    getCommunityList({type: 3}).then((res) => {
+    getCommunityList({type: 3}).then(res => {
       this.setState({
         questionsList: res.list,
       });

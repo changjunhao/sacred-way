@@ -56,7 +56,7 @@ export default class ResetPasswordScreen extends Component<
             placeholder={'请输入您的手机号'}
             keyboardType={'phone-pad'}
             textContentType={'username'}
-            onChangeText={(phone) => this.setState({phone})}
+            onChangeText={phone => this.setState({phone})}
           />
         </View>
         <View style={styles.inputView}>
@@ -66,7 +66,7 @@ export default class ResetPasswordScreen extends Component<
             placeholder={'请输入短信验证码'}
             keyboardType={'numeric'}
             textContentType={'oneTimeCode'}
-            onChangeText={(code) => this.setState({code})}
+            onChangeText={code => this.setState({code})}
           />
           <TouchableHighlight
             underlayColor="white"
@@ -100,7 +100,7 @@ export default class ResetPasswordScreen extends Component<
             secureTextEntry={true}
             textContentType={'newPassword'}
             value={this.state.password}
-            onChangeText={(password) => this.setState({password})}
+            onChangeText={password => this.setState({password})}
           />
         </View>
         <View style={styles.inputView}>
@@ -111,7 +111,7 @@ export default class ResetPasswordScreen extends Component<
             secureTextEntry={true}
             textContentType={'newPassword'}
             value={this.state.repeatPassword}
-            onChangeText={(repeatPassword) => this.setState({repeatPassword})}
+            onChangeText={repeatPassword => this.setState({repeatPassword})}
           />
         </View>
         <TouchableHighlight

@@ -106,15 +106,15 @@ export default class CommunityDetailScreen extends Component<
 
   public componentDidMount() {
     const {id} = this.props.route.params;
-    getCommunityInfo({id}).then(async (res) => {
+    getCommunityInfo({id}).then(async res => {
       const infoPromiseArray = res.list.map((item: any) => this.getInfo(item));
       const infos: any[] = await Promise.all(infoPromiseArray);
-      const userIds = [...new Set(infos.map((item) => item.nick_name))];
+      const userIds = [...new Set(infos.map(item => item.nick_name))];
       this.setState({
         title: res.title,
         groupName: res.group_name,
         readCount: res.read_count,
-        list: infos.map((item) => ({
+        list: infos.map(item => ({
           ...item,
           color: colorSet[userIds.indexOf(item.nick_name) % 10],
         })),
@@ -125,7 +125,7 @@ export default class CommunityDetailScreen extends Component<
   }
 
   public getInfo(originInfo: any) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       if (originInfo.type === 'IMAGE' && originInfo.content) {
         Image.getSize(
           originInfo.content,
@@ -234,8 +234,8 @@ export default class CommunityDetailScreen extends Component<
               />
             </View>
             {list
-              .filter((item) => item.content)
-              .map((item) => (
+              .filter(item => item.content)
+              .map(item => (
                 <View
                   key={item.id}
                   style={{

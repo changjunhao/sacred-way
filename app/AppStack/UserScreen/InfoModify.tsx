@@ -109,7 +109,7 @@ export default class InfoModify extends Component<
                   placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入昵称（6个字）'}
                   defaultValue={this.props.UserStore.info.nick_name}
-                  onChangeText={(nickName) => this.setState({nickName})}
+                  onChangeText={nickName => this.setState({nickName})}
                 />
               </View>
               <View>
@@ -121,7 +121,7 @@ export default class InfoModify extends Component<
                   placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入微信号（20个字）'}
                   defaultValue={this.props.UserStore.info.wechat}
-                  onChangeText={(weChat) => this.setState({weChat})}
+                  onChangeText={weChat => this.setState({weChat})}
                 />
               </View>
               <View>
@@ -168,7 +168,7 @@ export default class InfoModify extends Component<
                   placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入公司名称（20个字）'}
                   defaultValue={this.props.UserStore.info.company}
-                  onChangeText={(company) => this.setState({company})}
+                  onChangeText={company => this.setState({company})}
                 />
               </View>
               <View>
@@ -180,7 +180,7 @@ export default class InfoModify extends Component<
                   placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入职务名称（10个字）'}
                   defaultValue={this.props.UserStore.info.duty}
-                  onChangeText={(duty) => this.setState({duty})}
+                  onChangeText={duty => this.setState({duty})}
                 />
               </View>
               <View>
@@ -192,7 +192,7 @@ export default class InfoModify extends Component<
                   placeholderTextColor={'#8E8E8E'}
                   placeholder={'请输入所属行业（10个字）'}
                   defaultValue={this.props.UserStore.info.trade}
-                  onChangeText={(trade) => this.setState({trade})}
+                  onChangeText={trade => this.setState({trade})}
                 />
               </View>
             </View>
@@ -223,15 +223,8 @@ export default class InfoModify extends Component<
 
   private handleSubmit = async () => {
     const {name, phone, location} = this.props.UserStore.baseInfo;
-    const {
-      avatar,
-      nickName,
-      weChat,
-      weChatQR,
-      company,
-      duty,
-      trade,
-    } = this.state;
+    const {avatar, nickName, weChat, weChatQR, company, duty, trade} =
+      this.state;
     await setUserInfo({
       name,
       phone,
@@ -243,7 +236,7 @@ export default class InfoModify extends Component<
       company,
       duty,
       trade,
-    }).then((res) => {
+    }).then(res => {
       if (res.errno === 0) {
         this.props.UserStore.setInfo(res.data);
         this.props.navigation.goBack();
@@ -259,7 +252,7 @@ export default class InfoModify extends Component<
       mediaType: 'photo',
     };
 
-    launchImageLibrary(options, (response) => {
+    launchImageLibrary(options, response => {
       if (response.didCancel) {
         // console.log('User cancelled image picker');
       } else if (response.errorMessage) {
@@ -269,7 +262,7 @@ export default class InfoModify extends Component<
           data: response.base64,
           uri: response.uri,
           name: response.fileName,
-        }).then((res) => {
+        }).then(res => {
           if (res.errno === 0) {
             if (type === 'avatar') {
               this.setState({

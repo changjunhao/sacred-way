@@ -63,14 +63,8 @@ export default class MemberScreen extends Component<
 
   public render() {
     const userInfo = this.props.UserStore.info;
-    const {
-      todayIncome,
-      totalIncome,
-      money,
-      fans,
-      scan,
-      recommendList,
-    } = this.state;
+    const {todayIncome, totalIncome, money, fans, scan, recommendList} =
+      this.state;
 
     return (
       <Fragment>
@@ -204,7 +198,7 @@ export default class MemberScreen extends Component<
   }
 
   private fetchData = async () => {
-    getPersonMoney().then((res) => {
+    getPersonMoney().then(res => {
       this.setState({
         todayIncome: res.today,
         totalIncome: res.dis_money,
@@ -213,7 +207,7 @@ export default class MemberScreen extends Component<
         scan: res.scan,
       });
     });
-    getDirectRecommend().then((res) => {
+    getDirectRecommend().then(res => {
       this.setState({
         recommendList: res,
       });

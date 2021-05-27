@@ -10,11 +10,11 @@ export function getCurriculumlist() {
       USERSIGN: toJS(store).token,
     },
   })
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error);
     });
 }
@@ -25,11 +25,11 @@ export function getUserBuyed() {
       USERSIGN: toJS(store).token,
     },
   })
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson.data;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error);
     });
 }
@@ -43,11 +43,11 @@ export function getCourseList(params: {categoryId: any}) {
       },
     },
   )
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson.data;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error);
     });
 }
@@ -61,11 +61,11 @@ export function getCourseDetail(params: {column_id?: string; id: string}) {
       },
     },
   )
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson.data;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error);
     });
 }
@@ -79,11 +79,11 @@ export function getSubCurriculum(params: {id: any}) {
       },
     },
   )
-    .then((response) => response.json())
-    .then((responseJson) => {
+    .then(response => response.json())
+    .then(responseJson => {
       return responseJson.data;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error);
     });
 }
