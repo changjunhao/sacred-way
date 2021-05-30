@@ -14,17 +14,6 @@ import {
 } from '../Services/user';
 import styles from './Styles';
 
-interface InterfaceStates {
-  phone: string;
-  password: string;
-  repeatPassword: string;
-  code: string;
-  content: string;
-  totalTime: number;
-  canClick: boolean;
-  next: boolean;
-}
-
 const ResetPasswordScreen: React.FC<Record<string, any>> = props => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
