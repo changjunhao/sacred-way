@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
   Image,
   StyleSheet,
@@ -13,63 +13,62 @@ interface InterfaceProps {
   navigation: {navigate: (arg0: string, arg1: {id: any}) => void};
 }
 
-export default class CommunityList extends Component<InterfaceProps> {
-  public render() {
-    const {question} = this.props;
-    return (
-      <TouchableWithoutFeedback
-        onPress={() => {
-          this.props.navigation.navigate('CommunityDetail', {id: question.id});
-        }}>
-        <View style={styles.questionItem}>
-          {question.category_pic ? (
-            <Image
-              style={styles.questionsListHeadImg}
-              source={{uri: question.category_pic}}
-            />
-          ) : null}
-          <View>
+const CommunityList: React.FC<InterfaceProps> = props => {
+  const {question} = props;
+
+  return (
+    <TouchableWithoutFeedback
+      onPress={() => {
+        props.navigation.navigate('CommunityDetail', {id: question.id});
+      }}>
+      <View style={styles.questionItem}>
+        {question.category_pic ? (
+          <Image
+            style={styles.questionsListHeadImg}
+            source={{uri: question.category_pic}}
+          />
+        ) : null}
+        <View>
+          <Text
+            numberOfLines={2}
+            style={{
+              width: scaleSize(267),
+              flexWrap: 'wrap',
+              fontWeight: '600',
+              color: '#212121',
+              fontSize: setSpText2(16),
+              lineHeight: setSpText2(20),
+            }}>
+            {question.title}
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'baseline',
+              marginTop: scaleSize(6),
+              marginBottom: scaleSize(8),
+            }}>
             <Text
-              numberOfLines={2}
               style={{
-                width: scaleSize(267),
-                flexWrap: 'wrap',
-                fontWeight: '600',
-                color: '#212121',
-                fontSize: setSpText2(16),
-                lineHeight: setSpText2(20),
+                color: '#555',
+                fontSize: setSpText2(12),
+                marginRight: scaleSize(12),
               }}>
-              {question.title}
+              共{question.dialogue_count}对话
             </Text>
-            <View
+            <Text
               style={{
-                flexDirection: 'row',
-                alignItems: 'baseline',
-                marginTop: scaleSize(6),
-                marginBottom: scaleSize(8),
+                color: '#555',
+                fontSize: setSpText2(12),
               }}>
-              <Text
-                style={{
-                  color: '#555',
-                  fontSize: setSpText2(12),
-                  marginRight: scaleSize(12),
-                }}>
-                共{question.dialogue_count}对话
-              </Text>
-              <Text
-                style={{
-                  color: '#555',
-                  fontSize: setSpText2(12),
-                }}>
-                来自：{question.group_name}
-              </Text>
-            </View>
+              来自：{question.group_name}
+            </Text>
           </View>
         </View>
-      </TouchableWithoutFeedback>
-    );
-  }
-}
+      </View>
+    </TouchableWithoutFeedback>
+  );
+};
 
 const styles = StyleSheet.create({
   questionItem: {
@@ -83,3 +82,5 @@ const styles = StyleSheet.create({
     marginRight: scaleSize(16),
   },
 });
+
+export default CommunityList;

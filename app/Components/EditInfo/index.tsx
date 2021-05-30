@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {useEffect} from 'react';
 import {
   Keyboard,
   Text,
@@ -17,91 +17,43 @@ interface InterfaceProps {
   UserStore: any;
 }
 
-class EditInfo extends Component<InterfaceProps> {
-  private keyboardDidShowListener: any;
+const EditInfo: React.FC<InterfaceProps> = props => {
+  const {UserStore} = props;
 
-  public componentDidMount(): void {
-    this.props.UserStore.setBaseInfo({
-      name: this.props.UserStore.info.real_name,
-      phone:
-        this.props.UserStore.info.contact_number ||
-        this.props.UserStore.info.mobile_number,
-      location: this.props.UserStore.info.location,
-    });
-    this.keyboardDidShowListener = Keyboard.addListener(
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
-      this._keyboardDidShow,
+      () => {
+        Picker.isPickerShow(status => {
+          if (status) {
+            Picker.hide();
+          }
+        });
+      },
     );
-  }
+    return () => {
+      keyboardDidShowListener.remove();
+      Picker.hide();
+    };
+  }, []);
 
-  public _keyboardDidShow() {
-    Picker.isPickerShow(status => {
-      if (status) {
-        Picker.hide();
-      }
+  useEffect(() => {
+    UserStore.setBaseInfo({
+      name: UserStore.info.real_name,
+      phone: UserStore.info.contact_number || UserStore.info.mobile_number,
+      location: UserStore.info.location,
     });
-  }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  public componentWillUnmount(): void {
-    this.keyboardDidShowListener.remove();
-    Picker.hide();
-  }
-
-  public render() {
-    return (
-      <Fragment>
-        <View>
-          <View style={styles.labelView}>
-            <Icon size={scaleSize(8)} color="#FF3F3F" name={'ios-star'} />
-            <Text style={styles.labelText}>姓名</Text>
-          </View>
-          <TextInput
-            style={styles.input}
-            placeholderTextColor={'#8E8E8E'}
-            placeholder={'请输入姓名（6个字）'}
-            defaultValue={this.props.UserStore.baseInfo.name}
-            onChangeText={value => this.handleNameChange(value)}
-          />
-        </View>
-        <View>
-          <View style={styles.labelView}>
-            <Icon size={scaleSize(8)} color="#FF3F3F" name={'ios-star'} />
-            <Text style={styles.labelText}>联系电话</Text>
-          </View>
-          <TextInput
-            style={styles.input}
-            placeholderTextColor={'#8E8E8E'}
-            placeholder={'请输入联系电话'}
-            defaultValue={this.props.UserStore.baseInfo.phone}
-            onChangeText={value => this.handlePhoneChange(value)}
-          />
-        </View>
-        <View>
-          <View style={styles.labelView}>
-            <Icon size={scaleSize(8)} color="#FF3F3F" name={'ios-star'} />
-            <Text style={styles.labelText}>所在地</Text>
-          </View>
-          <TouchableHighlight
-            underlayColor="white"
-            onPress={this.handlePickerShow}>
-            <Text style={styles.input}>
-              {this.props.UserStore.baseInfo.location}
-            </Text>
-          </TouchableHighlight>
-        </View>
-      </Fragment>
-    );
-  }
-
-  private handlePhoneChange = (phone: any) => {
-    this.props.UserStore.setBaseInfo({phone});
+  const handlePhoneChange = (phone: any) => {
+    UserStore.setBaseInfo({phone});
   };
 
-  private handleNameChange = (name: any) => {
-    this.props.UserStore.setBaseInfo({name});
+  const handleNameChange = (name: any) => {
+    UserStore.setBaseInfo({name});
   };
 
-  private handlePickerShow = () => {
+  const handlePickerShow = () => {
     Picker.init({
       pickerConfirmBtnText: '确定',
       pickerCancelBtnText: '取消',
@@ -122,11 +74,51 @@ class EditInfo extends Component<InterfaceProps> {
             location += `-${data[2]}`;
           }
         }
-        this.props.UserStore.setBaseInfo({location});
+        UserStore.setBaseInfo({location});
       },
     });
     Picker.show();
   };
-}
+
+  return (
+    <>
+      <View>
+        <View style={styles.labelView}>
+          <Icon size={scaleSize(8)} color="#FF3F3F" name={'ios-star'} />
+          <Text style={styles.labelText}>姓名</Text>
+        </View>
+        <TextInput
+          style={styles.input}
+          placeholderTextColor={'#8E8E8E'}
+          placeholder={'请输入姓名（6个字）'}
+          defaultValue={UserStore.baseInfo.name}
+          onChangeText={value => handleNameChange(value)}
+        />
+      </View>
+      <View>
+        <View style={styles.labelView}>
+          <Icon size={scaleSize(8)} color="#FF3F3F" name={'ios-star'} />
+          <Text style={styles.labelText}>联系电话</Text>
+        </View>
+        <TextInput
+          style={styles.input}
+          placeholderTextColor={'#8E8E8E'}
+          placeholder={'请输入联系电话'}
+          defaultValue={UserStore.baseInfo.phone}
+          onChangeText={value => handlePhoneChange(value)}
+        />
+      </View>
+      <View>
+        <View style={styles.labelView}>
+          <Icon size={scaleSize(8)} color="#FF3F3F" name={'ios-star'} />
+          <Text style={styles.labelText}>所在地</Text>
+        </View>
+        <TouchableHighlight underlayColor="white" onPress={handlePickerShow}>
+          <Text style={styles.input}>{UserStore.baseInfo.location}</Text>
+        </TouchableHighlight>
+      </View>
+    </>
+  );
+};
 
 export default EditInfo;

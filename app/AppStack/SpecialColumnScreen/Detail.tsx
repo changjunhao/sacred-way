@@ -54,6 +54,7 @@ export default class SpecialColumnDetail extends Component<
   public componentDidMount(): void {
     const {id} = this.props.route.params;
     getSpecialColumnInfo({id}).then(async res => {
+      console.log(res.info);
       this.setState({
         info: res.info,
         direct: res.direct,
@@ -273,7 +274,7 @@ export default class SpecialColumnDetail extends Component<
                 backgroundColor: '#f26522',
               }}>
               {!info.is_buy && Number(info.present_price) !== 0 && (
-                <Fragment>
+                <>
                   <Text
                     style={{
                       color: '#FFF',
@@ -290,17 +291,17 @@ export default class SpecialColumnDetail extends Component<
                       ¥{info.present_price / 100}
                     </Text>
                   </View>
-                  {info.original_price && (
-                    <Text
-                      style={{
-                        textDecorationLine: 'line-through',
-                        color: '#FEDAAF',
-                        fontSize: setSpText2(13),
-                      }}>
-                      ¥{(info.original_price / 100).toFixed(2)}
-                    </Text>
-                  )}
-                </Fragment>
+                  <Text
+                    style={{
+                      textDecorationLine: 'line-through',
+                      color: '#FEDAAF',
+                      fontSize: setSpText2(13),
+                    }}>
+                    {info.original_price
+                      ? `¥${(info.original_price / 100).toFixed(2)}`
+                      : ''}
+                  </Text>
+                </>
               )}
               {!info.is_buy && Number(info.present_price) === 0 && (
                 <Text

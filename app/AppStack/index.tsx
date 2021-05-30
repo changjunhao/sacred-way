@@ -17,7 +17,7 @@ import VisitedScreen from './UserScreen/Visited';
 const Stack = createStackNavigator();
 
 function getHeaderTitle(route: any) {
-  const routeName = getFocusedRouteNameFromRoute(route) ?? '发现';
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'Find';
 
   switch (routeName) {
     case 'Find':
