@@ -7,7 +7,7 @@ import MyScreen from './MyScreen';
 
 const Tab = createBottomTabNavigator();
 
-function TabNavigator() {
+const TabNavigator: React.FC = () => {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -85,6 +85,6 @@ function TabNavigator() {
       <Tab.Screen name="My" component={MyScreen} />
     </Tab.Navigator>
   );
-}
+};
 
 export default TabNavigator;
