@@ -6,20 +6,21 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
 
 interface InterfaceProps {
-  question: any;
-  navigation: {navigate: (arg0: string, arg1: {id: any}) => void};
+  question: Record<string, any>;
 }
 
 const CommunityList: React.FC<InterfaceProps> = props => {
+  const navigation = useNavigation();
   const {question} = props;
 
   return (
     <TouchableWithoutFeedback
       onPress={() => {
-        props.navigation.navigate('CommunityDetail', {id: question.id});
+        navigation.navigate('CommunityDetail', {id: question.id});
       }}>
       <View style={styles.questionItem}>
         {question.category_pic ? (

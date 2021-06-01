@@ -56,7 +56,7 @@ export default function AppStack() {
       <Stack.Screen
         name="CommunityList"
         component={CommunityListScreen}
-        options={CommunityListScreen.navigationOptions}
+        options={() => ({title: '美秒社群精华问答'})}
       />
       <Stack.Screen name="CommunityDetail" component={CommunityDetailScreen} />
       <Stack.Screen
