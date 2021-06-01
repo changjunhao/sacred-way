@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   SafeAreaView,
@@ -7,84 +7,52 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {RouteProp} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import {useRoute} from '@react-navigation/native';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
 import {getCourseDetail, getSubCurriculum} from '../../Services/course';
 import ApplicationStyles from '../../Theme/ApplicationStyles';
 import styles from '../SpecialColumnScreen/Styles';
 
-interface InterfaceState {
-  baseInfo: any;
-  childList: any[];
-  chooseType: 0 | 1 | 2;
-  description: any[];
-}
+const CourseDetail: React.FC = () => {
+  const route = useRoute();
+  const [baseInfo, setBaseInfo] = useState({});
+  const [chooseType, setChooseType] = useState(0);
+  const [description, setDescription] = useState([]);
+  const [childList, setChildList] = useState([]);
 
-type StackParamList = {
-  CourseDetail: {id: string; columnId: string | undefined};
-};
-
-type ScreenRouteProp = RouteProp<StackParamList, 'CourseDetail'>;
-
-type ScreenNavigationProp = StackNavigationProp<any>;
-
-interface InterfaceProps {
-  navigation: ScreenNavigationProp;
-  route: ScreenRouteProp;
-}
-
-export default class CourseDetail extends Component<
-  InterfaceProps,
-  InterfaceState
-> {
-  constructor(prop: Readonly<InterfaceProps>) {
-    super(prop);
-    this.state = {
-      baseInfo: {},
-      chooseType: 0,
-      description: [],
-      childList: [],
-    };
-  }
-
-  public componentDidMount(): void {
-    const {id, columnId} = this.props.route.params;
-    getCourseDetail({id, column_id: columnId}).then(
-      async (res: {type: number; description: string}) => {
-        // console.log(res);
-        this.setState({
-          baseInfo: res,
-        });
-        if (res.type === 2) {
-          getSubCurriculum({id}).then(data => {
-            this.setState({
-              childList: data.list,
-              chooseType: 2,
+  useEffect(() => {
+    // @ts-ignore
+    if (route?.params?.id) {
+      // @ts-ignore
+      const {id, columnId} = route.params;
+      getCourseDetail({id, column_id: columnId}).then(
+        async (res: {type: number; description: string}) => {
+          // console.log(res);
+          setBaseInfo(res);
+          if (res.type === 2) {
+            getSubCurriculum({id}).then(data => {
+              setChildList(data.list);
+              setChooseType(2);
             });
-          });
-        } else {
-          this.setState({
-            chooseType: 1,
-          });
-        }
-        const description = JSON.parse(res.description) || [];
-        const infoPromiseArray = description.map((item: any) =>
-          this.getInfo(item),
-        );
-        const infos: any[] = await Promise.all(infoPromiseArray);
-        this.setState({
-          description: infos,
-        });
-      },
-    );
-  }
+          } else {
+            setChooseType(1);
+          }
+          const descriptionRaw = JSON.parse(res.description) || [];
+          const infoPromiseArray = descriptionRaw.map((item: any) =>
+            getInfo(item),
+          );
+          const infos: never[] = await Promise.all(infoPromiseArray);
+          setDescription(infos);
+        },
+      );
+    }
+  }, [route.params]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  public getInfo(originInfo: any) {
+  const getInfo = (originInfo: any) => {
     return new Promise(async resolve => {
       if (originInfo.type === 3 && originInfo.value.length !== 0) {
         const infoPromiseArray = originInfo.value.map((item: any) =>
-          this.getImageInfo(item),
+          getImageInfo(item),
         );
         const infos: any[] = await Promise.all(infoPromiseArray);
         resolve({...originInfo, value: infos});
@@ -92,9 +60,9 @@ export default class CourseDetail extends Component<
         resolve({...originInfo, width: 0, height: 0});
       }
     });
-  }
+  };
 
-  public getImageInfo(originInfo: any) {
+  const getImageInfo = (originInfo: any) => {
     return new Promise(resolve => {
       Image.getSize(
         originInfo,
@@ -106,83 +74,93 @@ export default class CourseDetail extends Component<
         },
       );
     });
-  }
+  };
 
-  public render() {
-    const {baseInfo, description, chooseType, childList} = this.state;
-
-    return (
-      <SafeAreaView style={{flex: 1}}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          stickyHeaderIndices={[3]}
-          automaticallyAdjustContentInsets={false}
-          style={{flex: 1}}>
-          {baseInfo.pic ? (
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        stickyHeaderIndices={[3]}
+        automaticallyAdjustContentInsets={false}
+        style={{flex: 1}}>
+        {
+          // @ts-ignore
+          baseInfo.pic ? (
             <Image
               resizeMode={'cover'}
+              // @ts-ignore
               source={{uri: `${baseInfo.pic}/banner_medium`}}
               style={styles.cover}
             />
-          ) : null}
+          ) : null
+        }
+        <View
+          style={{
+            paddingVertical: scaleSize(14),
+            paddingHorizontal: scaleSize(16),
+          }}>
+          <Text
+            style={{
+              color: '#272A32',
+              fontSize: setSpText2(18),
+              paddingBottom: scaleSize(14),
+            }}>
+            {
+              // @ts-ignore
+              baseInfo.name
+            }
+          </Text>
           <View
             style={{
-              paddingVertical: scaleSize(14),
-              paddingHorizontal: scaleSize(16),
+              flexDirection: 'row',
+              justifyContent: 'space-between',
             }}>
             <Text
               style={{
-                color: '#272A32',
-                fontSize: setSpText2(18),
-                paddingBottom: scaleSize(14),
+                ...styles.summary,
+                ...styles.courseSummary,
               }}>
-              {baseInfo.name}
+              {
+                // @ts-ignore
+                baseInfo.summary
+              }
             </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-              <Text
-                style={{
-                  ...styles.summary,
-                  ...styles.courseSummary,
-                }}>
-                {baseInfo.summary}
+            <View style={{alignItems: 'center'}}>
+              <Text style={styles.headerDescNumber}>
+                {
+                  // @ts-ignore
+                  baseInfo.buy_count
+                }
+                <Text style={styles.headerDescUnit}>人</Text>
               </Text>
-              <View style={{alignItems: 'center'}}>
-                <Text style={styles.headerDescNumber}>
-                  {baseInfo.buy_count}
-                  <Text style={styles.headerDescUnit}>人</Text>
-                </Text>
-                <Text style={styles.headerDescTip}>已学习</Text>
-              </View>
+              <Text style={styles.headerDescTip}>已学习</Text>
             </View>
           </View>
-          <View
-            style={{
-              ...ApplicationStyles.hr,
-              marginLeft: 0,
-            }}
-          />
-          <View style={styles.tabView}>
-            <View style={ApplicationStyles.flexRow}>
-              <TouchableWithoutFeedback
-                onPress={() => this.setState({chooseType: 1})}>
-                <View style={styles.tabButton}>
-                  <Text
-                    style={
-                      chooseType === 1
-                        ? {...styles.buttonText, ...styles.activeButtonText}
-                        : {...styles.buttonText, ...styles.inactiveButtonText}
-                    }>
-                    课程详情
-                  </Text>
-                </View>
-              </TouchableWithoutFeedback>
-              {baseInfo.type === 1 ? null : (
-                <TouchableWithoutFeedback
-                  onPress={() => this.setState({chooseType: 2})}>
+        </View>
+        <View
+          style={{
+            ...ApplicationStyles.hr,
+            marginLeft: 0,
+          }}
+        />
+        <View style={styles.tabView}>
+          <View style={ApplicationStyles.flexRow}>
+            <TouchableWithoutFeedback onPress={() => setChooseType(1)}>
+              <View style={styles.tabButton}>
+                <Text
+                  style={
+                    chooseType === 1
+                      ? {...styles.buttonText, ...styles.activeButtonText}
+                      : {...styles.buttonText, ...styles.inactiveButtonText}
+                  }>
+                  课程详情
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
+            {
+              // @ts-ignore
+              baseInfo.type === 1 ? null : (
+                <TouchableWithoutFeedback onPress={() => setChooseType(2)}>
                   <View style={styles.tabButton}>
                     <Text
                       style={
@@ -194,18 +172,21 @@ export default class CourseDetail extends Component<
                     </Text>
                   </View>
                 </TouchableWithoutFeedback>
-              )}
-            </View>
+              )
+            }
           </View>
-          <View
-            style={
-              chooseType === 2
-                ? {...styles.infoView, display: 'none'}
-                : {...styles.infoView}
-            }>
-            {description.map((item, index) => (
-              <View key={index}>
-                {item.type === 1 ? (
+        </View>
+        <View
+          style={
+            chooseType === 2
+              ? {...styles.infoView, display: 'none'}
+              : {...styles.infoView}
+          }>
+          {description.map((item, index) => (
+            <View key={index}>
+              {
+                // @ts-ignore
+                item.type === 1 ? (
                   <View style={{paddingBottom: scaleSize(7)}}>
                     <Text
                       style={{
@@ -214,11 +195,17 @@ export default class CourseDetail extends Component<
                         fontWeight: '600',
                         lineHeight: setSpText2(24),
                       }}>
-                      {item.value}
+                      {
+                        // @ts-ignore
+                        item.value
+                      }
                     </Text>
                   </View>
-                ) : null}
-                {item.type === 2 ? (
+                ) : null
+              }
+              {
+                // @ts-ignore
+                item.type === 2 ? (
                   <View style={{paddingBottom: scaleSize(7)}}>
                     <Text
                       style={{
@@ -226,107 +213,139 @@ export default class CourseDetail extends Component<
                         fontSize: setSpText2(15),
                         lineHeight: setSpText2(22.5),
                       }}>
-                      {item.value}
+                      {
+                        // @ts-ignore
+                        item.value
+                      }
                     </Text>
                   </View>
-                ) : null}
-                {item.type === 3 ? (
+                ) : null
+              }
+              {
+                // @ts-ignore
+                item.type === 3 ? (
                   <View style={{paddingBottom: scaleSize(7)}}>
-                    {item.value.map(
-                      (image: {url: string; height: number; width: number}) => (
-                        <Image
-                          key={image.url}
-                          source={{uri: image.url}}
-                          style={{
-                            width: scaleSize(343),
-                            height: (image.height * 343) / image.width,
-                          }}
-                        />
-                      ),
-                    )}
+                    {
+                      // @ts-ignore
+                      item.value.map(
+                        (image: {
+                          url: string;
+                          height: number;
+                          width: number;
+                        }) => (
+                          <Image
+                            key={image.url}
+                            source={{uri: image.url}}
+                            style={{
+                              width: scaleSize(343),
+                              height: (image.height * 343) / image.width,
+                            }}
+                          />
+                        ),
+                      )
+                    }
                   </View>
-                ) : null}
-              </View>
-            ))}
-          </View>
-          <View
-            style={
-              chooseType === 1
-                ? {...styles.infoView, display: 'none'}
-                : {...styles.infoView}
-            }>
-            {childList.map(item => (
+                ) : null
+              }
+            </View>
+          ))}
+        </View>
+        <View
+          style={
+            chooseType === 1
+              ? {...styles.infoView, display: 'none'}
+              : {...styles.infoView}
+          }>
+          {childList.map(item => (
+            <View
+              // @ts-ignore
+              key={item.id}
+              style={{
+                padding: scaleSize(10),
+                backgroundColor: '#f8f8f8',
+                marginBottom: scaleSize(6),
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
               <View
-                key={item.id}
                 style={{
-                  padding: scaleSize(10),
-                  backgroundColor: '#f8f8f8',
-                  marginBottom: scaleSize(6),
-                  flexDirection: 'row',
+                  width: scaleSize(220),
                   justifyContent: 'space-between',
                 }}>
-                <View
+                <Text style={{fontSize: setSpText2(15)}}>
+                  {
+                    // @ts-ignore
+                    item.name
+                  }
+                </Text>
+                <Text
                   style={{
-                    width: scaleSize(220),
-                    justifyContent: 'space-between',
+                    color: '#999',
+                    fontSize: setSpText2(12),
                   }}>
-                  <Text style={{fontSize: setSpText2(15)}}>{item.name}</Text>
-                  <Text
-                    style={{
-                      color: '#999',
-                      fontSize: setSpText2(12),
-                    }}>
-                    {item.type_name}：时长{item.duration}分钟
-                  </Text>
-                </View>
-                <Image
-                  source={{uri: `${item.pic}/thumb_medium`}}
-                  style={{
-                    width: scaleSize(100),
-                    height: scaleSize(66),
-                  }}
-                />
+                  {
+                    // @ts-ignore
+                    item.type_name
+                  }
+                  ：时长
+                  {
+                    // @ts-ignore
+                    item.duration
+                  }
+                  分钟
+                </Text>
               </View>
-            ))}
-          </View>
-        </ScrollView>
-        <View
-          style={{
-            height: scaleSize(50),
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-around',
-          }}>
-          <TouchableWithoutFeedback>
-            <View
-              style={{
-                backgroundColor: '#e6e5eb',
-                width: scaleSize(93),
-                height: scaleSize(41),
-                borderRadius: scaleSize(20.5),
-              }}>
-              <Text
+              <Image
+                // @ts-ignore
+                source={{uri: `${item.pic}/thumb_medium`}}
                 style={{
-                  fontSize: setSpText2(11),
-                  lineHeight: scaleSize(41),
-                  textAlign: 'center',
-                }}>
-                联系课代表
-              </Text>
+                  width: scaleSize(100),
+                  height: scaleSize(66),
+                }}
+              />
             </View>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback>
-            <View
+          ))}
+        </View>
+      </ScrollView>
+      <View
+        style={{
+          height: scaleSize(50),
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+        }}>
+        <TouchableWithoutFeedback>
+          <View
+            style={{
+              backgroundColor: '#e6e5eb',
+              width: scaleSize(93),
+              height: scaleSize(41),
+              borderRadius: scaleSize(20.5),
+            }}>
+            <Text
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: scaleSize(269),
-                height: scaleSize(41),
-                borderRadius: scaleSize(20.5),
-                backgroundColor: '#f26522',
+                fontSize: setSpText2(11),
+                lineHeight: scaleSize(41),
+                textAlign: 'center',
               }}>
-              {!baseInfo.is_buy && Number(baseInfo.present_price) !== 0 && (
+              联系课代表
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: scaleSize(269),
+              height: scaleSize(41),
+              borderRadius: scaleSize(20.5),
+              backgroundColor: '#f26522',
+            }}>
+            {
+              // @ts-ignore
+              !baseInfo.is_buy && Number(baseInfo.present_price) !== 0 && (
                 <Text
                   style={{
                     color: '#FFF',
@@ -334,8 +353,11 @@ export default class CourseDetail extends Component<
                   }}>
                   立即购买
                 </Text>
-              )}
-              {!baseInfo.is_buy && Number(baseInfo.present_price) === 0 && (
+              )
+            }
+            {
+              // @ts-ignore
+              !baseInfo.is_buy && Number(baseInfo.present_price) === 0 && (
                 <Text
                   style={{
                     color: '#FFF',
@@ -343,8 +365,11 @@ export default class CourseDetail extends Component<
                   }}>
                   免费
                 </Text>
-              )}
-              {!!baseInfo.is_buy && (
+              )
+            }
+            {
+              // @ts-ignore
+              !!baseInfo.is_buy && (
                 <Text
                   style={{
                     color: '#FFF',
@@ -352,11 +377,13 @@ export default class CourseDetail extends Component<
                   }}>
                   查看课程
                 </Text>
-              )}
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </SafeAreaView>
-    );
-  }
-}
+              )
+            }
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+export default CourseDetail;
