@@ -11,10 +11,6 @@ interface InterfaceState {
 }
 
 export default class Visited extends Component<{}, InterfaceState> {
-  public static navigationOptions = {
-    title: '浏览用户',
-  };
-
   constructor(props: Readonly<{}>) {
     super(props);
     this.state = {

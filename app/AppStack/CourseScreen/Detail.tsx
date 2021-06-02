@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
 import {getCourseDetail, getSubCurriculum} from '../../Services/course';
 import ApplicationStyles from '../../Theme/ApplicationStyles';
@@ -15,6 +15,7 @@ import styles from '../SpecialColumnScreen/Styles';
 
 const CourseDetail: React.FC = () => {
   const route = useRoute();
+  const navigation = useNavigation();
   const [baseInfo, setBaseInfo] = useState({});
   const [chooseType, setChooseType] = useState(0);
   const [description, setDescription] = useState([]);
@@ -27,8 +28,11 @@ const CourseDetail: React.FC = () => {
       const {id, columnId} = route.params;
       getCourseDetail({id, column_id: columnId}).then(
         async (res: {type: number; description: string}) => {
-          // console.log(res);
           setBaseInfo(res);
+          navigation.setOptions({
+            // @ts-ignore
+            title: res.name,
+          });
           if (res.type === 2) {
             getSubCurriculum({id}).then(data => {
               setChildList(data.list);

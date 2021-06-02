@@ -24,10 +24,6 @@ interface InterfaceProps {
 @inject('UserStore')
 @observer
 export default class InfoEditScreen extends Component<InterfaceProps> {
-  public static navigationOptions = {
-    title: '填写资料',
-  };
-
   constructor(prop: Readonly<InterfaceProps>) {
     super(prop);
   }

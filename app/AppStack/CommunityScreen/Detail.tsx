@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 // @ts-ignore
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -61,6 +61,7 @@ const colorSet = [
 
 const CommunityDetailScreen: React.FC = () => {
   const route = useRoute();
+  const navigation = useNavigation();
 
   const [data, setData] = useState({
     title: '',
@@ -83,6 +84,10 @@ const CommunityDetailScreen: React.FC = () => {
         const infoPromiseArray = res.list.map((item: any) => getInfo(item));
         const infos: any[] = await Promise.all(infoPromiseArray);
         const userIds = [...new Set(infos.map(item => item.nick_name))];
+        navigation.setOptions({
+          // @ts-ignore
+          title: res.title,
+        });
         setData({
           ...data,
           title: res.title,

@@ -11,10 +11,6 @@ interface InterfaceState {
 }
 
 export default class Inviter extends Component<{}, InterfaceState> {
-  public static navigationOptions = {
-    title: '购课粉丝',
-  };
-
   constructor(props: Readonly<{}>) {
     super(props);
     this.state = {

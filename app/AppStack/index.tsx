@@ -67,14 +67,18 @@ export default function AppStack() {
       <Stack.Screen
         name="Earnings"
         component={EarningsScreen}
-        options={EarningsScreen.navigationOptions}
+        options={() => ({title: '收益'})}
       />
       <Stack.Screen
         name="Visited"
         component={VisitedScreen}
-        options={VisitedScreen.navigationOptions}
+        options={() => ({title: '浏览用户'})}
       />
-      <Stack.Screen name="Inviter" component={InviterScreen} />
+      <Stack.Screen
+        name="Inviter"
+        component={InviterScreen}
+        options={() => ({title: '购课粉丝'})}
+      />
     </Stack.Navigator>
   );
 }

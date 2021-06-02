@@ -60,11 +60,7 @@ export default class FindScreen extends Component<
       this.state;
 
     const CommunityList = questionsList.map(question => (
-      <CommunityListComponent
-        key={question.id}
-        question={question}
-        navigation={this.props.navigation}
-      />
+      <CommunityListComponent key={question.id} question={question} />
     ));
 
     return (

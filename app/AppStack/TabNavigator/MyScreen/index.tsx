@@ -148,7 +148,6 @@ export default class MyScreen extends Component<
                 course={course}
                 recommend={false}
                 purchased={true}
-                navigation={this.props.navigation}
                 borderBottom={index !== purchasedCourses.length - 1}
               />
             ))}

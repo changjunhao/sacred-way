@@ -23,7 +23,7 @@ function InfoEdit() {
       <Stack.Screen
         name="InfoEdit"
         component={InfoEditScreen}
-        options={InfoEditScreen.navigationOptions}
+        options={() => ({title: '填写资料'})}
       />
     </Stack.Navigator>
   );

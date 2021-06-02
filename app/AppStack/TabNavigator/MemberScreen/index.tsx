@@ -185,7 +185,6 @@ export default class MemberScreen extends Component<
                     course={course}
                     recommend={true}
                     purchased={false}
-                    navigation={this.props.navigation}
                     borderBottom={index !== recommendList.length - 1}
                   />
                 ))}

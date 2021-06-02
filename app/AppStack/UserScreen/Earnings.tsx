@@ -11,10 +11,6 @@ interface InterfaceState {
 }
 
 export default class Earnings extends Component<{}, InterfaceState> {
-  public static navigationOptions = {
-    title: '收益',
-  };
-
   constructor(props: Readonly<{}>) {
     super(props);
     this.state = {

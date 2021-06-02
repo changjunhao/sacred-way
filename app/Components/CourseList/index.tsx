@@ -1,43 +1,41 @@
 import React from 'react';
 import {Image, Text, TouchableWithoutFeedback, View} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
 import LinearGradient from 'react-native-linear-gradient';
+import {useNavigation} from '@react-navigation/native';
 import {scaleSize} from '../../Lib/ScreenUtil';
 import ApplicationStyles from '../../Theme/ApplicationStyles';
 import styles from './Styles';
 
-type ScreenNavigationProp = StackNavigationProp<any>;
-
 interface InterfaceProps {
-  course: any;
+  course: Record<string, any>;
   borderBottom: boolean;
   recommend: boolean;
   purchased: boolean;
-  navigation: ScreenNavigationProp;
 }
 
 const CourseList: React.FC<InterfaceProps> = props => {
+  const navigation = useNavigation();
   const {course, borderBottom, recommend, purchased} = props;
 
   const navigationToDetail = () => {
     if (course.curriculum_type === 2 && !purchased) {
-      props.navigation.navigate('SpecialColumnDetail', {id: course.id});
+      navigation.navigate('SpecialColumnDetail', {id: course.id});
       return;
     }
     if (course.curriculum_type === 2 && purchased) {
-      props.navigation.navigate('SpecialColumnDetail', {
+      navigation.navigate('SpecialColumnDetail', {
         id: course.curriculum_id,
       });
       return;
     }
     if (recommend) {
-      props.navigation.navigate('CourseDetail', {
+      navigation.navigate('CourseDetail', {
         id: course.id,
         columnId: course.column,
       });
       return;
     }
-    props.navigation.navigate('CourseDetail', {
+    navigation.navigate('CourseDetail', {
       id: course.curriculum_id,
       columnId: course.column_id,
     });
