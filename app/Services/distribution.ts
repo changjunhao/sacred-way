@@ -1,13 +1,13 @@
-import {toJS} from 'mobx';
-import store from '../Stores/TokenStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import config from './config';
 
 const {BASEURL} = config;
 
-export function getPersonMoney() {
+export async function getPersonMoney() {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(`${BASEURL}/membercenter/Distribution/person_money`, {
     headers: {
-      USERSIGN: toJS(store).token,
+      USERSIGN: userToken || '',
     },
   })
     .then(response => response.json())
@@ -19,10 +19,11 @@ export function getPersonMoney() {
     });
 }
 
-export function getDirectRecommend() {
+export async function getDirectRecommend() {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(`${BASEURL}/membercenter/Distribution/direct_recommend`, {
     headers: {
-      USERSIGN: toJS(store).token,
+      USERSIGN: userToken || '',
     },
   })
     .then(response => response.json())
@@ -34,12 +35,13 @@ export function getDirectRecommend() {
     });
 }
 
-export function getUserIoList(params: {page: any; pageSize: any}) {
+export async function getUserIoList(params: {page: any; pageSize: any}) {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(
     `${BASEURL}/membercenter/Distribution/user_io_list?page=${params.page}&pageSize=${params.pageSize}`,
     {
       headers: {
-        USERSIGN: toJS(store).token,
+        USERSIGN: userToken || '',
       },
     },
   )
@@ -52,12 +54,13 @@ export function getUserIoList(params: {page: any; pageSize: any}) {
     });
 }
 
-export function getScanList(params: {page: any; pageSize: any}) {
+export async function getScanList(params: {page: any; pageSize: any}) {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(
     `${BASEURL}/membercenter/Distribution/scan_list?page=${params.page}&pageSize=${params.pageSize}`,
     {
       headers: {
-        USERSIGN: toJS(store).token,
+        USERSIGN: userToken || '',
       },
     },
   )
@@ -70,12 +73,13 @@ export function getScanList(params: {page: any; pageSize: any}) {
     });
 }
 
-export function getDirectUser(params: {page: any; pageSize: any}) {
+export async function getDirectUser(params: {page: any; pageSize: any}) {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(
     `${BASEURL}/membercenter/Distribution/direct_user?page=${params.page}&pageSize=${params.pageSize}`,
     {
       headers: {
-        USERSIGN: toJS(store).token,
+        USERSIGN: userToken || '',
       },
     },
   )

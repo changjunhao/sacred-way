@@ -1,6 +1,5 @@
-import {toJS} from 'mobx';
 import {Alert} from 'react-native';
-import store from '../Stores/TokenStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import config from './config';
 
 const {BASEURL} = config;
@@ -123,10 +122,11 @@ export function resetPassword(params: {
     });
 }
 
-export function getUserInfo() {
+export async function getUserInfo() {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(`${BASEURL}/membercenter/Userinfo/getUserInfo`, {
     headers: {
-      USERSIGN: toJS(store).token,
+      USERSIGN: userToken || '',
     },
   })
     .then(response => response.json())
@@ -138,7 +138,7 @@ export function getUserInfo() {
     });
 }
 
-export function setUserInfo(params: {
+export async function setUserInfo(params: {
   duty?: any;
   company?: any;
   weChatQR?: any;
@@ -156,10 +156,11 @@ export function setUserInfo(params: {
     speed: number;
   };
 }) {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(`${BASEURL}/membercenter/Userinfo/setUserInfo`, {
     method: 'POST',
     headers: {
-      USERSIGN: toJS(store).token,
+      USERSIGN: userToken || '',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({

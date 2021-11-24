@@ -1,13 +1,13 @@
-import {toJS} from 'mobx';
-import store from '../Stores/TokenStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import config from './config';
 
 const {BASEURL} = config;
 
-export function getSpecialColumnInfo(params: {id: any}) {
+export async function getSpecialColumnInfo(params: {id: any}) {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(`${BASEURL}/membercenter/Column/getColumnInfo?id=${params.id}`, {
     headers: {
-      USERSIGN: toJS(store).token,
+      USERSIGN: userToken || '',
     },
   })
     .then(response => response.json())

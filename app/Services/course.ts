@@ -1,13 +1,13 @@
-import {toJS} from 'mobx';
-import store from '../Stores/TokenStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import config from './config';
 
 const {BASEURL} = config;
 
-export function getCurriculumlist() {
+export async function getCurriculumlist() {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(`${BASEURL}/membercenter/curriculum/curriculumlist`, {
     headers: {
-      USERSIGN: toJS(store).token,
+      USERSIGN: userToken || '',
     },
   })
     .then(response => response.json())
@@ -19,10 +19,11 @@ export function getCurriculumlist() {
     });
 }
 
-export function getUserBuyed() {
+export async function getUserBuyed() {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(`${BASEURL}/membercenter/column/getUserBuyed`, {
     headers: {
-      USERSIGN: toJS(store).token,
+      USERSIGN: userToken || '',
     },
   })
     .then(response => response.json())
@@ -34,12 +35,13 @@ export function getUserBuyed() {
     });
 }
 
-export function getCourseList(params: {categoryId: any}) {
+export async function getCourseList(params: {categoryId: any}) {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(
     `${BASEURL}/membercenter/curriculum/getCurriculumByCategoryId?category_id=${params.categoryId}`,
     {
       headers: {
-        USERSIGN: toJS(store).token,
+        USERSIGN: userToken || '',
       },
     },
   )
@@ -52,12 +54,16 @@ export function getCourseList(params: {categoryId: any}) {
     });
 }
 
-export function getCourseDetail(params: {column_id?: string; id: string}) {
+export async function getCourseDetail(params: {
+  column_id?: string;
+  id: string;
+}) {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(
     `${BASEURL}/membercenter/curriculum/getCurriculumInfo?id=${params.id}`,
     {
       headers: {
-        USERSIGN: toJS(store).token,
+        USERSIGN: userToken || '',
       },
     },
   )
@@ -70,12 +76,13 @@ export function getCourseDetail(params: {column_id?: string; id: string}) {
     });
 }
 
-export function getSubCurriculum(params: {id: any}) {
+export async function getSubCurriculum(params: {id: any}) {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(
     `${BASEURL}/membercenter/curriculum/getSubCurriculum?curriculum_id=${params.id}`,
     {
       headers: {
-        USERSIGN: toJS(store).token,
+        USERSIGN: userToken || '',
       },
     },
   )

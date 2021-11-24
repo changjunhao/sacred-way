@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {
   Keyboard,
   Text,
@@ -9,16 +9,13 @@ import {
 import Picker from 'react-native-picker';
 // @ts-ignore
 import Icon from 'react-native-vector-icons/Ionicons';
+import UserContext from '../../context/userContext';
 import {scaleSize} from '../../Lib/ScreenUtil';
 import district from './district';
 import styles from './Styles';
 
-interface InterfaceProps {
-  UserStore: any;
-}
-
-const EditInfo: React.FC<InterfaceProps> = props => {
-  const {UserStore} = props;
+const EditInfo: React.FC = () => {
+  const {userState, userDispatch} = useContext(UserContext);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -38,19 +35,32 @@ const EditInfo: React.FC<InterfaceProps> = props => {
   }, []);
 
   useEffect(() => {
-    UserStore.setBaseInfo({
-      name: UserStore.info.real_name,
-      phone: UserStore.info.contact_number || UserStore.info.mobile_number,
-      location: UserStore.info.location,
+    userDispatch({
+      type: 'SET_BASE_INFO',
+      baseInfo: {
+        name: userState.info.real_name,
+        phone: userState.info.contact_number || userState.info.mobile_number,
+        location: userState.info.location,
+      },
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlePhoneChange = (phone: any) => {
-    UserStore.setBaseInfo({phone});
+    userDispatch({
+      type: 'SET_BASE_INFO',
+      baseInfo: {
+        phone,
+      },
+    });
   };
 
   const handleNameChange = (name: any) => {
-    UserStore.setBaseInfo({name});
+    userDispatch({
+      type: 'SET_BASE_INFO',
+      baseInfo: {
+        name,
+      },
+    });
   };
 
   const handlePickerShow = () => {
@@ -74,7 +84,12 @@ const EditInfo: React.FC<InterfaceProps> = props => {
             location += `-${data[2]}`;
           }
         }
-        UserStore.setBaseInfo({location});
+        userDispatch({
+          type: 'SET_BASE_INFO',
+          baseInfo: {
+            location,
+          },
+        });
       },
     });
     Picker.show();
@@ -91,7 +106,7 @@ const EditInfo: React.FC<InterfaceProps> = props => {
           style={styles.input}
           placeholderTextColor={'#8E8E8E'}
           placeholder={'请输入姓名（6个字）'}
-          defaultValue={UserStore.baseInfo.name}
+          defaultValue={userState.baseInfo.name}
           onChangeText={value => handleNameChange(value)}
         />
       </View>
@@ -104,7 +119,7 @@ const EditInfo: React.FC<InterfaceProps> = props => {
           style={styles.input}
           placeholderTextColor={'#8E8E8E'}
           placeholder={'请输入联系电话'}
-          defaultValue={UserStore.baseInfo.phone}
+          defaultValue={userState.baseInfo.phone}
           onChangeText={value => handlePhoneChange(value)}
         />
       </View>
@@ -114,7 +129,7 @@ const EditInfo: React.FC<InterfaceProps> = props => {
           <Text style={styles.labelText}>所在地</Text>
         </View>
         <TouchableHighlight underlayColor="white" onPress={handlePickerShow}>
-          <Text style={styles.input}>{UserStore.baseInfo.location}</Text>
+          <Text style={styles.input}>{userState.baseInfo.location}</Text>
         </TouchableHighlight>
       </View>
     </>

@@ -1,5 +1,4 @@
-import {inject, observer} from 'mobx-react';
-import React, {Component} from 'react';
+import React, {FC, useContext} from 'react';
 import {
   Alert,
   SafeAreaView,
@@ -8,79 +7,67 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import UserContext from '../context/userContext';
 import EditInfo from '../Components/EditInfo';
 import {scaleSize, setSpText2} from '../Lib/ScreenUtil';
 import {setUserInfo} from '../Services/user';
 import ApplicationStyles from '../Theme/ApplicationStyles';
 
-type ScreenNavigationProp = StackNavigationProp<any>;
+const InfoEditScreen: FC = () => {
+  const {userState, userDispatch} = useContext(UserContext);
+  const baseInfo = userState.baseInfo || {};
 
-interface InterfaceProps {
-  UserStore: any;
-  navigation: ScreenNavigationProp;
-}
-
-@inject('UserStore')
-@observer
-export default class InfoEditScreen extends Component<InterfaceProps> {
-  constructor(prop: Readonly<InterfaceProps>) {
-    super(prop);
-  }
-
-  public render() {
-    const {baseInfo} = this.props.UserStore;
-
-    return (
-      <SafeAreaView style={{flex: 1}}>
-        <View
-          style={{
-            ...ApplicationStyles.mainContainer,
-          }}>
-          <View style={styles.tipView}>
-            <Text style={styles.tipText}>
-              为了能提供更好的服务，请认真填写以下信息
-            </Text>
-          </View>
-          <EditInfo UserStore={this.props.UserStore} />
-        </View>
-        <TouchableHighlight
-          disabled={
-            baseInfo.phone === '' ||
-            baseInfo.name === '' ||
-            baseInfo.location === ''
-          }
-          underlayColor="white"
-          onPress={this.handleSubmit}>
-          <View
-            style={
-              baseInfo.phone !== '' &&
-              baseInfo.name !== '' &&
-              baseInfo.location !== ''
-                ? {...styles.button, ...styles.buttonActive}
-                : {...styles.button, ...styles.buttonDisable}
-            }>
-            <Text style={styles.buttonText}>完成</Text>
-          </View>
-        </TouchableHighlight>
-      </SafeAreaView>
-    );
-  }
-
-  private handleSubmit = async () => {
+  const handleSubmit = async () => {
     const response = await setUserInfo({
-      name: this.props.UserStore.baseInfo.name,
-      phone: this.props.UserStore.baseInfo.phone,
-      location: this.props.UserStore.baseInfo.location,
+      name: baseInfo.name,
+      phone: baseInfo.phone,
+      location: baseInfo.location,
     });
     if (response.errno !== 0) {
       Alert.alert(response.errmsg);
     } else {
-      this.props.UserStore.setInfo(response.data);
-      this.props.UserStore.setInfoEdit(false);
+      userDispatch({type: 'SET_INFO', info: response.data});
+      userDispatch({
+        type: 'SET_INFO_EDIT',
+        infoEdit: false,
+      });
     }
   };
-}
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <View
+        style={{
+          ...ApplicationStyles.mainContainer,
+        }}>
+        <View style={styles.tipView}>
+          <Text style={styles.tipText}>
+            为了能提供更好的服务，请认真填写以下信息
+          </Text>
+        </View>
+        <EditInfo />
+      </View>
+      <TouchableHighlight
+        disabled={
+          baseInfo.phone === '' ||
+          baseInfo.name === '' ||
+          baseInfo.location === ''
+        }
+        underlayColor="white"
+        onPress={handleSubmit}>
+        <View
+          style={
+            baseInfo.phone !== '' &&
+            baseInfo.name !== '' &&
+            baseInfo.location !== ''
+              ? {...styles.button, ...styles.buttonActive}
+              : {...styles.button, ...styles.buttonDisable}
+          }>
+          <Text style={styles.buttonText}>完成</Text>
+        </View>
+      </TouchableHighlight>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   tipView: {
@@ -110,3 +97,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#bfc4d0',
   },
 });
+
+export default InfoEditScreen;

@@ -11,6 +11,9 @@ const TabNavigator: React.FC = () => {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
+        headerShown: false,
+        tabBarActiveTintColor: '#FF5400',
+        tabBarInactiveTintColor: '#A4A4AE',
         tabBarIcon: ({focused}) => {
           const routeName = route.name;
           let Icon;
@@ -75,11 +78,7 @@ const TabNavigator: React.FC = () => {
             </Text>
           );
         },
-      })}
-      tabBarOptions={{
-        activeTintColor: '#FF5400',
-        inactiveTintColor: '#A4A4AE',
-      }}>
+      })}>
       <Tab.Screen name="Find" component={FindScreen} />
       <Tab.Screen name="Member" component={MemberScreen} />
       <Tab.Screen name="My" component={MyScreen} />

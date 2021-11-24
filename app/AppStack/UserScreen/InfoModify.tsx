@@ -1,5 +1,4 @@
-import {inject, observer} from 'mobx-react';
-import React, {Component} from 'react';
+import React, {FC, useContext, useState} from 'react';
 import {
   Alert,
   Image,
@@ -18,6 +17,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {ImageLibraryOptions} from 'react-native-image-picker/src/types';
 // @ts-ignore
 import Icon from 'react-native-vector-icons/AntDesign';
+import UserContext from '../../context/userContext';
 import EditInfo from '../../Components/EditInfo';
 import InputStyles from '../../Components/EditInfo/Styles';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
@@ -26,205 +26,22 @@ import ApplicationStyles from '../../Theme/ApplicationStyles';
 
 type ScreenNavigationProp = StackNavigationProp<any>;
 interface InterfaceProps {
-  UserStore: any;
   navigation: ScreenNavigationProp;
 }
 
-interface InterfaceStates {
-  avatar: string;
-  nickName: string;
-  weChat: string;
-  weChatQR: string;
-  company: string;
-  duty: string;
-  trade: string;
-}
+const InfoModify: FC<InterfaceProps> = props => {
+  const {userState, userDispatch} = useContext(UserContext);
+  const baseInfo = userState.baseInfo || {};
+  const [avatar, setAvatar] = useState(userState.info.head_img);
+  const [nickName, setNickName] = useState('');
+  const [weChat, setWeChat] = useState('');
+  const [weChatQR, setWeChatQR] = useState('');
+  const [company, setCompany] = useState('');
+  const [duty, setDuty] = useState('');
+  const [trade, setTrade] = useState('');
 
-@inject('UserStore')
-@observer
-export default class InfoModify extends Component<
-  InterfaceProps,
-  InterfaceStates
-> {
-  constructor(prop: Readonly<InterfaceProps>) {
-    super(prop);
-    this.state = {
-      avatar: this.props.UserStore.info.head_img,
-      nickName: '',
-      weChat: '',
-      weChatQR: '',
-      company: '',
-      duty: '',
-      trade: '',
-    };
-  }
-
-  public render() {
-    const {baseInfo} = this.props.UserStore;
-
-    // TODO keyboardVerticalOffset 需判断设备
-    return (
-      <SafeAreaView style={{flex: 1}}>
-        <KeyboardAvoidingView
-          style={{flex: 1}}
-          // @ts-ignore
-          behavior={Platform.OS === 'ios' ? 'padding' : ''}
-          keyboardVerticalOffset={88}
-          enabled>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{
-              ...ApplicationStyles.mainContainer,
-            }}>
-            <View style={styles.avatarActionView}>
-              <TouchableHighlight
-                underlayColor="white"
-                onPress={() => this.handleSelectImage('avatar')}>
-                <View>
-                  <Image
-                    style={styles.avatar}
-                    source={
-                      this.state.avatar
-                        ? {uri: this.state.avatar}
-                        : require('../../Images/mrtx.png')
-                    }
-                    resizeMode={'cover'}
-                  />
-                  <Text style={styles.avatarTip}>点击修改头像</Text>
-                </View>
-              </TouchableHighlight>
-            </View>
-            <View style={ApplicationStyles.hr} />
-            <View style={styles.infoView}>
-              <EditInfo UserStore={this.props.UserStore} />
-            </View>
-            <View style={ApplicationStyles.hr} />
-            <View style={styles.infoView}>
-              <View>
-                <View style={InputStyles.labelView}>
-                  <Text style={InputStyles.labelText}>昵称</Text>
-                </View>
-                <TextInput
-                  style={InputStyles.input}
-                  placeholderTextColor={'#8E8E8E'}
-                  placeholder={'请输入昵称（6个字）'}
-                  defaultValue={this.props.UserStore.info.nick_name}
-                  onChangeText={nickName => this.setState({nickName})}
-                />
-              </View>
-              <View>
-                <View style={InputStyles.labelView}>
-                  <Text style={InputStyles.labelText}>微信号</Text>
-                </View>
-                <TextInput
-                  style={InputStyles.input}
-                  placeholderTextColor={'#8E8E8E'}
-                  placeholder={'请输入微信号（20个字）'}
-                  defaultValue={this.props.UserStore.info.wechat}
-                  onChangeText={weChat => this.setState({weChat})}
-                />
-              </View>
-              <View>
-                <View style={InputStyles.labelView}>
-                  <Text style={InputStyles.labelText}>微信二维码</Text>
-                </View>
-                <TouchableHighlight
-                  underlayColor="white"
-                  // @ts-ignore
-                  onPress={this.handleSelectImage}>
-                  <View
-                    style={{
-                      ...styles.weChatQRView,
-                    }}>
-                    {this.state.weChatQR ||
-                    this.props.UserStore.info.wechat_qrcode ? (
-                      <Image
-                        style={{
-                          ...styles.weChatQR,
-                        }}
-                        resizeMode={'cover'}
-                        source={{
-                          uri:
-                            this.state.weChatQR ||
-                            this.props.UserStore.info.wechat_qrcode,
-                        }}
-                      />
-                    ) : (
-                      <Icon
-                        size={setSpText2(40)}
-                        color={'#272A32'}
-                        name={'plus'}
-                      />
-                    )}
-                  </View>
-                </TouchableHighlight>
-              </View>
-              <View>
-                <View style={InputStyles.labelView}>
-                  <Text style={InputStyles.labelText}>公司名称</Text>
-                </View>
-                <TextInput
-                  style={InputStyles.input}
-                  placeholderTextColor={'#8E8E8E'}
-                  placeholder={'请输入公司名称（20个字）'}
-                  defaultValue={this.props.UserStore.info.company}
-                  onChangeText={company => this.setState({company})}
-                />
-              </View>
-              <View>
-                <View style={InputStyles.labelView}>
-                  <Text style={InputStyles.labelText}>职务名称</Text>
-                </View>
-                <TextInput
-                  style={InputStyles.input}
-                  placeholderTextColor={'#8E8E8E'}
-                  placeholder={'请输入职务名称（10个字）'}
-                  defaultValue={this.props.UserStore.info.duty}
-                  onChangeText={duty => this.setState({duty})}
-                />
-              </View>
-              <View>
-                <View style={InputStyles.labelView}>
-                  <Text style={InputStyles.labelText}>所属行业</Text>
-                </View>
-                <TextInput
-                  style={InputStyles.input}
-                  placeholderTextColor={'#8E8E8E'}
-                  placeholder={'请输入所属行业（10个字）'}
-                  defaultValue={this.props.UserStore.info.trade}
-                  onChangeText={trade => this.setState({trade})}
-                />
-              </View>
-            </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-        <TouchableHighlight
-          disabled={
-            baseInfo.phone === '' ||
-            baseInfo.name === '' ||
-            baseInfo.location === ''
-          }
-          underlayColor="white"
-          onPress={this.handleSubmit}>
-          <View
-            style={
-              baseInfo.phone !== '' &&
-              baseInfo.name !== '' &&
-              baseInfo.location !== ''
-                ? {...styles.button, ...styles.buttonActive}
-                : {...styles.button, ...styles.buttonDisable}
-            }>
-            <Text style={styles.buttonText}>完成</Text>
-          </View>
-        </TouchableHighlight>
-      </SafeAreaView>
-    );
-  }
-
-  private handleSubmit = async () => {
-    const {name, phone, location} = this.props.UserStore.baseInfo;
-    const {avatar, nickName, weChat, weChatQR, company, duty, trade} =
-      this.state;
+  const handleSubmit = async () => {
+    const {name, phone, location} = baseInfo;
     await setUserInfo({
       name,
       phone,
@@ -238,15 +55,15 @@ export default class InfoModify extends Component<
       trade,
     }).then(res => {
       if (res.errno === 0) {
-        this.props.UserStore.setInfo(res.data);
-        this.props.navigation.goBack();
+        userDispatch({type: 'SET_INFO', info: res.data});
+        props.navigation.goBack();
       } else {
         Alert.alert(res.errmsg);
       }
     });
   };
 
-  private handleSelectImage = (type: string) => {
+  const handleSelectImage = (type: string) => {
     const options: ImageLibraryOptions = {
       // includeBase64: true,
       mediaType: 'photo',
@@ -261,18 +78,14 @@ export default class InfoModify extends Component<
         const assets = response.assets;
         uploadAvatar({
           // data: assets[0].base64,
-          uri: assets[0].uri,
-          name: assets[0].fileName,
+          uri: assets?.[0]?.uri,
+          name: assets?.[0]?.fileName,
         }).then(res => {
           if (res.errno === 0) {
             if (type === 'avatar') {
-              this.setState({
-                avatar: res.data.info.file_url,
-              });
+              setAvatar(res.data.info.file_url);
             } else {
-              this.setState({
-                weChatQR: res.data.info.file_url,
-              });
+              setWeChatQR(res.data.info.file_url);
             }
           } else {
             Alert.alert(res.errmsg);
@@ -281,7 +94,159 @@ export default class InfoModify extends Component<
       }
     });
   };
-}
+
+  // TODO keyboardVerticalOffset 需判断设备
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        // @ts-ignore
+        behavior={Platform.OS === 'ios' ? 'padding' : ''}
+        keyboardVerticalOffset={88}
+        enabled>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{
+            ...ApplicationStyles.mainContainer,
+          }}>
+          <View style={styles.avatarActionView}>
+            <TouchableHighlight
+              underlayColor="white"
+              onPress={() => handleSelectImage('avatar')}>
+              <View>
+                <Image
+                  style={styles.avatar}
+                  source={
+                    avatar ? {uri: avatar} : require('../../Images/mrtx.png')
+                  }
+                  resizeMode={'cover'}
+                />
+                <Text style={styles.avatarTip}>点击修改头像</Text>
+              </View>
+            </TouchableHighlight>
+          </View>
+          <View style={ApplicationStyles.hr} />
+          <View style={styles.infoView}>
+            <EditInfo />
+          </View>
+          <View style={ApplicationStyles.hr} />
+          <View style={styles.infoView}>
+            <View>
+              <View style={InputStyles.labelView}>
+                <Text style={InputStyles.labelText}>昵称</Text>
+              </View>
+              <TextInput
+                style={InputStyles.input}
+                placeholderTextColor={'#8E8E8E'}
+                placeholder={'请输入昵称（6个字）'}
+                defaultValue={userState.info.nick_name}
+                onChangeText={val => setNickName(val)}
+              />
+            </View>
+            <View>
+              <View style={InputStyles.labelView}>
+                <Text style={InputStyles.labelText}>微信号</Text>
+              </View>
+              <TextInput
+                style={InputStyles.input}
+                placeholderTextColor={'#8E8E8E'}
+                placeholder={'请输入微信号（20个字）'}
+                defaultValue={userState.info.wechat}
+                onChangeText={val => setWeChat(val)}
+              />
+            </View>
+            <View>
+              <View style={InputStyles.labelView}>
+                <Text style={InputStyles.labelText}>微信二维码</Text>
+              </View>
+              <TouchableHighlight
+                underlayColor="white"
+                onPress={() => handleSelectImage('qr')}>
+                <View
+                  style={{
+                    ...styles.weChatQRView,
+                  }}>
+                  {weChatQR || userState.info.wechat_qrcode ? (
+                    <Image
+                      style={{
+                        ...styles.weChatQR,
+                      }}
+                      resizeMode={'cover'}
+                      source={{
+                        uri: weChatQR || userState.info.wechat_qrcode,
+                      }}
+                    />
+                  ) : (
+                    <Icon
+                      size={setSpText2(40)}
+                      color={'#272A32'}
+                      name={'plus'}
+                    />
+                  )}
+                </View>
+              </TouchableHighlight>
+            </View>
+            <View>
+              <View style={InputStyles.labelView}>
+                <Text style={InputStyles.labelText}>公司名称</Text>
+              </View>
+              <TextInput
+                style={InputStyles.input}
+                placeholderTextColor={'#8E8E8E'}
+                placeholder={'请输入公司名称（20个字）'}
+                defaultValue={userState.info.company}
+                onChangeText={val => setCompany(val)}
+              />
+            </View>
+            <View>
+              <View style={InputStyles.labelView}>
+                <Text style={InputStyles.labelText}>职务名称</Text>
+              </View>
+              <TextInput
+                style={InputStyles.input}
+                placeholderTextColor={'#8E8E8E'}
+                placeholder={'请输入职务名称（10个字）'}
+                defaultValue={userState.info.duty}
+                onChangeText={val => setDuty(val)}
+              />
+            </View>
+            <View>
+              <View style={InputStyles.labelView}>
+                <Text style={InputStyles.labelText}>所属行业</Text>
+              </View>
+              <TextInput
+                style={InputStyles.input}
+                placeholderTextColor={'#8E8E8E'}
+                placeholder={'请输入所属行业（10个字）'}
+                defaultValue={userState.info.trade}
+                onChangeText={val => setTrade(val)}
+              />
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+      <TouchableHighlight
+        disabled={
+          baseInfo.phone === '' ||
+          baseInfo.name === '' ||
+          baseInfo.location === ''
+        }
+        underlayColor="white"
+        onPress={handleSubmit}>
+        <View
+          style={
+            baseInfo.phone !== '' &&
+            baseInfo.name !== '' &&
+            baseInfo.location !== ''
+              ? {...styles.button, ...styles.buttonActive}
+              : {...styles.button, ...styles.buttonDisable}
+          }>
+          <Text style={styles.buttonText}>完成</Text>
+        </View>
+      </TouchableHighlight>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   avatarActionView: {
@@ -332,3 +297,5 @@ const styles = StyleSheet.create({
     height: scaleSize(90),
   },
 });
+
+export default InfoModify;

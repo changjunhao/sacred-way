@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {inject, observer} from 'mobx-react';
-import React, {Component, Fragment} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import {
   ActionSheetIOS,
   Alert,
@@ -14,167 +13,45 @@ import {
   View,
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import UserContext from '../../../context/userContext';
+import AuthContext from '../../../context/authContext';
 import CourseListComponent from '../../../Components/CourseList';
 import {scaleSize, setSpText2} from '../../../Lib/ScreenUtil';
-// import { getUserInfo } from '../../../Services/user';
+// import {getUserInfo} from '../../../Services/user';
 import {getUserBuyed} from '../../../Services/course';
 import ApplicationStyles from '../../../Theme/ApplicationStyles';
 
 type ScreenNavigationProp = StackNavigationProp<any>;
-
-interface InterfaceMyState {
-  userInfo: any;
-  purchasedCourses: any[];
-}
-
 interface InterfaceProps {
-  UserStore: any;
-  tokenStore: any;
   navigation: ScreenNavigationProp;
 }
 
-@inject('UserStore', 'tokenStore')
-@observer
-export default class MyScreen extends Component<
-  InterfaceProps,
-  InterfaceMyState
-> {
-  constructor(props: Readonly<InterfaceProps>) {
-    super(props);
-    this.state = {
-      userInfo: {},
-      purchasedCourses: [],
-    };
-  }
+const MyScree: FC<InterfaceProps> = props => {
+  const {dispatch} = useContext(AuthContext);
+  const {userState} = useContext(UserContext);
 
-  componentDidMount() {
-    this.props.navigation.addListener('focus', () => {
-      this.fetchData();
-    });
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [userInfo, setUserInfo] = useState(userState.info || {});
+  const [purchasedCourses, setPurchasedCourses] = useState<any[]>([]);
 
-  public render() {
-    const {userInfo, purchasedCourses} = this.state;
-
-    return (
-      <Fragment>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{
-            ...ApplicationStyles.mainContainer,
-          }}>
-          <ImageBackground
-            source={require('../../../Images/tab_member_images/bg.png')}
-            style={styles.cardBackgroundImage}
-            imageStyle={{
-              resizeMode: 'cover',
-              borderRadius: 4,
-            }}>
-            <View style={{flexDirection: 'row-reverse'}}>
-              <TouchableWithoutFeedback onPress={this.showActionSheet}>
-                <Image
-                  source={require('../../../Images/tab_member_images/shezhi.png')}
-                />
-              </TouchableWithoutFeedback>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginTop: scaleSize(9),
-                marginBottom: scaleSize(16),
-              }}>
-              <Image
-                style={styles.avatar}
-                source={
-                  userInfo.head_img
-                    ? {uri: userInfo.head_img}
-                    : require('../../../Images/mrtx.png')
-                }
-                resizeMode={'cover'}
-              />
-              <View
-                style={{
-                  marginLeft: scaleSize(16),
-                  height: scaleSize(50),
-                  justifyContent: 'space-around',
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                  <Text
-                    style={{
-                      color: '#FEE3A6',
-                      fontSize: setSpText2(16),
-                      marginRight: scaleSize(8),
-                    }}>
-                    {userInfo.real_name || userInfo.nick_name}
-                  </Text>
-                  {userInfo.member_name && (
-                    <Text
-                      style={{
-                        fontSize: setSpText2(12),
-                        color: '#E4CA91',
-                        backgroundColor: '#5A5952',
-                        paddingHorizontal: scaleSize(12),
-                        paddingVertical: scaleSize(5),
-                      }}>
-                      {userInfo.member_name}
-                    </Text>
-                  )}
-                </View>
-                <Text
-                  style={{
-                    color: '#FEE3A6',
-                    fontSize: setSpText2(11),
-                  }}>
-                  {userInfo.mobile_number}
-                </Text>
-              </View>
-            </View>
-          </ImageBackground>
-          <View style={{paddingVertical: scaleSize(25)}}>
-            <Text
-              style={{
-                ...ApplicationStyles.contentListTitle,
-              }}>
-              我学习的课程
-            </Text>
-            {purchasedCourses.map((course, index) => (
-              <CourseListComponent
-                key={course.curriculum_id}
-                course={course}
-                recommend={false}
-                purchased={true}
-                borderBottom={index !== purchasedCourses.length - 1}
-              />
-            ))}
-          </View>
-        </ScrollView>
-      </Fragment>
-    );
-  }
-
-  private fetchData = () => {
-    this.setState({
-      userInfo: this.props.UserStore.info,
-    });
-    // getUserInfo()
-    //   .then((userInfo) => {
-    //     this.setState({
-    //       userInfo,
-    //     });
-    //   });
+  const fetchData = () => {
+    // getUserInfo().then(res => {
+    //   setUserInfo(res);
+    // });
     getUserBuyed().then(res => {
-      this.setState({
-        purchasedCourses: res.curriculum_list,
-      });
+      setPurchasedCourses(res.curriculum_list);
     });
   };
 
-  private showActionSheet = () => {
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      fetchData();
+    });
+
+    return unsubscribe;
+  }, [props.navigation]);
+
+  const showActionSheet = () => {
     if (Platform.OS === 'ios') {
       ActionSheetIOS.showActionSheetWithOptions(
         {
@@ -184,10 +61,10 @@ export default class MyScreen extends Component<
         },
         buttonIndex => {
           if (buttonIndex === 0) {
-            this.props.navigation.navigate('InfoModify');
+            props.navigation.navigate('InfoModify');
           }
           if (buttonIndex === 1) {
-            this.props.navigation.navigate('PasswordModify');
+            props.navigation.navigate('PasswordModify');
           }
           if (buttonIndex === 2) {
             Alert.alert(
@@ -197,7 +74,7 @@ export default class MyScreen extends Component<
                 {text: '取消', style: 'cancel'},
                 {
                   text: '确认退出',
-                  onPress: () => this.signOutAsync(),
+                  onPress: () => signOutAsync(),
                   style: 'destructive',
                 },
               ],
@@ -211,11 +88,111 @@ export default class MyScreen extends Component<
     }
   };
 
-  private signOutAsync = async () => {
+  const signOutAsync = async () => {
     await AsyncStorage.clear();
-    this.props.tokenStore.setToken('');
+    dispatch({type: 'SIGN_OUT'});
   };
-}
+
+  return (
+    <>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{
+          ...ApplicationStyles.mainContainer,
+        }}>
+        <ImageBackground
+          source={require('../../../Images/tab_member_images/bg.png')}
+          style={styles.cardBackgroundImage}
+          imageStyle={{
+            resizeMode: 'cover',
+            borderRadius: 4,
+          }}>
+          <View style={{flexDirection: 'row-reverse'}}>
+            <TouchableWithoutFeedback onPress={showActionSheet}>
+              <Image
+                source={require('../../../Images/tab_member_images/shezhi.png')}
+              />
+            </TouchableWithoutFeedback>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: scaleSize(9),
+              marginBottom: scaleSize(16),
+            }}>
+            <Image
+              style={styles.avatar}
+              source={
+                userInfo.head_img
+                  ? {uri: userInfo.head_img}
+                  : require('../../../Images/mrtx.png')
+              }
+              resizeMode={'cover'}
+            />
+            <View
+              style={{
+                marginLeft: scaleSize(16),
+                height: scaleSize(50),
+                justifyContent: 'space-around',
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                <Text
+                  style={{
+                    color: '#FEE3A6',
+                    fontSize: setSpText2(16),
+                    marginRight: scaleSize(8),
+                  }}>
+                  {userInfo.real_name || userInfo.nick_name}
+                </Text>
+                {userInfo.member_name && (
+                  <Text
+                    style={{
+                      fontSize: setSpText2(12),
+                      color: '#E4CA91',
+                      backgroundColor: '#5A5952',
+                      paddingHorizontal: scaleSize(12),
+                      paddingVertical: scaleSize(5),
+                    }}>
+                    {userInfo.member_name}
+                  </Text>
+                )}
+              </View>
+              <Text
+                style={{
+                  color: '#FEE3A6',
+                  fontSize: setSpText2(11),
+                }}>
+                {userInfo.mobile_number}
+              </Text>
+            </View>
+          </View>
+        </ImageBackground>
+        <View style={{paddingVertical: scaleSize(25)}}>
+          <Text
+            style={{
+              ...ApplicationStyles.contentListTitle,
+            }}>
+            我学习的课程
+          </Text>
+          {purchasedCourses.map((course, index) => (
+            <CourseListComponent
+              key={course.curriculum_id}
+              course={course}
+              recommend={false}
+              purchased={true}
+              borderBottom={index !== purchasedCourses.length - 1}
+            />
+          ))}
+        </View>
+      </ScrollView>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   cardBackgroundImage: {
@@ -315,3 +292,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default MyScree;

@@ -1,15 +1,15 @@
-import {toJS} from 'mobx';
-import store from '../Stores/TokenStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import config from './config';
 
 const {BASEURL} = config;
 
-export function getCommunityList(params: {type: any}) {
+export async function getCommunityList(params: {type: any}) {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(
     `${BASEURL}/membercenter/communityEssence/getCommunityList?type=${params.type}`,
     {
       headers: {
-        USERSIGN: toJS(store).token,
+        USERSIGN: userToken || '',
       },
     },
   )
@@ -22,12 +22,13 @@ export function getCommunityList(params: {type: any}) {
     });
 }
 
-export function getCommunityInfo(params: {id: any}) {
+export async function getCommunityInfo(params: {id: any}) {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(
     `${BASEURL}/membercenter/communityEssence/getCommunityInfo?id=${params.id}`,
     {
       headers: {
-        USERSIGN: toJS(store).token,
+        USERSIGN: userToken || '',
       },
     },
   )

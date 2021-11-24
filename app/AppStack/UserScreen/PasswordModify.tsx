@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {inject, observer} from 'mobx-react';
-import React, {Component, Fragment} from 'react';
+import React, {FC, Fragment, useContext, useState} from 'react';
 import {
   Alert,
   SafeAreaView,
@@ -10,173 +9,46 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import AuthContext from '../../context/authContext';
+import UserContext from '../../context/userContext';
 import InputStyles from '../../AuthStack/Styles';
-import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
 import {
   checkVerificationCode,
   resetPassword,
   sendMobileMessage,
 } from '../../Services/user';
+import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
 
-interface InterfaceStates {
-  password: string;
-  repeatPassword: string;
-  code: string;
-  content: string;
-  totalTime: number;
-  canClick: boolean;
-  next: boolean;
-}
+const PasswordModify: FC = () => {
+  const {userState} = useContext(UserContext);
+  const {dispatch} = useContext(AuthContext);
 
-type ScreenNavigationProp = StackNavigationProp<any>;
+  const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
+  const [content, setContent] = useState('发送验证码');
+  const [totalTime, setTotalTime] = useState(60);
+  const [canClick, setCanClick] = useState(true);
+  const [code, setCode] = useState('');
+  const [next, setNext] = useState(false);
 
-interface InterfaceProps {
-  UserStore: any;
-  tokenStore: any;
-  navigation: ScreenNavigationProp;
-}
-
-@inject('UserStore', 'tokenStore')
-@observer
-export default class PasswordModify extends Component<
-  InterfaceProps,
-  InterfaceStates
-> {
-  constructor(props: Readonly<InterfaceProps>) {
-    super(props);
-    this.state = {
-      password: '',
-      repeatPassword: '',
-      code: '',
-      content: '发送验证码',
-      totalTime: 60,
-      canClick: true,
-      next: false,
-    };
-  }
-
-  public render() {
-    const {next} = this.state;
-
-    const VerificationCode = (
-      <Fragment>
-        <View>
-          <Text style={styles.phone}>当前注册手机号</Text>
-          <Text style={styles.phone}>
-            {this.props.UserStore.info.mobile_number.replace(
-              /^(\d{3})\d{4}(\d+)/,
-              '$1****$2',
-            )}
-          </Text>
-        </View>
-        <View style={InputStyles.inputView}>
-          <TextInput
-            style={InputStyles.input}
-            placeholderTextColor={'#8E8E8E'}
-            placeholder={'请输入验证码'}
-            keyboardType={'numeric'}
-            textContentType={'oneTimeCode'}
-            onChangeText={code => this.setState({code})}
-          />
-          <TouchableHighlight
-            underlayColor="white"
-            onPress={this.sendMobileMessage}>
-            <Text>{this.state.content}</Text>
-          </TouchableHighlight>
-        </View>
-        <TouchableHighlight
-          disabled={this.state.code === ''}
-          onPressIn={this.next}
-          underlayColor="white">
-          <View
-            style={
-              this.state.code !== ''
-                ? {...InputStyles.button, ...InputStyles.buttonActive}
-                : {...InputStyles.button, ...InputStyles.buttonDisable}
-            }>
-            <Text style={InputStyles.buttonText}>下一步</Text>
-          </View>
-        </TouchableHighlight>
-      </Fragment>
-    );
-
-    const PassWord = (
-      <Fragment>
-        <View style={InputStyles.inputView}>
-          <TextInput
-            style={InputStyles.input}
-            placeholderTextColor={'#8E8E8E'}
-            placeholder={'请输入新密码'}
-            secureTextEntry={true}
-            textContentType={'newPassword'}
-            value={this.state.password}
-            onChangeText={password => this.setState({password})}
-          />
-        </View>
-        <View style={InputStyles.inputView}>
-          <TextInput
-            style={InputStyles.input}
-            placeholderTextColor={'#8E8E8E'}
-            placeholder={'请再次输入新密码'}
-            secureTextEntry={true}
-            textContentType={'newPassword'}
-            value={this.state.repeatPassword}
-            onChangeText={repeatPassword => this.setState({repeatPassword})}
-          />
-        </View>
-        <TouchableHighlight
-          disabled={
-            this.state.password === '' && this.state.repeatPassword === ''
-          }
-          onPressIn={this.resetPassword}
-          underlayColor="white">
-          <View
-            style={
-              this.state.password !== '' && this.state.repeatPassword !== ''
-                ? {...InputStyles.button, ...InputStyles.buttonActive}
-                : {...InputStyles.button, ...InputStyles.buttonDisable}
-            }>
-            <Text style={InputStyles.buttonText}>完成</Text>
-          </View>
-        </TouchableHighlight>
-      </Fragment>
-    );
-
-    return (
-      <SafeAreaView>
-        <View
-          style={{
-            ...InputStyles.container,
-            paddingTop: scaleSize(20),
-          }}>
-          <View style={!next ? {display: 'none'} : {}}>{PassWord}</View>
-          <View style={next ? {display: 'none'} : {}}>{VerificationCode}</View>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  private next = async () => {
+  const handleNext = async () => {
     const response = await checkVerificationCode({
-      phone: this.props.UserStore.info.mobile_number,
-      code: this.state.code,
+      phone: userState.info.mobile_number,
+      code: code,
     });
     if (response.errno !== 0) {
       Alert.alert(response.errmsg);
     } else {
-      this.setState({
-        next: true,
-      });
+      setNext(true);
     }
   };
 
-  private resetPassword = async () => {
+  const handleResetPassword = async () => {
     const response = await resetPassword({
-      phone: this.props.UserStore.info.mobile_number,
-      code: this.state.code,
-      password: this.state.password,
-      repeatPassword: this.state.repeatPassword,
+      phone: userState.info.mobile_number,
+      code,
+      password,
+      repeatPassword,
     });
     if (response.errno !== 0) {
       Alert.alert(response.errmsg);
@@ -184,59 +56,144 @@ export default class PasswordModify extends Component<
       Alert.alert(
         '提示',
         '密码已修改，请重新登录',
-        [{text: '确定', onPress: () => this.signOutAsync()}],
+        [{text: '确定', onPress: () => signOutAsync()}],
         {cancelable: false},
       );
     }
   };
 
-  private signOutAsync = async () => {
+  const signOutAsync = async () => {
     await AsyncStorage.clear();
-    this.props.tokenStore.setToken('');
+    dispatch({type: 'SIGN_OUT'});
   };
 
-  private sendMobileMessage = async () => {
-    if (!this.state.canClick) {
+  const handleSendMobileMessage = async () => {
+    if (!canClick) {
       return;
     }
-    this.setState({
-      canClick: false,
-      content: `${this.state.totalTime}s`,
-    });
+    setCanClick(false);
+    setContent(`${totalTime}s`);
     const siv = setInterval(() => {
-      this.setState(
-        {
-          totalTime: this.state.totalTime - 1,
-          content: `${this.state.totalTime}s`,
-        },
-        () => {
-          if (this.state.totalTime === 0) {
-            clearInterval(siv);
-            this.setState({
-              canClick: true,
-              totalTime: 60,
-              content: '重新发送',
-            });
-          }
-        },
-      );
+      const t = totalTime - 1;
+      setContent(`${totalTime}s`);
+      setTotalTime(t);
+
+      if (t === 0) {
+        clearInterval(siv);
+        setCanClick(true);
+        setContent('重新发送');
+        setTotalTime(60);
+      }
     }, 1000);
     const result = await sendMobileMessage({
-      phone: this.props.UserStore.info.mobile_number,
+      phone: userState.info.mobile_number,
       type: 0,
     });
     if (Number(result.errno) !== 0) {
       clearInterval(siv);
       setTimeout(() => {
-        this.setState({
-          canClick: true,
-          totalTime: 60,
-          content: '发送验证码',
-        });
+        setCanClick(true);
+        setContent('发送验证码');
+        setTotalTime(60);
       }, 1500);
     }
   };
-}
+
+  const VerificationCode = (
+    <Fragment>
+      <View>
+        <Text style={styles.phone}>当前注册手机号</Text>
+        <Text style={styles.phone}>
+          {userState.info.mobile_number.replace(
+            /^(\d{3})\d{4}(\d+)/,
+            '$1****$2',
+          )}
+        </Text>
+      </View>
+      <View style={InputStyles.inputView}>
+        <TextInput
+          style={InputStyles.input}
+          placeholderTextColor={'#8E8E8E'}
+          placeholder={'请输入验证码'}
+          keyboardType={'numeric'}
+          textContentType={'oneTimeCode'}
+          onChangeText={val => setCode(val)}
+        />
+        <TouchableHighlight
+          underlayColor="white"
+          onPress={handleSendMobileMessage}>
+          <Text>{content}</Text>
+        </TouchableHighlight>
+      </View>
+      <TouchableHighlight
+        disabled={code === ''}
+        onPressIn={handleNext}
+        underlayColor="white">
+        <View
+          style={
+            code !== ''
+              ? {...InputStyles.button, ...InputStyles.buttonActive}
+              : {...InputStyles.button, ...InputStyles.buttonDisable}
+          }>
+          <Text style={InputStyles.buttonText}>下一步</Text>
+        </View>
+      </TouchableHighlight>
+    </Fragment>
+  );
+
+  const PassWord = (
+    <Fragment>
+      <View style={InputStyles.inputView}>
+        <TextInput
+          style={InputStyles.input}
+          placeholderTextColor={'#8E8E8E'}
+          placeholder={'请输入新密码'}
+          secureTextEntry={true}
+          textContentType={'newPassword'}
+          value={password}
+          onChangeText={val => setPassword(val)}
+        />
+      </View>
+      <View style={InputStyles.inputView}>
+        <TextInput
+          style={InputStyles.input}
+          placeholderTextColor={'#8E8E8E'}
+          placeholder={'请再次输入新密码'}
+          secureTextEntry={true}
+          textContentType={'newPassword'}
+          value={repeatPassword}
+          onChangeText={val => setRepeatPassword(val)}
+        />
+      </View>
+      <TouchableHighlight
+        disabled={password === '' && repeatPassword === ''}
+        onPressIn={handleResetPassword}
+        underlayColor="white">
+        <View
+          style={
+            password !== '' && repeatPassword !== ''
+              ? {...InputStyles.button, ...InputStyles.buttonActive}
+              : {...InputStyles.button, ...InputStyles.buttonDisable}
+          }>
+          <Text style={InputStyles.buttonText}>完成</Text>
+        </View>
+      </TouchableHighlight>
+    </Fragment>
+  );
+
+  return (
+    <SafeAreaView>
+      <View
+        style={{
+          ...InputStyles.container,
+          paddingTop: scaleSize(20),
+        }}>
+        <View style={!next ? {display: 'none'} : {}}>{PassWord}</View>
+        <View style={next ? {display: 'none'} : {}}>{VerificationCode}</View>
+      </View>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   phone: {
@@ -245,3 +202,5 @@ const styles = StyleSheet.create({
     fontSize: setSpText2(15),
   },
 });
+
+export default PasswordModify;

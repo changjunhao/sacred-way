@@ -1,15 +1,15 @@
-import {toJS} from 'mobx';
-import store from '../Stores/TokenStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import config from './config';
 
 const {BASEURL} = config;
 
-export function getBulletinList(params = {page: 1, count: 5}) {
+export async function getBulletinList(params = {page: 1, count: 5}) {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(
     `${BASEURL}/membercenter/announcement/announcementList?page=${params.page}&count=${params.count}`,
     {
       headers: {
-        USERSIGN: toJS(store).token,
+        USERSIGN: userToken || '',
       },
     },
   )
@@ -22,12 +22,13 @@ export function getBulletinList(params = {page: 1, count: 5}) {
     });
 }
 
-export function getBulletin(params: {id: any}) {
+export async function getBulletin(params: {id: any}) {
+  const userToken = await AsyncStorage.getItem('userToken');
   return fetch(
     `${BASEURL}/membercenter/announcement/getAnnouncementInfo?id=${params.id}`,
     {
       headers: {
-        USERSIGN: toJS(store).token,
+        USERSIGN: userToken || '',
       },
     },
   )

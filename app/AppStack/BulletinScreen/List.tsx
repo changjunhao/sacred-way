@@ -74,6 +74,7 @@ const BulletinListScreen: React.FC = () => {
         renderItem={({item}) => (
           <TouchableWithoutFeedback
             onPress={() => {
+              // @ts-ignore
               navigation.navigate('BulletinDetail', {
                 // @ts-ignore
                 id: item.id,

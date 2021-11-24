@@ -8,9 +8,8 @@ const Stack = createStackNavigator();
 
 const AuthStack: React.FC = () => (
   <Stack.Navigator
-    mode={'modal'}
-    headerMode={'none'}
-    initialRouteName={'SignIn'}>
+    initialRouteName={'SignIn'}
+    screenOptions={{presentation: 'modal', headerShown: false}}>
     <Stack.Screen name="SignIn" component={SignInScreen} />
     <Stack.Screen name="SignUp" component={SignUpScreen} />
     <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
