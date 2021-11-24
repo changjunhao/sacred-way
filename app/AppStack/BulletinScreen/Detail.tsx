@@ -22,7 +22,7 @@ const BulletinDetailScreen: React.FC<Record<string, never>> = () => {
   });
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [currentImage, setCurrentImage] = useState({});
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<any>([]);
 
   const getInfo = (originInfo: any) => {
     return new Promise(resolve => {
@@ -56,7 +56,7 @@ const BulletinDetailScreen: React.FC<Record<string, never>> = () => {
         setBulletin(data);
         setImages(data.images);
         const infoPromiseArray = data.images.map((item: any) => getInfo(item));
-        const infos: never[] = await Promise.all(infoPromiseArray);
+        const infos: any[] = await Promise.all(infoPromiseArray);
         setImages(infos);
       });
     }
