@@ -69,7 +69,7 @@ const InfoModify: FC<InterfaceProps> = props => {
       mediaType: 'photo',
     };
 
-    launchImageLibrary(options, response => {
+    launchImageLibrary(options).then(response => {
       if (response.didCancel) {
         // console.log('User cancelled image picker');
       } else if (response.errorMessage) {
