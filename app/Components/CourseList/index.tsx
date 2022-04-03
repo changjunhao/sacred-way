@@ -19,22 +19,26 @@ const CourseList: React.FC<InterfaceProps> = props => {
 
   const navigationToDetail = () => {
     if (course.curriculum_type === 2 && !purchased) {
+      // @ts-ignore
       navigation.navigate('SpecialColumnDetail', {id: course.id});
       return;
     }
     if (course.curriculum_type === 2 && purchased) {
+      // @ts-ignore
       navigation.navigate('SpecialColumnDetail', {
         id: course.curriculum_id,
       });
       return;
     }
     if (recommend) {
+      // @ts-ignore
       navigation.navigate('CourseDetail', {
         id: course.id,
         columnId: course.column,
       });
       return;
     }
+    // @ts-ignore
     navigation.navigate('CourseDetail', {
       id: course.curriculum_id,
       columnId: course.column_id,

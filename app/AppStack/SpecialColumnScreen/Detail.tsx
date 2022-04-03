@@ -21,7 +21,7 @@ const SpecialColumnDetail: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [direct, setDirect] = useState({});
   const [chooseType, setChooseType] = useState(2);
-  const [description, setDescription] = useState([]);
+  const [description, setDescription] = useState<any>([]);
   const [curriculumList, setCurriculumList] = useState([]);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const SpecialColumnDetail: React.FC = () => {
         const infoPromiseArray = descriptionRaw.map((item: any) =>
           getInfo(item),
         );
-        const infos: never[] = await Promise.all(infoPromiseArray);
+        const infos: any[] = await Promise.all(infoPromiseArray);
         setDescription(infos);
       });
     }
@@ -182,62 +182,67 @@ const SpecialColumnDetail: React.FC = () => {
               ? {...styles.infoView, display: 'none'}
               : {...styles.infoView}
           }>
-          {description.map((item, index) => (
-            <View key={index}>
-              {
-                // @ts-ignore
-                item.type === 1 ? (
-                  <View style={styles.descriptionContentView}>
-                    <Text style={styles.descriptionTitle}>
+          {description.map(
+            (
+              item: {type: number; value: {} | null | undefined},
+              index: React.Key | null | undefined,
+            ) => (
+              <View key={index}>
+                {
+                  // @ts-ignore
+                  item.type === 1 ? (
+                    <View style={styles.descriptionContentView}>
+                      <Text style={styles.descriptionTitle}>
+                        {
+                          // @ts-ignore
+                          item.value
+                        }
+                      </Text>
+                    </View>
+                  ) : null
+                }
+                {
+                  // @ts-ignore
+                  item.type === 2 ? (
+                    <View style={styles.descriptionContentView}>
+                      <Text style={styles.descriptionText}>
+                        {
+                          // @ts-ignore
+                          item.value
+                        }
+                      </Text>
+                    </View>
+                  ) : null
+                }
+                {
+                  // @ts-ignore
+                  item.type === 3 ? (
+                    <View style={styles.descriptionContentView}>
                       {
                         // @ts-ignore
-                        item.value
+                        item.value.map(
+                          (image: {
+                            url: string;
+                            height: number;
+                            width: number;
+                          }) => (
+                            <Image
+                              key={image.url}
+                              source={{uri: image.url}}
+                              style={{
+                                width: scaleSize(343),
+                                height: (image.height * 343) / image.width,
+                              }}
+                            />
+                          ),
+                        )
                       }
-                    </Text>
-                  </View>
-                ) : null
-              }
-              {
-                // @ts-ignore
-                item.type === 2 ? (
-                  <View style={styles.descriptionContentView}>
-                    <Text style={styles.descriptionText}>
-                      {
-                        // @ts-ignore
-                        item.value
-                      }
-                    </Text>
-                  </View>
-                ) : null
-              }
-              {
-                // @ts-ignore
-                item.type === 3 ? (
-                  <View style={styles.descriptionContentView}>
-                    {
-                      // @ts-ignore
-                      item.value.map(
-                        (image: {
-                          url: string;
-                          height: number;
-                          width: number;
-                        }) => (
-                          <Image
-                            key={image.url}
-                            source={{uri: image.url}}
-                            style={{
-                              width: scaleSize(343),
-                              height: (image.height * 343) / image.width,
-                            }}
-                          />
-                        ),
-                      )
-                    }
-                  </View>
-                ) : null
-              }
-            </View>
-          ))}
+                    </View>
+                  ) : null
+                }
+              </View>
+            ),
+          )}
         </View>
         <View
           style={

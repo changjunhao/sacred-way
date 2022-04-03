@@ -20,6 +20,7 @@ const CommunityList: React.FC<InterfaceProps> = props => {
   return (
     <TouchableWithoutFeedback
       onPress={() => {
+        // @ts-ignore
         navigation.navigate('CommunityDetail', {id: question.id});
       }}>
       <View style={styles.questionItem}>
