@@ -203,10 +203,7 @@ const CourseDetail: React.FC = () => {
                           fontWeight: '600',
                           lineHeight: setSpText2(24),
                         }}>
-                        {
-                          // @ts-ignore
-                          item.value
-                        }
+                        {item.value as unknown as string}
                       </Text>
                     </View>
                   ) : null
@@ -221,10 +218,7 @@ const CourseDetail: React.FC = () => {
                           fontSize: setSpText2(15),
                           lineHeight: setSpText2(22.5),
                         }}>
-                        {
-                          // @ts-ignore
-                          item.value
-                        }
+                        {item.value as unknown as string}
                       </Text>
                     </View>
                   ) : null

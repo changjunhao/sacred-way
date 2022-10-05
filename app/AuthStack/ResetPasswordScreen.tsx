@@ -23,7 +23,7 @@ const ResetPasswordScreen: React.FC<Record<string, any>> = props => {
   const [totalTime, setTotalTime] = useState(60);
   const [canClick, setCanClick] = useState(true);
   const [next, setNext] = useState(false);
-  const [siv, setSiv] = useState<NodeJS.Timeout>();
+  const [siv, setSiv] = useState<number>();
 
   const handleNext = async () => {
     const response = await checkVerificationCode({

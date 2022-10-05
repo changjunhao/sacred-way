@@ -193,10 +193,7 @@ const SpecialColumnDetail: React.FC = () => {
                   item.type === 1 ? (
                     <View style={styles.descriptionContentView}>
                       <Text style={styles.descriptionTitle}>
-                        {
-                          // @ts-ignore
-                          item.value
-                        }
+                        {item.value as unknown as string}
                       </Text>
                     </View>
                   ) : null
@@ -206,10 +203,7 @@ const SpecialColumnDetail: React.FC = () => {
                   item.type === 2 ? (
                     <View style={styles.descriptionContentView}>
                       <Text style={styles.descriptionText}>
-                        {
-                          // @ts-ignore
-                          item.value
-                        }
+                        {item.value as unknown as string}
                       </Text>
                     </View>
                   ) : null

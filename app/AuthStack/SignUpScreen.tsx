@@ -16,7 +16,7 @@ const SignUpScreen: React.FC<Record<string, any>> = props => {
   const [content, setContent] = useState('发送验证码');
   const [totalTime, setTotalTime] = useState(60);
   const [canClick, setCanClick] = useState(true);
-  const [siv, setSiv] = useState<NodeJS.Timeout>();
+  const [siv, setSiv] = useState<number>();
 
   useEffect(() => {
     if (totalTime === 0) {
