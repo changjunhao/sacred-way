@@ -2,8 +2,8 @@ import React, {FC, useEffect, useReducer} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AuthContext from './context/authContext';
-import UserContext from './context/userContext';
+import AuthContext, {AuthState, AuthAction} from './context/authContext';
+import UserContext, {UserState, UserAction} from './context/userContext';
 import AppStack from './AppStack/';
 import AuthStack from './AuthStack/';
 import SplashScreen from './AuthStack/SplashScreen';
@@ -33,7 +33,7 @@ function InfoEdit() {
 
 const RootStack: FC = () => {
   const [state, dispatch] = useReducer(
-    (prevState: any, action: {type: string; token?: string | null}) => {
+    (prevState: AuthState, action: AuthAction): AuthState => {
       switch (action.type) {
         case 'LOADING':
           return {
@@ -44,19 +44,21 @@ const RootStack: FC = () => {
           return {
             ...prevState,
             isLoading: false,
-            token: action.token,
+            token: action.token ?? '',
           };
         case 'SIGN_IN':
           return {
             ...prevState,
             isLoading: false,
-            token: action.token,
+            token: action.token ?? '',
           };
         case 'SIGN_OUT':
           return {
             ...prevState,
             token: '',
           };
+        default:
+          return prevState;
       }
     },
     {
@@ -66,7 +68,7 @@ const RootStack: FC = () => {
   );
 
   const [userState, userDispatch] = useReducer(
-    (prevState: any, action: any) => {
+    (prevState: UserState, action: UserAction): UserState => {
       switch (action.type) {
         case 'SET_INFO':
           return {
@@ -86,6 +88,8 @@ const RootStack: FC = () => {
               ...action.baseInfo,
             },
           };
+        default:
+          return prevState;
       }
     },
     {
@@ -100,36 +104,44 @@ const RootStack: FC = () => {
   );
 
   useEffect(() => {
+    let cancelled = false;
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
       let userToken;
 
       try {
         userToken = await AsyncStorage.getItem('userToken');
-      } catch (e) {
+      } catch {
         // Restoring token failed
       }
+      if (cancelled) { return; }
       if (userToken) {
         dispatch({type: 'RESTORE_TOKEN', token: userToken});
         const userInfoResult = await getUserInfo();
-        if (userInfoResult.errno !== 0) {
-          await AsyncStorage.clear();
-          dispatch({type: 'RESTORE_TOKEN', token: ''});
+        if (!userInfoResult || userInfoResult.errno !== 0) {
+          try { await AsyncStorage.clear(); } catch {}
+          if (!cancelled) {
+            dispatch({type: 'RESTORE_TOKEN', token: ''});
+          }
           return;
         }
+        if (cancelled) { return; }
         const userInfo = userInfoResult.data;
         userDispatch({type: 'SET_INFO', info: userInfo});
         userDispatch({type: 'SET_INFO_EDIT', infoEdit: userInfo.status === 0});
       } else {
-        dispatch({type: 'RESTORE_TOKEN', token: ''});
+        if (!cancelled) {
+          dispatch({type: 'RESTORE_TOKEN', token: ''});
+        }
       }
     };
 
     bootstrapAsync();
+    return () => { cancelled = true; };
   }, []);
 
   return (
-    <AuthContext.Provider value={{state, dispatch}}>
+    <AuthContext value={{state, dispatch}}>
       {state.isLoading ? (
         <SplashScreen />
       ) : (
@@ -138,7 +150,7 @@ const RootStack: FC = () => {
             ...DefaultTheme,
             ...Theme,
           }}>
-          <UserContext.Provider value={{userState, userDispatch}}>
+          <UserContext value={{userState, userDispatch}}>
             <Stack.Navigator screenOptions={{headerShown: false}}>
               {state.token ? (
                 userState.infoEdit ? (
@@ -150,10 +162,10 @@ const RootStack: FC = () => {
                 <Stack.Screen name="Auth" component={AuthStack} />
               )}
             </Stack.Navigator>
-          </UserContext.Provider>
+          </UserContext>
         </NavigationContainer>
       )}
-    </AuthContext.Provider>
+    </AuthContext>
   );
 };
 

@@ -16,6 +16,7 @@ export async function getPersonMoney() {
     })
     .catch(error => {
       console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }
 
@@ -32,6 +33,7 @@ export async function getDirectRecommend() {
     })
     .catch(error => {
       console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }
 
@@ -51,6 +53,7 @@ export async function getUserIoList(params: {page: any; pageSize: any}) {
     })
     .catch(error => {
       console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }
 
@@ -70,6 +73,7 @@ export async function getScanList(params: {page: any; pageSize: any}) {
     })
     .catch(error => {
       console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }
 
@@ -89,5 +93,6 @@ export async function getDirectUser(params: {page: any; pageSize: any}) {
     })
     .catch(error => {
       console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }

@@ -1,14 +1,13 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
-  Keyboard,
+  Modal,
   Text,
   TextInput,
   TouchableHighlight,
   View,
 } from 'react-native';
-import Picker from 'react-native-picker';
-// @ts-ignore
-import Icon from 'react-native-vector-icons/Ionicons';
+import {Picker} from '@react-native-picker/picker';
+import {Ionicons as Icon} from '@react-native-vector-icons/ionicons';
 import UserContext from '../../context/userContext';
 import {scaleSize} from '../../Lib/ScreenUtil';
 import district from './district';
@@ -16,23 +15,23 @@ import styles from './Styles';
 
 const EditInfo: React.FC = () => {
   const {userState, userDispatch} = useContext(UserContext);
+  const [pickerVisible, setPickerVisible] = useState(false);
+  const [selectedProvince, setSelectedProvince] = useState(0);
+  const [selectedCity, setSelectedCity] = useState(0);
+  const [selectedDistrict, setSelectedDistrict] = useState(0);
 
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => {
-        Picker.isPickerShow(status => {
-          if (status) {
-            Picker.hide();
-          }
-        });
-      },
-    );
-    return () => {
-      keyboardDidShowListener.remove();
-      Picker.hide();
-    };
-  }, []);
+  // Flatten district data for the pickers
+  // Structure: [{ provinceName: [{ cityName: ['district1', ...] }] }]
+  const provinces = district.map((d: any) => Object.keys(d)[0]);
+  const provinceData: Record<string, any> = district[selectedProvince];
+  const provinceKey = provinceData ? Object.keys(provinceData)[0] : '';
+  const cityList: Record<string, any>[] = provinceData
+    ? provinceData[provinceKey]
+    : [];
+  const cities = cityList.map((c) => Object.keys(c)[0]);
+  const cityData = cityList[selectedCity];
+  const cityKey = cityData ? Object.keys(cityData)[0] : '';
+  const districtList: string[] = cityData ? cityData[cityKey] : [];
 
   useEffect(() => {
     userDispatch({
@@ -64,42 +63,31 @@ const EditInfo: React.FC = () => {
   };
 
   const handlePickerShow = () => {
-    Picker.init({
-      pickerConfirmBtnText: '确定',
-      pickerCancelBtnText: '取消',
-      pickerTitleText: '选择省市区/县',
-      pickerConfirmBtnColor: [47, 134, 246, 1],
-      pickerCancelBtnColor: [102, 111, 131, 1],
-      pickerTitleColor: [17, 26, 52, 1],
-      pickerToolBarBg: [249, 250, 251, 1],
-      pickerBg: [255, 255, 255, 1],
-      pickerRowHeight: 45,
-      pickerData: district,
-      selectedValue: [59],
-      onPickerConfirm: data => {
-        let location = data[0];
-        if (data[1]) {
-          location += `-${data[1]}`;
-          if (data[2]) {
-            location += `-${data[2]}`;
-          }
-        }
-        userDispatch({
-          type: 'SET_BASE_INFO',
-          baseInfo: {
-            location,
-          },
-        });
+    setPickerVisible(true);
+  };
+
+  const handlePickerConfirm = () => {
+    let location = provinces[selectedProvince] || '';
+    if (cities[selectedCity]) {
+      location += `-${cities[selectedCity]}`;
+      if (districtList[selectedDistrict]) {
+        location += `-${districtList[selectedDistrict]}`;
+      }
+    }
+    userDispatch({
+      type: 'SET_BASE_INFO',
+      baseInfo: {
+        location,
       },
     });
-    Picker.show();
+    setPickerVisible(false);
   };
 
   return (
     <>
       <View>
         <View style={styles.labelView}>
-          <Icon size={scaleSize(8)} color="#FF3F3F" name={'ios-star'} />
+          <Icon size={scaleSize(8)} color="#FF3F3F" name={'star'} />
           <Text style={styles.labelText}>姓名</Text>
         </View>
         <TextInput
@@ -112,7 +100,7 @@ const EditInfo: React.FC = () => {
       </View>
       <View>
         <View style={styles.labelView}>
-          <Icon size={scaleSize(8)} color="#FF3F3F" name={'ios-star'} />
+          <Icon size={scaleSize(8)} color="#FF3F3F" name={'star'} />
           <Text style={styles.labelText}>联系电话</Text>
         </View>
         <TextInput
@@ -125,13 +113,53 @@ const EditInfo: React.FC = () => {
       </View>
       <View>
         <View style={styles.labelView}>
-          <Icon size={scaleSize(8)} color="#FF3F3F" name={'ios-star'} />
+          <Icon size={scaleSize(8)} color="#FF3F3F" name={'star'} />
           <Text style={styles.labelText}>所在地</Text>
         </View>
         <TouchableHighlight underlayColor="white" onPress={handlePickerShow}>
           <Text style={styles.input}>{userState.baseInfo.location}</Text>
         </TouchableHighlight>
       </View>
+      <Modal visible={pickerVisible} transparent animationType="slide">
+        <View style={{flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.3)'}}>
+          <View style={{backgroundColor: '#fff'}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12}}>
+              <TouchableHighlight underlayColor="white" onPress={() => setPickerVisible(false)}>
+                <Text style={{color: '#666F83', fontSize: 16}}>取消</Text>
+              </TouchableHighlight>
+              <TouchableHighlight underlayColor="white" onPress={handlePickerConfirm}>
+                <Text style={{color: '#2F86F6', fontSize: 16}}>确定</Text>
+              </TouchableHighlight>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <Picker
+                style={{flex: 1, height: 200}}
+                selectedValue={selectedProvince}
+                onValueChange={(val: number) => { setSelectedProvince(val); setSelectedCity(0); setSelectedDistrict(0); }}>
+                {provinces.map((name: string, idx: number) => (
+                  <Picker.Item key={idx} label={name} value={idx} />
+                ))}
+              </Picker>
+              <Picker
+                style={{flex: 1, height: 200}}
+                selectedValue={selectedCity}
+                onValueChange={(val: number) => { setSelectedCity(val); setSelectedDistrict(0); }}>
+                {cities.map((name: string, idx: number) => (
+                  <Picker.Item key={idx} label={name} value={idx} />
+                ))}
+              </Picker>
+              <Picker
+                style={{flex: 1, height: 200}}
+                selectedValue={selectedDistrict}
+                onValueChange={(val: number) => setSelectedDistrict(val)}>
+                {districtList.map((name: string, idx: number) => (
+                  <Picker.Item key={idx} label={name} value={idx} />
+                ))}
+              </Picker>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 };

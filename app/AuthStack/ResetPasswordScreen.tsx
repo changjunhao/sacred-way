@@ -5,8 +5,8 @@ import {
   TextInput,
   TouchableHighlight,
   View,
-  SafeAreaView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   checkVerificationCode,
   resetPassword,
@@ -30,8 +30,8 @@ const ResetPasswordScreen: React.FC<Record<string, any>> = props => {
       phone,
       code,
     });
-    if (response.errno !== 0) {
-      Alert.alert(response.errmsg);
+    if (!response || response.errno !== 0) {
+      Alert.alert(response?.errmsg || '验证失败，请稍后重试');
     } else {
       setNext(true);
     }
@@ -44,21 +44,12 @@ const ResetPasswordScreen: React.FC<Record<string, any>> = props => {
       password,
       repeatPassword,
     });
-    if (response.errno !== 0) {
-      Alert.alert(response.errmsg);
+    if (!response || response.errno !== 0) {
+      Alert.alert(response?.errmsg || '重置失败，请稍后重试');
     } else {
       props.navigation.goBack();
     }
   };
-
-  useEffect(() => {
-    if (totalTime === 0) {
-      clearInterval(Number(siv));
-      setCanClick(true);
-      setTotalTime(60);
-      setContent('重新发送');
-    }
-  }, [siv, totalTime]);
 
   useEffect(() => {
     return () => {
@@ -66,7 +57,7 @@ const ResetPasswordScreen: React.FC<Record<string, any>> = props => {
         clearInterval(Number(siv));
       }
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [siv]);
 
   const handleSendMobileMessage = async () => {
     if (!canClick) {
@@ -75,21 +66,32 @@ const ResetPasswordScreen: React.FC<Record<string, any>> = props => {
     setCanClick(false);
     setContent(`${totalTime}s`);
     const interval = setInterval(() => {
-      setTotalTime(totalTime - 1);
-      setContent(`${totalTime}s`);
+      setTotalTime(prev => {
+        const next = prev - 1;
+        setContent(`${next}s`);
+        if (next === 0) {
+          clearInterval(interval);
+          setCanClick(true);
+          setTotalTime(60);
+          setContent('重新发送');
+          return 60;
+        }
+        return next;
+      });
     }, 1000);
     setSiv(interval);
     const result = await sendMobileMessage({
       phone,
       type: 0,
     });
-    if (Number(result.errno) !== 0) {
-      clearInterval(Number(siv));
-      setTimeout(() => {
-        setCanClick(true);
-        setTotalTime(60);
-        setContent('发送验证码');
-      }, 1500);
+    if (!result || Number(result.errno) !== 0) {
+      clearInterval(Number(interval));
+      setCanClick(true);
+      setTotalTime(60);
+      setContent('发送验证码');
+      if (result) {
+        Alert.alert(result.errmsg || '发送失败');
+      }
     }
   };
 
@@ -162,7 +164,7 @@ const ResetPasswordScreen: React.FC<Record<string, any>> = props => {
         />
       </View>
       <TouchableHighlight
-        disabled={password === '' && repeatPassword === ''}
+        disabled={password === '' || repeatPassword === ''}
         onPressIn={handleResetPassword}
         underlayColor="white">
         <View

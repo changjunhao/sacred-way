@@ -2,13 +2,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {FC, Fragment, useContext, useState} from 'react';
 import {
   Alert,
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
   TouchableHighlight,
   View,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import AuthContext from '../../context/authContext';
 import UserContext from '../../context/userContext';
 import InputStyles from '../../AuthStack/Styles';
@@ -36,8 +36,8 @@ const PasswordModify: FC = () => {
       phone: userState.info.mobile_number,
       code: code,
     });
-    if (response.errno !== 0) {
-      Alert.alert(response.errmsg);
+    if (!response || response.errno !== 0) {
+      Alert.alert(response?.errmsg || '验证失败，请稍后重试');
     } else {
       setNext(true);
     }
@@ -50,8 +50,8 @@ const PasswordModify: FC = () => {
       password,
       repeatPassword,
     });
-    if (response.errno !== 0) {
-      Alert.alert(response.errmsg);
+    if (!response || response.errno !== 0) {
+      Alert.alert(response?.errmsg || '重置失败，请稍后重试');
     } else {
       Alert.alert(
         '提示',
@@ -63,7 +63,9 @@ const PasswordModify: FC = () => {
   };
 
   const signOutAsync = async () => {
-    await AsyncStorage.clear();
+    try {
+      await AsyncStorage.clear();
+    } catch {}
     dispatch({type: 'SIGN_OUT'});
   };
 
@@ -74,28 +76,31 @@ const PasswordModify: FC = () => {
     setCanClick(false);
     setContent(`${totalTime}s`);
     const siv = setInterval(() => {
-      const t = totalTime - 1;
-      setContent(`${totalTime}s`);
-      setTotalTime(t);
-
-      if (t === 0) {
-        clearInterval(siv);
-        setCanClick(true);
-        setContent('重新发送');
-        setTotalTime(60);
-      }
+      setTotalTime(prev => {
+        const next = prev - 1;
+        setContent(`${next}s`);
+        if (next === 0) {
+          clearInterval(siv);
+          setCanClick(true);
+          setTotalTime(60);
+          setContent('重新发送');
+          return 60;
+        }
+        return next;
+      });
     }, 1000);
     const result = await sendMobileMessage({
       phone: userState.info.mobile_number,
       type: 0,
     });
-    if (Number(result.errno) !== 0) {
+    if (!result || Number(result.errno) !== 0) {
       clearInterval(siv);
-      setTimeout(() => {
-        setCanClick(true);
-        setContent('发送验证码');
-        setTotalTime(60);
-      }, 1500);
+      setCanClick(true);
+      setTotalTime(60);
+      setContent('发送验证码');
+      if (result) {
+        Alert.alert(result.errmsg || '发送失败');
+      }
     }
   };
 
@@ -166,7 +171,7 @@ const PasswordModify: FC = () => {
         />
       </View>
       <TouchableHighlight
-        disabled={password === '' && repeatPassword === ''}
+        disabled={password === '' || repeatPassword === ''}
         onPressIn={handleResetPassword}
         underlayColor="white">
         <View

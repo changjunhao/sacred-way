@@ -9,8 +9,7 @@ import {
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import LinearGradient from 'react-native-linear-gradient';
-// @ts-ignore
-import Icon from 'react-native-vector-icons/AntDesign';
+import {AntDesign as Icon} from '@react-native-vector-icons/ant-design';
 import CourseListComponent from '../../../Components/CourseList';
 import {setSpText2} from '../../../Lib/ScreenUtil';
 import {

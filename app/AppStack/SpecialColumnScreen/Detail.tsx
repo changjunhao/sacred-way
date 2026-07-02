@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {
   Image,
-  SafeAreaView,
   ScrollView,
   Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import CourseListComponent from '../../Components/CourseList';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
+import {getImageDimensions} from '../../Lib/imageUtils';
 import {getSpecialColumnInfo} from '../../Services/specialColumn';
 import ApplicationStyles from '../../Theme/ApplicationStyles';
 import styles from './Styles';
@@ -25,26 +26,33 @@ const SpecialColumnDetail: React.FC = () => {
   const [curriculumList, setCurriculumList] = useState([]);
 
   useEffect(() => {
-    // @ts-ignore
-    if (route?.params?.id) {
+    const fetchData = async () => {
       // @ts-ignore
-      const {id} = route.params;
-      getSpecialColumnInfo({id}).then(async res => {
-        setInfo(res.info);
-        setDirect(res.direct);
-        setCurriculumList(res.curriculum_list);
-        navigation.setOptions({
+      if (route?.params?.id) {
+        try {
           // @ts-ignore
-          title: res.info.name,
-        });
-        const descriptionRaw = JSON.parse(res.info.description) || [];
-        const infoPromiseArray = descriptionRaw.map((item: any) =>
-          getInfo(item),
-        );
-        const infos: any[] = await Promise.all(infoPromiseArray);
-        setDescription(infos);
-      });
-    }
+          const {id} = route.params;
+          const res = await getSpecialColumnInfo({id});
+          if (!res) { return; }
+          setInfo(res.info);
+          setDirect(res.direct);
+          setCurriculumList(res.curriculum_list);
+          navigation.setOptions({
+            // @ts-ignore
+            title: res.info.name,
+          });
+          const descriptionRaw = JSON.parse(res.info.description) || [];
+          const infoPromiseArray = descriptionRaw.map((item: any) =>
+            getInfo(item),
+          );
+          const infos: any[] = await Promise.all(infoPromiseArray);
+          setDescription(infos);
+        } catch (error) {
+          console.error('Failed to load special column info:', error);
+        }
+      }
+    };
+    fetchData();
   }, [route.params]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getInfo = (originInfo: any) => {
@@ -61,18 +69,9 @@ const SpecialColumnDetail: React.FC = () => {
     });
   };
 
-  const getImageInfo = (originInfo: any) => {
-    return new Promise(resolve => {
-      Image.getSize(
-        originInfo,
-        (width, height) => {
-          resolve({url: originInfo, width, height});
-        },
-        () => {
-          resolve({url: originInfo, width: 0, height: 0});
-        },
-      );
-    });
+  const getImageInfo = async (originInfo: any) => {
+    const {width, height} = await getImageDimensions(originInfo);
+    return {url: originInfo, width, height};
   };
 
   return (

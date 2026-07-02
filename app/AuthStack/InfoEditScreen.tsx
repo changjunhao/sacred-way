@@ -1,12 +1,12 @@
 import React, {FC, useContext} from 'react';
 import {
   Alert,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableHighlight,
   View,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import UserContext from '../context/userContext';
 import EditInfo from '../Components/EditInfo';
 import {scaleSize, setSpText2} from '../Lib/ScreenUtil';

@@ -16,5 +16,6 @@ export async function getSpecialColumnInfo(params: {id: any}) {
     })
     .catch(error => {
       console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }

@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {
   Image,
-  SafeAreaView,
   ScrollView,
   Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
+import {getImageDimensions} from '../../Lib/imageUtils';
 import {getCourseDetail, getSubCurriculum} from '../../Services/course';
 import ApplicationStyles from '../../Theme/ApplicationStyles';
 import styles from '../SpecialColumnScreen/Styles';
@@ -22,34 +23,42 @@ const CourseDetail: React.FC = () => {
   const [childList, setChildList] = useState([]);
 
   useEffect(() => {
-    // @ts-ignore
-    if (route?.params?.id) {
+    const fetchData = async () => {
       // @ts-ignore
-      const {id, columnId} = route.params;
-      getCourseDetail({id, column_id: columnId}).then(
-        async (res: {type: number; description: string}) => {
+      if (route?.params?.id) {
+        try {
+          // @ts-ignore
+          const {id, columnId} = route.params;
+          const res = await getCourseDetail({id, column_id: columnId});
+          if (!res) { return; }
+          const {type, description: desc} = res as {type: number; description: string};
           setBaseInfo(res);
           navigation.setOptions({
             // @ts-ignore
-            title: res.name,
+            title: (res as any).name,
           });
-          if (res.type === 2) {
+          if (type === 2) {
             getSubCurriculum({id}).then(data => {
-              setChildList(data.list);
+              if (data) {
+                setChildList(data.list);
+              }
               setChooseType(2);
             });
           } else {
             setChooseType(1);
           }
-          const descriptionRaw = JSON.parse(res.description) || [];
+          const descriptionRaw = JSON.parse(desc) || [];
           const infoPromiseArray = descriptionRaw.map((item: any) =>
             getInfo(item),
           );
           const infos: any[] = await Promise.all(infoPromiseArray);
           setDescription(infos);
-        },
-      );
-    }
+        } catch (error) {
+          console.error('Failed to load course detail:', error);
+        }
+      }
+    };
+    fetchData();
   }, [route.params]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getInfo = (originInfo: any) => {
@@ -66,18 +75,9 @@ const CourseDetail: React.FC = () => {
     });
   };
 
-  const getImageInfo = (originInfo: any) => {
-    return new Promise(resolve => {
-      Image.getSize(
-        originInfo,
-        (width, height) => {
-          resolve({url: originInfo, width, height});
-        },
-        () => {
-          resolve({url: originInfo, width: 0, height: 0});
-        },
-      );
-    });
+  const getImageInfo = async (originInfo: any) => {
+    const {width, height} = await getImageDimensions(originInfo);
+    return {url: originInfo, width, height};
   };
 
   return (

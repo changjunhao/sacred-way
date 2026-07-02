@@ -4,7 +4,6 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,11 +11,10 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {launchImageLibrary} from 'react-native-image-picker';
-import {ImageLibraryOptions} from 'react-native-image-picker/src/types';
-// @ts-ignore
-import Icon from 'react-native-vector-icons/AntDesign';
+import {launchImageLibrary, ImageLibraryOptions} from 'react-native-image-picker';
+import {AntDesign as Icon} from '@react-native-vector-icons/ant-design';
 import UserContext from '../../context/userContext';
 import EditInfo from '../../Components/EditInfo';
 import InputStyles from '../../Components/EditInfo/Styles';

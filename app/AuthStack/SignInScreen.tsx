@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {FC, useContext, useState} from 'react';
-import {Text, TouchableHighlight, View, SafeAreaView} from 'react-native';
+import {Alert, Text, TouchableHighlight, View} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {StackNavigationProp} from '@react-navigation/stack';
 import AuthContext from '../context/authContext';
 import UserContext from '../context/userContext';
@@ -26,15 +27,25 @@ const SignInScreen: FC<InterfaceProps> = props => {
       phone,
       password,
     });
-    if (response) {
-      await AsyncStorage.setItem('userToken', response.usersign);
-      userDispatch({type: 'SET_INFO', info: response.user_info});
-      userDispatch({
-        type: 'SET_INFO_EDIT',
-        infoEdit: response.user_info.status === 0,
-      });
-      dispatch({type: 'SIGN_IN', token: response.usersign});
+    if (!response) {
+      Alert.alert('网络请求失败，请稍后重试');
+      return;
     }
+    if (response.errno === -1) {
+      Alert.alert(response.errmsg || '登录失败，请稍后重试');
+      return;
+    }
+    if (!response.usersign) {
+      Alert.alert('登录失败，请检查账号密码');
+      return;
+    }
+    await AsyncStorage.setItem('userToken', response.usersign);
+    userDispatch({type: 'SET_INFO', info: response.user_info});
+    userDispatch({
+      type: 'SET_INFO_EDIT',
+      infoEdit: response.user_info?.status === 0,
+    });
+    dispatch({type: 'SIGN_IN', token: response.usersign});
   };
 
   return (

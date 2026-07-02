@@ -35,7 +35,7 @@ export default function AppStack() {
       screenOptions={{
         title: '美秒短视频会员中心',
         headerTintColor: '#333',
-        headerBackTitleVisible: false,
+        headerBackButtonDisplayMode: 'minimal',
       }}>
       <Stack.Screen
         name="Tabs"
@@ -50,8 +50,7 @@ export default function AppStack() {
       <Stack.Screen
         name="BulletinDetail"
         component={BulletinDetailScreen}
-        // @ts-ignore
-        options={({route}) => ({title: route.params.title})}
+        options={({route}) => ({title: (route.params as any)?.title})}
       />
       <Stack.Screen
         name="CommunityList"

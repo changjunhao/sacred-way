@@ -2,40 +2,37 @@ import React, {useEffect, useState} from 'react';
 import {
   Image,
   Modal,
-  SafeAreaView,
   ScrollView,
   Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {useRoute} from '@react-navigation/native';
 import Hyperlink from 'react-native-hyperlink';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
+import {getImageDimensions} from '../../Lib/imageUtils';
 import {getBulletin} from '../../Services/bulletin';
 import ApplicationStyles from '../../Theme/ApplicationStyles';
 
 const BulletinDetailScreen: React.FC<Record<string, never>> = () => {
   const route = useRoute();
 
-  const [bulletin, setBulletin] = useState({
+  const [bulletin, setBulletin] = useState<any>({
+    title: '',
+    content: '',
+    category_name: '',
+    is_top: 0,
+    create_time: '',
     images: [],
   });
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [currentImage, setCurrentImage] = useState({});
   const [images, setImages] = useState<any>([]);
 
-  const getInfo = (originInfo: any) => {
-    return new Promise(resolve => {
-      Image.getSize(
-        originInfo.url,
-        (width, height) => {
-          resolve({...originInfo, width, height});
-        },
-        () => {
-          resolve({...originInfo, width: 0, height: 0});
-        },
-      );
-    });
+  const getInfo = async (originInfo: any) => {
+    const {width, height} = await getImageDimensions(originInfo.url);
+    return {...originInfo, width, height};
   };
 
   const formatTime = (val: string) => {
@@ -49,19 +46,25 @@ const BulletinDetailScreen: React.FC<Record<string, never>> = () => {
   };
 
   useEffect(() => {
-    // @ts-ignore
-    if (route?.params?.id) {
-      // @ts-ignore
-      getBulletin({id: route?.params?.id}).then(async data => {
-        setBulletin(data);
-        setImages(data.images);
-        const infoPromiseArray = data.images.map((item: any) => getInfo(item));
-        const infos: any[] = await Promise.all(infoPromiseArray);
-        setImages(infos);
-      });
-    }
-    // @ts-ignore
-  }, [route?.params?.id]);
+    const fetchData = async () => {
+      const id = (route.params as any)?.id;
+      if (id) {
+        try {
+          const data = await getBulletin({id});
+          if (!data) { return; }
+          setBulletin(data);
+          setImages(data.images);
+          const infoPromiseArray = data.images.map((item: any) => getInfo(item));
+          const infos: any[] = await Promise.all(infoPromiseArray);
+          setImages(infos);
+        } catch (error) {
+          console.error('Failed to load bulletin:', error);
+        }
+      }
+    };
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [(route.params as any)?.id]);
 
   return (
     <SafeAreaView style={{flex: 1}}>

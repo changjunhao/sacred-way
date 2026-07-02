@@ -1,4 +1,3 @@
-import {Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import config from './config';
 
@@ -18,13 +17,11 @@ export function sendMobileMessage(params: {phone: any; type: any}) {
   })
     .then(response => response.json())
     .then(responseJson => {
-      if (responseJson.errno !== 0) {
-        Alert.alert(responseJson.errmsg);
-      }
       return responseJson;
     })
-    .catch(() => {
-      // console.error(error);
+    .catch(error => {
+      console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }
 
@@ -43,8 +40,9 @@ export function checkVerificationCode(params: {phone: any; code: any}) {
     .then(responseJson => {
       return responseJson;
     })
-    .catch(() => {
-      // console.error(error);
+    .catch(error => {
+      console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }
 
@@ -61,13 +59,11 @@ export function login(params: {phone: string; password: string}) {
   })
     .then(response => response.json())
     .then(responseJson => {
-      if (responseJson.errno !== 0) {
-        Alert.alert(responseJson.errmsg);
-      }
       return responseJson.data;
     })
-    .catch(() => {
-      // console.error(error);
+    .catch(error => {
+      console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }
 
@@ -85,13 +81,11 @@ export function signUp(params: {phone: any; code: any; password: any}) {
   })
     .then(response => response.json())
     .then(responseJson => {
-      if (responseJson.errno !== 0) {
-        Alert.alert(responseJson.errmsg);
-      }
       return responseJson;
     })
-    .catch(() => {
-      // console.error(error);
+    .catch(error => {
+      console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }
 
@@ -117,8 +111,9 @@ export function resetPassword(params: {
     .then(responseJson => {
       return responseJson;
     })
-    .catch(() => {
-      // console.error(error);
+    .catch(error => {
+      console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }
 
@@ -133,8 +128,9 @@ export async function getUserInfo() {
     .then(responseJson => {
       return responseJson;
     })
-    .catch(() => {
-      // console.error(error);
+    .catch(error => {
+      console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }
 
@@ -180,8 +176,9 @@ export async function setUserInfo(params: {
     .then(responseJson => {
       return responseJson;
     })
-    .catch(() => {
-      // console.error(error);
+    .catch(error => {
+      console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }
 
@@ -206,7 +203,8 @@ export function uploadAvatar(params: {
     .then(responseJson => {
       return responseJson;
     })
-    .catch(() => {
-      // console.error(error);
+    .catch(error => {
+      console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }

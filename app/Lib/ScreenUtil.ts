@@ -8,8 +8,8 @@
  */
 import {Dimensions, PixelRatio, Platform} from 'react-native';
 
-export let screenW = Dimensions.get('window').width;
-export let screenH = Dimensions.get('window').height;
+export function getScreenW() { return Dimensions.get('window').width; }
+export function getScreenH() { return Dimensions.get('window').height; }
 const fontScale = PixelRatio.getFontScale();
 export let pixelRatio = PixelRatio.get();
 // 像素密度
@@ -23,8 +23,8 @@ const w2 = defaultWidth / DEFAULT_DENSITY;
 const h2 = defaultHeight / DEFAULT_DENSITY;
 
 // 缩放比例
-const widthScale = screenW / defaultWidth;
-const heightScale = screenH / defaultHeight;
+const widthScale = getScreenW() / defaultWidth;
+const heightScale = getScreenH() / defaultHeight;
 
 // iPhoneX
 const X_WIDTH = 375;
@@ -73,9 +73,9 @@ export function setSpText(size: number, allowFontScaling = false) {
 }
 
 export function setSpText2(size: number) {
-  const scaleWidth = screenW / w2;
+  const scaleWidth = getScreenW() / w2;
   // const scaleHeight = screenH / h2;
-  const scale = Math.min(scaleWidth, screenH / h2);
+  const scale = Math.min(scaleWidth, getScreenH() / h2);
   size = Math.round(size * scale + 0.5);
 
   return (size / DEFAULT_DENSITY) * fontScale;
@@ -88,8 +88,8 @@ export function setSpText2(size: number) {
 export function isIphoneX() {
   return (
     Platform.OS === 'ios' &&
-    ((screenH === X_HEIGHT && screenW === X_WIDTH) ||
-      (screenH === X_WIDTH && screenW === X_HEIGHT))
+    ((getScreenH() === X_HEIGHT && getScreenW() === X_WIDTH) ||
+      (getScreenH() === X_WIDTH && getScreenW() === X_HEIGHT))
   );
 }
 

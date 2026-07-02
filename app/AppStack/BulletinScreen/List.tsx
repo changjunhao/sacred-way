@@ -2,11 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
-  SafeAreaView,
   Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
 import {getBulletinList} from '../../Services/bulletin';
@@ -20,10 +20,14 @@ const BulletinListScreen: React.FC = () => {
 
   useEffect(() => {
     getBulletinList({page, count: 10}).then(res => {
+      if (!res || !res.list) {
+        setRefreshing(false);
+        return;
+      }
       if (page === 1) {
         setBulletinList(res.list);
       } else {
-        setBulletinList(bulletinList.concat(res.list));
+        setBulletinList(prev => prev.concat(res.list));
       }
       setCount(res.count);
       setRefreshing(false);
@@ -31,7 +35,13 @@ const BulletinListScreen: React.FC = () => {
   }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onRefresh = () => {
-    setPage(1);
+    setRefreshing(true);
+    if (page === 1) {
+      setPage(0);
+      setTimeout(() => setPage(1), 0);
+    } else {
+      setPage(1);
+    }
   };
 
   const onEndReached = () => {

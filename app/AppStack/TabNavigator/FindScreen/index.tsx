@@ -1,4 +1,4 @@
-import React, {FC, Fragment, useContext, useEffect, useState} from 'react';
+import React, {FC, Fragment, useContext, useEffect, useMemo, useState} from 'react';
 import {
   Image,
   ScrollView,
@@ -8,8 +8,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
-// @ts-ignore
-import Icon from 'react-native-vector-icons/AntDesign';
+import {AntDesign as Icon} from '@react-native-vector-icons/ant-design';
 import UserContext from '../../../context/userContext';
 import CommunityListComponent from '../../../Components/CommunityList';
 import {scaleSize, setSpText2} from '../../../Lib/ScreenUtil';
@@ -69,9 +68,13 @@ const FindScreen: FC = () => {
     return unsubscribe;
   }, [navigation]);
 
-  const CommunityList = questionsList.map(question => (
-    <CommunityListComponent key={question.id} question={question} />
-  ));
+  const CommunityList = useMemo(
+    () =>
+      questionsList.map(question => (
+        <CommunityListComponent key={question.id} question={question} />
+      )),
+    [questionsList],
+  );
 
   return (
     <>

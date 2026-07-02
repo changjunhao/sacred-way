@@ -16,6 +16,7 @@ export async function getCurriculumlist() {
     })
     .catch(error => {
       console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }
 
@@ -32,6 +33,7 @@ export async function getUserBuyed() {
     })
     .catch(error => {
       console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }
 
@@ -51,6 +53,7 @@ export async function getCourseList(params: {categoryId: any}) {
     })
     .catch(error => {
       console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }
 
@@ -73,6 +76,7 @@ export async function getCourseDetail(params: {
     })
     .catch(error => {
       console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }
 
@@ -92,5 +96,6 @@ export async function getSubCurriculum(params: {id: any}) {
     })
     .catch(error => {
       console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }

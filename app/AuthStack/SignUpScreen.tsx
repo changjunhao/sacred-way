@@ -1,11 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
+  Alert,
   Text,
   TextInput,
   TouchableHighlight,
   View,
-  SafeAreaView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import UserContext from '../context/userContext';
 import {sendMobileMessage, signUp} from '../Services/user';
 import styles from './Styles';
 
@@ -18,14 +20,7 @@ const SignUpScreen: React.FC<Record<string, any>> = props => {
   const [canClick, setCanClick] = useState(true);
   const [siv, setSiv] = useState<number>();
 
-  useEffect(() => {
-    if (totalTime === 0) {
-      clearInterval(Number(siv));
-      setCanClick(true);
-      setTotalTime(60);
-      setContent('重新发送');
-    }
-  }, [siv, totalTime]);
+  const {userDispatch} = useContext(UserContext);
 
   useEffect(() => {
     return () => {
@@ -33,7 +28,7 @@ const SignUpScreen: React.FC<Record<string, any>> = props => {
         clearInterval(Number(siv));
       }
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [siv]);
 
   const handleSignUp = async () => {
     const result = await signUp({
@@ -41,8 +36,10 @@ const SignUpScreen: React.FC<Record<string, any>> = props => {
       code,
       password,
     });
-    if (Number(result.errno) === 0) {
-      props.UserStore.setInfoEdit(true);
+    if (result && Number(result.errno) === 0) {
+      userDispatch({type: 'SET_INFO_EDIT', infoEdit: true});
+    } else if (result && result.errno !== 0) {
+      Alert.alert(result.errmsg || '注册失败');
     }
   };
 
@@ -53,21 +50,32 @@ const SignUpScreen: React.FC<Record<string, any>> = props => {
     setCanClick(false);
     setContent(`${totalTime}s`);
     const interval = setInterval(() => {
-      setTotalTime(totalTime - 1);
-      setContent(`${totalTime}s`);
+      setTotalTime(prev => {
+        const next = prev - 1;
+        setContent(`${next}s`);
+        if (next === 0) {
+          clearInterval(interval);
+          setCanClick(true);
+          setTotalTime(60);
+          setContent('重新发送');
+          return 60;
+        }
+        return next;
+      });
     }, 1000);
     setSiv(interval);
     const result = await sendMobileMessage({
       phone,
       type: 1,
     });
-    if (Number(result.errno) !== 0) {
-      clearInterval(Number(siv));
-      setTimeout(() => {
-        setCanClick(true);
-        setTotalTime(60);
-        setContent('发送验证码');
-      }, 1500);
+    if (!result || Number(result.errno) !== 0) {
+      clearInterval(Number(interval));
+      setCanClick(true);
+      setTotalTime(60);
+      setContent('发送验证码');
+      if (result) {
+        Alert.alert(result.errmsg || '发送失败');
+      }
     }
   };
 

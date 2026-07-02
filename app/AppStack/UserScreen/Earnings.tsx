@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, Image, SafeAreaView, Text, View} from 'react-native';
+import {FlatList, Image, Text, View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {getUserIoList} from '../../Services/distribution';
 import styles from './Styles';
 
@@ -10,22 +11,12 @@ const Earnings: React.FC = () => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    fetchData();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const fetchData = () => {
     getUserIoList({page, pageSize: limit}).then(res => {
-      setList(res.list);
+      if (!res || !res.list) { return; }
+      setList(prev => (page === 1 ? res.list : prev.concat(res.list)));
       setCount(res.count);
     });
-  };
-
-  useEffect(() => {
-    getUserIoList({page, pageSize: limit}).then(res => {
-      setList(page === 1 ? res.list : list.concat(res.list));
-      setCount(res.count);
-    });
-  }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [page, limit]);
 
   const onEndReached = () => {
     if (page >= count / limit) {

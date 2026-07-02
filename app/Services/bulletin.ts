@@ -19,6 +19,7 @@ export async function getBulletinList(params = {page: 1, count: 5}) {
     })
     .catch(error => {
       console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }
 
@@ -38,5 +39,6 @@ export async function getBulletin(params: {id: any}) {
     })
     .catch(error => {
       console.error(error);
+      return {errno: -1, errmsg: '网络请求失败，请稍后重试'};
     });
 }

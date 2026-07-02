@@ -3,17 +3,17 @@ import {
   Image,
   ImageBackground,
   Modal,
-  SafeAreaView,
   ScrollView,
   Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
-// @ts-ignore
-import Icon from 'react-native-vector-icons/AntDesign';
+import {AntDesign as Icon} from '@react-native-vector-icons/ant-design';
 import {scaleSize, setSpText2} from '../../Lib/ScreenUtil';
+import {getImageDimensions} from '../../Lib/imageUtils';
 import {getCommunityInfo} from '../../Services/community';
 
 const colorSet = [
@@ -76,51 +76,48 @@ const CommunityDetailScreen: React.FC = () => {
   });
 
   useEffect(() => {
-    // @ts-ignore
-    if (route?.params?.id) {
+    const fetchData = async () => {
       // @ts-ignore
-      const {id} = route.params;
-      getCommunityInfo({id}).then(async res => {
-        const infoPromiseArray = res.list.map((item: any) => getInfo(item));
-        const infos: any[] = await Promise.all(infoPromiseArray);
-        const userIds = [...new Set(infos.map(item => item.nick_name))];
-        navigation.setOptions({
+      if (route?.params?.id) {
+        try {
           // @ts-ignore
-          title: res.title,
-        });
-        setData({
-          ...data,
-          title: res.title,
-          groupName: res.group_name,
-          readCount: res.read_count,
-          // @ts-ignore
-          list: infos.map(item => ({
-            ...item,
-            color: colorSet[userIds.indexOf(item.nick_name) % 10],
-          })),
-          publishTime: res.publish_time,
-          screenshots: res.screenshots,
-        });
-      });
-    }
+          const {id} = route.params;
+          const res = await getCommunityInfo({id});
+          if (!res) { return; }
+          const infoPromiseArray = res.list.map((item: any) => getInfo(item));
+          const infos: any[] = await Promise.all(infoPromiseArray);
+          const userIds = [...new Set(infos.map(item => item.nick_name))];
+          navigation.setOptions({
+            // @ts-ignore
+            title: res.title,
+          });
+          setData({
+            ...data,
+            title: res.title,
+            groupName: res.group_name,
+            readCount: res.read_count,
+            // @ts-ignore
+            list: infos.map(item => ({
+              ...item,
+              color: colorSet[userIds.indexOf(item.nick_name) % 10],
+            })),
+            publishTime: res.publish_time,
+            screenshots: res.screenshots,
+          });
+        } catch (error) {
+          console.error('Failed to load community info:', error);
+        }
+      }
+    };
+    fetchData();
   }, [route.params]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const getInfo = (originInfo: any) => {
-    return new Promise(resolve => {
-      if (originInfo.type === 'IMAGE' && originInfo.content) {
-        Image.getSize(
-          originInfo.content,
-          (width, height) => {
-            resolve({...originInfo, width, height});
-          },
-          () => {
-            resolve({...originInfo, width: 0, height: 0});
-          },
-        );
-      } else {
-        resolve({...originInfo, width: 0, height: 0});
-      }
-    });
+  const getInfo = async (originInfo: any) => {
+    if (originInfo.type === 'IMAGE' && originInfo.content) {
+      const {width, height} = await getImageDimensions(originInfo.content);
+      return {...originInfo, width, height};
+    }
+    return {...originInfo, width: 0, height: 0};
   };
 
   return (
@@ -265,7 +262,10 @@ const CommunityDetailScreen: React.FC = () => {
                           style={{
                             width: scaleSize(125),
                             // @ts-ignore
-                            height: scaleSize((item.height * 125) / item.width),
+                            height: item.width
+                              // @ts-ignore
+                              ? scaleSize((item.height * 125) / item.width)
+                              : scaleSize(125),
                             borderRadius: scaleSize(4),
                           }}
                           // @ts-ignore

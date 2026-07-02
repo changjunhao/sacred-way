@@ -89,7 +89,9 @@ const MyScree: FC<InterfaceProps> = props => {
   };
 
   const signOutAsync = async () => {
-    await AsyncStorage.clear();
+    try {
+      await AsyncStorage.clear();
+    } catch {}
     dispatch({type: 'SIGN_OUT'});
   };
 
